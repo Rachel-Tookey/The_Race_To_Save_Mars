@@ -24,6 +24,10 @@ namespace MarsRover.States
             return userInput != null ? userInput : "";
         }
 
+
+
+
+
         public void Run()
         {
             Console.WriteLine("Are you ready to play?");
@@ -35,7 +39,6 @@ namespace MarsRover.States
                 Console.WriteLine(userPSP.Message);
                 userPSP = new (GetUserInput("How big do you want your plateau? Format: 'x y'"));
             }
-
             _application.Plateau = userPSP.Result != null ? userPSP.Result as Plateau : new Plateau(5, 5);
 
 
@@ -46,7 +49,7 @@ namespace MarsRover.States
                  );
             }
 
-            _application.UserRover = userRP.Rover != null ? userRP.Rover as Rover : new Rover(new Position(2, 2, Enums.Facing.NORTH));
+            _application.UserRover = userRP.Result != null ? userRP.Result as Rover : new Rover(new Position(2, 2, Enums.Facing.NORTH));
 
             Console.WriteLine("Thank you. Let's begin!");
 

@@ -10,11 +10,11 @@ using MarsRover.Enums;
 
 namespace MarsRover.Input.ParserModels
 {
-    internal class RoverParser
+    public class RoverParser
     {
         public bool Success { get; set; } = false;
 
-        public Rover? Rover { get; set; } = null; 
+        public Rover? Result { get; set; } = null; 
 
         public string Message { get; set; } = "";
 
@@ -28,7 +28,7 @@ namespace MarsRover.Input.ParserModels
 
 
         public RoverParser(String userInput, Plateau plateau) {
-            Regex userPattern = new Regex("[0-9]+\\s[0-9]+\\s[NnSsEeWw]+");
+            Regex userPattern = new Regex("^[0-9]+\\s[0-9]+\\s[NnSsEeWw]+$");
             if (userPattern.IsMatch(userInput)) {
                 string[] userInputArray = userInput.Split(" ");
                 int xAxis = Int32.Parse(userInputArray[0]);
@@ -41,7 +41,7 @@ namespace MarsRover.Input.ParserModels
                 } else
                 {
                     Position startingPosition = new Position(xAxis, yAxis, roverIsFacing);
-                    Rover = new Rover(startingPosition);
+                    Result = new Rover(startingPosition);
                     Success = true; 
                 }
             

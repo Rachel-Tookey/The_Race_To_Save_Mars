@@ -8,7 +8,7 @@ using MarsRover.Enums;
 
 namespace MarsRover.Input.ParserModels
 {
-    internal class InstructionParser
+    public class InstructionParser
     {
         public bool Success { get; set; } = false;
 
