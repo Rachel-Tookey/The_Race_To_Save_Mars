@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarsRover.Models
 {
-    internal class Rover
+    public class Rover
     {
         public string Name { get; set; }
 

@@ -8,7 +8,7 @@ using MarsRover.Enums;
 namespace MarsRover.Models
 {
 
-    internal class Position
+    public class Position
     {
         private readonly int[,] _positionConversion = { { 0, 1 },
             {0, -1 },
