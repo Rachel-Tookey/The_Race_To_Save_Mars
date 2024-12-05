@@ -69,7 +69,7 @@ namespace MarsRoverTests
         [Test, Description("RoverParser - correct input")]
         public void RoverParser_ValidInput()
         {
-            String mockUserString = "5 7 N";
+            String mockUserString = "Kelly 5 7 N";
 
             Plateau testPlateau = new Plateau(10, 10);
 
@@ -88,7 +88,7 @@ namespace MarsRoverTests
         [Test, Description("RoverParser - invalid input")]
         public void RoverParser_InvalidInput()
         {
-            String mockUserString = "57 N";
+            String mockUserString = "John 57 N";
 
             Plateau testPlateau = new Plateau(10, 10);
 
@@ -104,7 +104,7 @@ namespace MarsRoverTests
         [Test, Description("RoverParser - valid input, outside plateau")]
         public void RoverParser_ValidInput_OutsidePlateau()
         {
-            String mockUserString = "55 77 N";
+            String mockUserString = "John 55 77 N";
 
             Plateau testPlateau = new Plateau(10, 10);
 

@@ -10,13 +10,19 @@ namespace MarsRover.LogicLater.Models
 {
     public class Rover
     {
+        public static ulong RoverCounter { get; set; }
+
+        public ulong Id { get; init; }
         public string Name { get; set; }
 
         public Position Position { get; set; }
 
-        public Rover(Position position)
+        public Rover(string name, Position position)
         {
+            Name = name;
             Position = position;
+            Id = RoverCounter;
+            RoverCounter++; 
         }
 
         public void RotateRover(Instructions instruction)

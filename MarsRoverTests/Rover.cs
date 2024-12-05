@@ -24,7 +24,7 @@ namespace MarsRoverTests
         public void RotateRover_Right(Facing startDirection, Facing finishDirection)
         {
             Position roverPosition = new Position(5, 5, startDirection);
-            Rover roverToTest = new Rover(roverPosition);
+            Rover roverToTest = new Rover("test", roverPosition);
 
             roverToTest.RotateRover(Instructions.R);
 
@@ -38,7 +38,7 @@ namespace MarsRoverTests
         public void RotateRover_Left(Facing startDirection, Facing finishDirection)
         {
             Position roverPosition = new Position(5, 5, startDirection);
-            Rover roverToTest = new Rover(roverPosition);
+            Rover roverToTest = new Rover("test", roverPosition);
 
             roverToTest.RotateRover(Instructions.L);
 
@@ -49,7 +49,7 @@ namespace MarsRoverTests
         public void RotateRover_InvalidInput()
         {
             Position roverPosition = new Position(5, 5, Facing.NORTH);
-            Rover roverToTest = new Rover(roverPosition);
+            Rover roverToTest = new Rover("test", roverPosition);
 
             roverToTest.RotateRover(Instructions.M);
 
@@ -63,7 +63,7 @@ namespace MarsRoverTests
         public void MoveRover(Facing direction, int endX, int endY)
         {
             Position roverPosition = new Position(5, 5, direction);
-            Rover roverToTest = new Rover(roverPosition);
+            Rover roverToTest = new Rover("test", roverPosition);
 
             roverToTest.MoveRover(); 
 
