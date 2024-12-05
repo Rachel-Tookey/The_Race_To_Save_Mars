@@ -26,8 +26,6 @@ namespace MarsRover.States
 
 
 
-
-
         public void Run()
         {
             Console.WriteLine("Are you ready to play?");
@@ -42,24 +40,8 @@ namespace MarsRover.States
 
             _application.MissionControl = new MissionControl(userPSP.Result);
 
-            /// MOVE THIS TO A MAKE ROVER STATE? 
-            /// THEN HAVE A MOVE ROVERS STATE? 
-
-            RoverParser userRP = new(GetUserInput("Please provide starting position and direction for your rover: x y d"), userPSP.Result);
-            while (!userRP.Success)
-            {
-                Console.WriteLine(userRP.Message);
-                userRP = new(GetUserInput("Please provide starting position and direction for your rover: x y d"), userPSP.Result
-                 );
-            }
-
-            _application.MissionControl.AddRover(userRP.Result);
-
-            Console.WriteLine("Thank you. Let's begin!");
-
-            //_application.MissionControl.Plateau.PrintGrid(); 
-
-            _application.CurrentState = new MoveState(_application); 
+        
+            _application.CurrentState = new AddRoverState(_application); 
 
         }
 

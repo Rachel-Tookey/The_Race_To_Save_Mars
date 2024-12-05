@@ -24,5 +24,10 @@ namespace MarsRover.LogicLater.Models
             Direction = direction;
         }
 
+        public override string ToString()
+        {
+            return $"({this.x},{this.y} facing {this.Direction})";
+        }
+
     }
 }
