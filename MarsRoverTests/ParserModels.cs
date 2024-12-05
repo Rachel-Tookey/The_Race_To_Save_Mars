@@ -1,21 +1,19 @@
 using MarsRover;
 using MarsRover.States;
-using MarsRover.Models;
 using MarsRover.Input.ParserModels;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using MarsRover.Enums;
+using MarsRover.LogicLater.Models;
 
 namespace MarsRoverTests
 {
-    public class Tests
+    public class ParserModelTests
     {
         [SetUp]
         public void Setup()
         {
         }
-
-        // PlateauSizeParser
 
         [Test, Description("PlateauSizeParser - correct input")]
         public void PlateauSizeParser_ValidInput()
@@ -68,8 +66,6 @@ namespace MarsRoverTests
             testPSP.Result.Should().BeNull();
         }
 
-        // Rover Parser 
-
         [Test, Description("RoverParser - correct input")]
         public void RoverParser_ValidInput()
         {
@@ -120,8 +116,6 @@ namespace MarsRoverTests
 
         }
 
-
-        // Instruction Parser 
 
         [Test, Description("Instruction Parser - valid input")]
         public void InstructionParser_ValidInput()

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Input.ParserModels;
-using MarsRover.Models;
+using MarsRover.LogicLater.Models;
 
 namespace MarsRover.States
 {
@@ -39,19 +39,25 @@ namespace MarsRover.States
                 Console.WriteLine(userPSP.Message);
                 userPSP = new (GetUserInput("How big do you want your plateau? Format: 'x y'"));
             }
-            _application.Plateau = userPSP.Result != null ? userPSP.Result as Plateau : new Plateau(5, 5);
 
+            _application.MissionControl = new MissionControl(userPSP.Result);
 
-            RoverParser userRP = new (GetUserInput("Please provide starting position and direction for your rover: x y d"), _application.Plateau);
-            while (!userRP.Success) {
+            /// MOVE THIS TO A MAKE ROVER STATE? 
+            /// THEN HAVE A MOVE ROVERS STATE? 
+
+            RoverParser userRP = new(GetUserInput("Please provide starting position and direction for your rover: x y d"), userPSP.Result);
+            while (!userRP.Success)
+            {
                 Console.WriteLine(userRP.Message);
-                userRP = new (GetUserInput("Please provide starting position and direction for your rover: x y d"), _application.Plateau
+                userRP = new(GetUserInput("Please provide starting position and direction for your rover: x y d"), userPSP.Result
                  );
             }
 
-            _application.UserRover = userRP.Result != null ? userRP.Result as Rover : new Rover(new Position(2, 2, Enums.Facing.NORTH));
+            _application.MissionControl.AddRover(userRP.Result);
 
             Console.WriteLine("Thank you. Let's begin!");
+
+            //_application.MissionControl.Plateau.PrintGrid(); 
 
             _application.CurrentState = new MoveState(_application); 
 

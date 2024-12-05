@@ -1,4 +1,4 @@
-﻿using MarsRover.Models;
+﻿using MarsRover.LogicLater.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

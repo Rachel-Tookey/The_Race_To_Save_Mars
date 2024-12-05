@@ -9,8 +9,8 @@ namespace MarsRover.Enums
     public enum Facing
     {
         NORTH,
-        SOUTH,
         EAST,
+        SOUTH,
         WEST
     }
 }
