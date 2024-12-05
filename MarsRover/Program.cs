@@ -1,4 +1,8 @@
-﻿namespace MarsRover
+﻿using MarsRover.Enums;
+using MarsRover.Input.ParserModels;
+using MarsRover.LogicLater.Models;
+
+namespace MarsRover
 {
     internal class Program
     {
@@ -6,6 +10,7 @@
         {
             Application application = new Application();
             application.Run();
+
         }
     }
 }

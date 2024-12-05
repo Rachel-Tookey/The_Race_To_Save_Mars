@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MarsRover.Models;
 using MarsRover.Enums;
+using MarsRover.LogicLater.Models;
 
 namespace MarsRover.Input.ParserModels
 {
