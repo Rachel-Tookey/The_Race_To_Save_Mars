@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Input.ParserModels;
 using MarsRover.LogicLater.Models;
+using Sharprompt;
 
 namespace MarsRover.States
 {
@@ -19,23 +21,23 @@ namespace MarsRover.States
 
         public string GetUserInput(string request)
         {
-            Console.WriteLine(request);
-            string? userInput = Console.ReadLine();
+            Prompt.ColorSchema.Select = ConsoleColor.DarkGreen;
+            Prompt.ColorSchema.Answer = ConsoleColor.Cyan;
+            string? userInput = Prompt.Input<string>(request);
             return userInput != null ? userInput : "";
         }
 
-
-
         public void Run()
         {
-            Console.WriteLine("Are you ready to play?");
-            Console.WriteLine("Let's get some user inputs...");
+            
+            Prompt.Confirm("Are you ready to explore Mars?", defaultValue: true);
 
-            PlateauSizeParser userPSP = new (GetUserInput("How big do you want your plateau? Format: 'x y'"));
+
+            PlateauSizeParser userPSP = new (GetUserInput("Set the size of the plateau. Format: 'x y'"));
             while (!userPSP.Success)
             {
                 Console.WriteLine(userPSP.Message);
-                userPSP = new (GetUserInput("How big do you want your plateau? Format: 'x y'"));
+                userPSP = new (GetUserInput("Set the size of the plateau. Format: 'x y'"));
             }
 
             _application.MissionControl = new MissionControl(userPSP.Result);

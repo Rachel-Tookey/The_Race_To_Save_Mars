@@ -49,7 +49,8 @@ namespace MarsRover.States
 
             }
 
-            _application.Stop();
+            _application.CurrentState = new DisplayGrid(_application);
+
         }
 
     }
