@@ -26,27 +26,27 @@ namespace MarsRover.Input.ParserModels
         };
 
 
-    public InstructionParser(String userInput) { 
+        public InstructionParser(String userInput) { 
         
-            char[] instructionChar = userInput.ToUpper().ToCharArray();
-            foreach (char instruction in instructionChar)
-            {
-                Instructions? conversion = InstructionSwitcher(instruction);    
-                if (conversion is Instructions conversionNotNull)
+                char[] instructionChar = userInput.ToUpper().ToCharArray();
+                foreach (char instruction in instructionChar)
                 {
-                    Result.Add(conversionNotNull);
+                    Instructions? conversion = InstructionSwitcher(instruction);    
+                    if (conversion is Instructions conversionNotNull)
+                    {
+                        Result.Add(conversionNotNull);
+                    }
+                }
+                if (Result.Count == 0)
+                {
+                    Success = false;
+                    Message = "There was no recognisable instruction there. Try again";
+                }
+                else
+                {
+                    Success = true;
                 }
             }
-            if (Result.Count == 0)
-            {
-                Success = false;
-                Message = "There was no recognisable instruction there. Try again";
-            }
-            else
-            {
-                Success = true;
-            }
-        }
 
-    }
+        }
 }

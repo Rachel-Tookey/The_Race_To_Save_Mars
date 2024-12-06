@@ -29,6 +29,7 @@ namespace MarsRover.UILayer.States
         {
             Console.Clear();
 
+
             Console.WriteLine("Let's add some rovers!");
             int RoversAdded = 0; 
 
