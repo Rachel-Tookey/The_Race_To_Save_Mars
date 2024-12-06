@@ -36,7 +36,15 @@ namespace MarsRover.LogicLayer.Models
 
             Position.Direction = (Facing)(shiftPosition);
         }
-        
+
+        public XYPosition PredictNextPosition()
+        {
+            int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+            int futureX = Position.x + _positionConversion[(int)Position.Direction, 0];
+            int futureY = Position.y + _positionConversion[(int)Position.Direction, 1];
+            return (futureX, futureY);
+        }
+
 
         public void MoveRover()
         {
@@ -44,6 +52,7 @@ namespace MarsRover.LogicLayer.Models
             Position.x += _positionConversion[(int)Position.Direction, 0];
             Position.y += _positionConversion[(int)Position.Direction, 1];
         }
+
 
     }
 }

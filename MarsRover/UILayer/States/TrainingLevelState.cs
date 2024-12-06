@@ -32,12 +32,15 @@ namespace MarsRover.UILayer.States
             _application.MissionControl.ChargingStation = new ChargingStation(randomPos);
             _application.MissionControl.DisplayGrid();
 
+
             Console.WriteLine("LEVEL 0: TRAINING");
             Console.WriteLine("Aim: move your Rovers to get to the charging station");
+
 
             Boolean HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos);
             Boolean AreRoversAllDestroyed = _application.MissionControl.AreRoversIntact(); 
             
+
             while ((HasRoverGotHealthCheck) && (_application.MissionControl.AreRoversIntact()))
             { 
                 foreach (Rover rover in _application.MissionControl.Rovers)
@@ -46,7 +49,6 @@ namespace MarsRover.UILayer.States
                     {
 
                         Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
-
                         InstructionParser userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
 
                         while (!userIP.Success)
@@ -56,21 +58,19 @@ namespace MarsRover.UILayer.States
                         }
 
                         List<Instructions> userInstructions = userIP.Result;
-
-                        _application.MissionControl.RunInstructions(rover, userInstructions);
-                            
+                        _application.MissionControl.RunInstructions(rover, userInstructions);   
                        _application.MissionControl.DisplayGrid();
 
                         if (!rover.IsIntact)
                         {
                             Console.WriteLine($"Rover {rover.Id} is destroyed");
-                         }
+                        }
                         else
                         {
                             Console.WriteLine($"Rover {rover.Id} is now at {rover.Position.ToString()}");
                         }
 
-                        HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos.xAxis, randomPos.yAxis);
+                        HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos);
                         AreRoversAllDestroyed = _application.MissionControl.AreRoversIntact();
 
                     }

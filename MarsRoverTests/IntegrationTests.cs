@@ -23,10 +23,10 @@ namespace MarsRoverTests
             MissionControl testMissionControl = new MissionControl(testPlateau);
             Position testPosOne = new Position(3, 4, Facing.NORTH);
             Rover testRoverOne = new Rover(testPosOne);
-            testMissionControl.AddRover(testRoverOne);
+            testMissionControl.AddObject(testRoverOne);
             Position testPosTwo = new Position(3, 3, Facing.EAST);
             Rover testRoverTwo = new Rover(testPosTwo);
-            testMissionControl.AddRover(testRoverTwo);
+            testMissionControl.AddObject(testRoverTwo);
 
 
             InstructionParser instructionsForRoverOne = new InstructionParser("LMLMLMLMM");
@@ -55,7 +55,7 @@ namespace MarsRoverTests
             MissionControl testMissionControl = new MissionControl(testPlateau);
             Position testPosOne = new Position(3, 3, Facing.NORTH);
             Rover testRoverOne = new Rover(testPosOne);
-            testMissionControl.AddRover(testRoverOne);
+            testMissionControl.AddObject(testRoverOne);
 
 
             InstructionParser instructionsForRoverOne = new InstructionParser("M");

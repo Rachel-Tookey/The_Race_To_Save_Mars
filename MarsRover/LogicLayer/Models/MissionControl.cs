@@ -24,41 +24,39 @@ namespace MarsRover.LogicLayer.Models
             Plateau = plateau;
         }
 
-        public void AddRover(Rover rover)
+        public void AddObject(Rover rover)
         {
             Rovers.Add(rover);
         }
 
-
-        public XYPosition ReturnNewPosition(Rover roverToMove)
+        public void AddObject(ChargingStation chargingStation)
         {
-            int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-            int futureX = roverToMove.Position.x + _positionConversion[(int)roverToMove.Position.Direction, 0];
-            int futureY = roverToMove.Position.y + _positionConversion[(int)roverToMove.Position.Direction, 1];
-            return (futureX, futureY);
+            ChargingStation = chargingStation;
         }
-
 
         public void RunInstructions(Rover roverToMove, List<Instructions> listOfMoves)
         {
-            foreach (Instructions direction in listOfMoves) { 
+            foreach (Instructions direction in listOfMoves)
+            {
                 if ((direction == Instructions.L) || (direction == Instructions.R))
                 {
                     roverToMove.RotateRover(direction);
-                } else if (roverToMove.IsIntact)
+                }
+                else if (roverToMove.IsIntact)
                 {
-                    XYPosition futurePosition = ReturnNewPosition(roverToMove);
-                    if (!IsPositionInRange((futurePosition.xAxis, futurePosition.yAxis)))
+                    XYPosition futurePosition = roverToMove.PredictNextPosition();
+                    if (!Plateau.IsPositionInRange((futurePosition.xAxis, futurePosition.yAxis)))
                     {
                         roverToMove.MoveRover();
                         roverToMove.IsIntact = false;
-                    } else if (IsPositionEmpty((futurePosition.xAxis, futurePosition.yAxis)))
+                    }
+                    else if (IsPositionEmpty((futurePosition.xAxis, futurePosition.yAxis)))
                     {
                         roverToMove.MoveRover();
                     }
 
-                } 
-                       
+                }
+
             }
 
         }
@@ -87,17 +85,6 @@ namespace MarsRover.LogicLayer.Models
             return false;
         }
 
-
-        public Boolean IsPositionInRange(XYPosition xyPosition)
-        {
-            if ((xyPosition.xAxis > Plateau._x) || (xyPosition.yAxis > Plateau._y) || (xyPosition.xAxis <= 0) || (xyPosition.yAxis <= 0))
-            {
-                return false; 
-            }
-            return true; 
-        }
-
-
         public Dictionary<ulong, XYPosition> GetRoverPositions()
         {
 
@@ -106,8 +93,25 @@ namespace MarsRover.LogicLayer.Models
             {
                 positions.Add(rover.Id, (rover.Position.x, rover.Position.y));
             }
-            return positions; 
+            return positions;
         }
+
+
+        public XYPosition PositionGenerator()
+        {
+            Random random = new Random();
+            int xAxis = random.Next(1, Plateau._x);
+            int yAxis = random.Next(1, Plateau._y);
+
+            while (!IsPositionEmpty((xAxis, yAxis)))
+            {
+                xAxis = random.Next(1, Plateau._x);
+                yAxis = random.Next(1, Plateau._y);
+            }
+
+            return (xAxis, yAxis);
+        }
+
 
 
         public void DisplayGrid()
@@ -159,20 +163,6 @@ namespace MarsRover.LogicLayer.Models
 
         }
 
-        public XYPosition PositionGenerator()
-        {
-            Random random = new Random();
-            int xAxis = random.Next(1, Plateau._x);
-            int yAxis = random.Next(1, Plateau._y);
-
-            while (!IsPositionEmpty((xAxis, yAxis)))
-            {
-                xAxis = random.Next(1, Plateau._x);
-                yAxis = random.Next(1, Plateau._y);
-            }
-
-            return (xAxis, yAxis);
-        }
 
     }
 }

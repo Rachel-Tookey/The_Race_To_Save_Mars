@@ -48,7 +48,7 @@ namespace MarsRover.UILayer.States
                     _application.MissionControl.Plateau);
 
                 }
-                _application.MissionControl.AddRover(userRP.Result);
+                _application.MissionControl.AddObject(userRP.Result);
 
                 string userAdding = GetUserInput("Press R to add more rovers. Press enter to exit.");
                 IsUserAdding = userAdding == "" ? false : true;
