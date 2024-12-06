@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using MarsRover.Enums;
 using MarsRover.Input.ParserModels;
-using MarsRover.LogicLater.Models;
+using MarsRover.LogicLayer.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

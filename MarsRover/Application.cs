@@ -4,8 +4,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using MarsRover.LogicLater.Models;
-using MarsRover.States;
+using MarsRover.LogicLayer.Models;
+using MarsRover.UILayer.States;
 using Sharprompt;
 
 namespace MarsRover

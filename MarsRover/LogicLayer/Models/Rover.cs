@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Enums; 
 
-namespace MarsRover.LogicLater.Models
+namespace MarsRover.LogicLayer.Models
 {
     public class Rover
     {

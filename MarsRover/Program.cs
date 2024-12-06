@@ -1,7 +1,5 @@
 ﻿using MarsRover.Enums;
 using MarsRover.Input.ParserModels;
-using MarsRover.LogicLater.Models;
-using Spectre.Console;
 
 
 namespace MarsRover

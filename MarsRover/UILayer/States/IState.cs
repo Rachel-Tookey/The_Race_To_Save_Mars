@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsRover.States
+namespace MarsRover.UILayer.States
 {
     public interface IState
     {

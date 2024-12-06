@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Input.ParserModels;
-using MarsRover.LogicLater.Models;
+using MarsRover.LogicLayer.Models;
 using Sharprompt;
 
-namespace MarsRover.States
+namespace MarsRover.UILayer.States
 {
-    public class StartupState : IState 
+    public class StartupState : IState
     {
         public Application _application;
 
@@ -22,7 +22,7 @@ namespace MarsRover.States
         public string GetUserInput(string request)
         {
             string? userInput = Prompt.Input<string>(request);
-            Console.Clear(); 
+            Console.Clear();
             return userInput != null ? userInput : "";
         }
 
@@ -37,23 +37,23 @@ namespace MarsRover.States
             Console.ReadLine();
             Console.WriteLine("(We mean you...)");
             Console.ReadLine();
-            Boolean result = Prompt.Confirm("Are you ready to save Mars?", defaultValue: true);
+            bool result = Prompt.Confirm("Are you ready to save Mars?", defaultValue: true);
             if (!result) Console.WriteLine("Well, you're going to have to anyway...");
 
-            Console.Clear(); 
+            Console.Clear();
 
-            PlateauSizeParser userPSP = new (GetUserInput("Set the size of the plateau. Format: 'x y'"));
-            
+            PlateauSizeParser userPSP = new(GetUserInput("Set the size of the plateau. Format: 'x y'"));
+
             while (!userPSP.Success)
             {
                 Console.WriteLine(userPSP.Message);
-                userPSP = new (GetUserInput("Set the size of the plateau. Format: 'x y'"));
+                userPSP = new(GetUserInput("Set the size of the plateau. Format: 'x y'"));
             }
 
             _application.MissionControl = new MissionControl(userPSP.Result);
 
-        
-            _application.CurrentState = new AddRoverState(_application); 
+
+            _application.CurrentState = new AddRoverState(_application);
 
         }
 

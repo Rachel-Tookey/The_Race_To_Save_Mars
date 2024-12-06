@@ -1,5 +1,5 @@
 ﻿using MarsRover.Enums;
-using MarsRover.LogicLater.Models;
+using MarsRover.LogicLayer.Models;
 using MarsRover.Input.ParserModels;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sharprompt;
 
-namespace MarsRover.States
+namespace MarsRover.UILayer.States
 {
     public class MoveState : IState
     {
@@ -36,7 +36,7 @@ namespace MarsRover.States
                     _application.MissionControl.DisplayGrid();
                     Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
 
-                //var instructions = Prompt.MultiSelect("Choose your moves", new[] { Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M }, pageSize: 3);
+                    //var instructions = Prompt.MultiSelect("Choose your moves", new[] { Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M }, pageSize: 3);
 
                     InstructionParser userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
 
@@ -47,15 +47,16 @@ namespace MarsRover.States
                     }
 
                     List<Instructions> userInstructions = userIP.Result;
-                    
+
                     _application.MissionControl.RunInstructions(rover, userInstructions);
-                    
+
                     _application.MissionControl.DisplayGrid();
-                    
+
                     if (!rover.IsIntact)
                     {
                         Console.WriteLine($"Rover {rover.Id} is destroyed");
-                    } else
+                    }
+                    else
                     {
                         Console.WriteLine($"Rover {rover.Id} is now at {rover.Position.ToString()}");
                     }

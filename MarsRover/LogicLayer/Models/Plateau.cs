@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsRover.LogicLater.Models
+namespace MarsRover.LogicLayer.Models
 {
     public class Plateau
     {

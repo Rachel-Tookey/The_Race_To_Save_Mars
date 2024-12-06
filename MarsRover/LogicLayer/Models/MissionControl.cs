@@ -8,7 +8,7 @@ using Sharprompt;
 using Spectre.Console;
 using PositionCheck = (int xAxis, int yAxis); 
 
-namespace MarsRover.LogicLater.Models
+namespace MarsRover.LogicLayer.Models
 {
     public class MissionControl
     {

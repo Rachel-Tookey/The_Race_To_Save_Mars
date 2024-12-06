@@ -1,10 +1,10 @@
 ﻿using MarsRover;
-using MarsRover.States;
+using MarsRover.UILayer.States;
 using MarsRover.Input.ParserModels;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using MarsRover.Enums;
-using MarsRover.LogicLater.Models;
+using MarsRover.LogicLayer.Models;
 
 namespace MarsRoverTests
 {
