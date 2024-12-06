@@ -8,11 +8,11 @@ namespace MarsRover.LogicLayer.Models
 {
     public class ChargingStation
     {
-        public PositionCheck Position { get; set; }
+        public XYPosition Position { get; set; }
 
         public Boolean IsUsed { get; set; } = false; 
 
-        public ChargingStation(PositionCheck position) {
+        public ChargingStation(XYPosition position) {
            Position = position;
         
         }

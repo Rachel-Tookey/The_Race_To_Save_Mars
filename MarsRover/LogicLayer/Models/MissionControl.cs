@@ -1,4 +1,4 @@
-﻿global using PositionCheck = (int xAxis, int yAxis);
+﻿global using XYPosition = (int xAxis, int yAxis);
 
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace MarsRover.LogicLayer.Models
         }
 
 
-        public PositionCheck ReturnNewPosition(Rover roverToMove)
+        public XYPosition ReturnNewPosition(Rover roverToMove)
         {
             int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
             int futureX = roverToMove.Position.x + _positionConversion[(int)roverToMove.Position.Direction, 0];
@@ -47,12 +47,12 @@ namespace MarsRover.LogicLayer.Models
                     roverToMove.RotateRover(direction);
                 } else if (roverToMove.IsIntact)
                 {
-                    PositionCheck futurePosition = ReturnNewPosition(roverToMove);
-                    if (!IsPositionInRange(futurePosition.xAxis, futurePosition.yAxis))
+                    XYPosition futurePosition = ReturnNewPosition(roverToMove);
+                    if (!IsPositionInRange((futurePosition.xAxis, futurePosition.yAxis)))
                     {
                         roverToMove.MoveRover();
                         roverToMove.IsIntact = false;
-                    } else if (IsPositionEmpty(futurePosition.xAxis, futurePosition.yAxis))
+                    } else if (IsPositionEmpty((futurePosition.xAxis, futurePosition.yAxis)))
                     {
                         roverToMove.MoveRover();
                     }
@@ -64,11 +64,11 @@ namespace MarsRover.LogicLayer.Models
         }
 
 
-        public Boolean IsPositionEmpty(int x, int y)
+        public Boolean IsPositionEmpty(XYPosition xyPosition)
         {
             foreach (Rover rover in Rovers)
             {
-                if ((rover.Position.x == x) && (rover.Position.y == y)) {
+                if ((rover.Position.x == xyPosition.xAxis) && (rover.Position.y == xyPosition.yAxis)) {
                     return false; 
                 }
             }
@@ -88,9 +88,9 @@ namespace MarsRover.LogicLayer.Models
         }
 
 
-        public Boolean IsPositionInRange(int x, int y)
+        public Boolean IsPositionInRange(XYPosition xyPosition)
         {
-            if ((x > Plateau._x) || (y > Plateau._y) || (x <= 0) || (y <= 0))
+            if ((xyPosition.xAxis > Plateau._x) || (xyPosition.yAxis > Plateau._y) || (xyPosition.xAxis <= 0) || (xyPosition.yAxis <= 0))
             {
                 return false; 
             }
@@ -98,10 +98,10 @@ namespace MarsRover.LogicLayer.Models
         }
 
 
-        public Dictionary<ulong, PositionCheck> GetRoverPositions()
+        public Dictionary<ulong, XYPosition> GetRoverPositions()
         {
 
-            Dictionary<ulong, PositionCheck> positions = new Dictionary<ulong, PositionCheck>();
+            Dictionary<ulong, XYPosition> positions = new Dictionary<ulong, XYPosition>();
             foreach (Rover rover in Rovers)
             {
                 positions.Add(rover.Id, (rover.Position.x, rover.Position.y));
@@ -124,7 +124,7 @@ namespace MarsRover.LogicLayer.Models
                 grid.AddColumn();
             }
 
-            Dictionary<ulong, PositionCheck> CurrentRoverPositions = GetRoverPositions();
+            Dictionary<ulong, XYPosition> CurrentRoverPositions = GetRoverPositions();
 
             for (int rows = plateau._y + 3; rows >= 0; rows--)
             {
@@ -159,13 +159,13 @@ namespace MarsRover.LogicLayer.Models
 
         }
 
-        public PositionCheck PositionGenerator()
+        public XYPosition PositionGenerator()
         {
             Random random = new Random();
             int xAxis = random.Next(1, Plateau._x);
             int yAxis = random.Next(1, Plateau._y);
 
-            while (!IsPositionEmpty(xAxis, yAxis))
+            while (!IsPositionEmpty((xAxis, yAxis)))
             {
                 xAxis = random.Next(1, Plateau._x);
                 yAxis = random.Next(1, Plateau._y);

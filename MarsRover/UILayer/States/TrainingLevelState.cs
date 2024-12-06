@@ -28,14 +28,14 @@ namespace MarsRover.UILayer.States
         public void Run()
         {
             
-            PositionCheck randomPos = _application.MissionControl.PositionGenerator(); 
+            XYPosition randomPos = _application.MissionControl.PositionGenerator(); 
             _application.MissionControl.ChargingStation = new ChargingStation(randomPos);
             _application.MissionControl.DisplayGrid();
 
             Console.WriteLine("LEVEL 0: TRAINING");
             Console.WriteLine("Aim: move your Rovers to get to the charging station");
 
-            Boolean HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos.xAxis, randomPos.yAxis);
+            Boolean HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos);
             Boolean AreRoversAllDestroyed = _application.MissionControl.AreRoversIntact(); 
             
             while ((HasRoverGotHealthCheck) && (_application.MissionControl.AreRoversIntact()))
