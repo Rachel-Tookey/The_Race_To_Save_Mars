@@ -66,7 +66,7 @@ namespace MarsRoverTests
         {
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(10, 10); 
+            Boolean result = testMissionControl.IsPositionInRange(9, 9); 
             result.Should().BeTrue(); 
 
         }
@@ -77,7 +77,7 @@ namespace MarsRoverTests
         {
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(11, 11);
+            Boolean result = testMissionControl.IsPositionInRange(10, 10);
             result.Should().BeFalse(); 
 
         }

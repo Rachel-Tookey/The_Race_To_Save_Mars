@@ -30,29 +30,38 @@ namespace MarsRover.States
 
             foreach (Rover rover in _application.MissionControl.Rovers)
             {
-                Console.Clear();
-                _application.MissionControl.DisplayGrid();
-                Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
+                if (rover.IsIntact)
+                {
+
+                    _application.MissionControl.DisplayGrid();
+                    Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
 
                 //var instructions = Prompt.MultiSelect("Choose your moves", new[] { Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M }, pageSize: 3);
 
-                InstructionParser userIP = new (GetUserInput("How do you want to move? i.e. LLRM"));
+                    InstructionParser userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
 
-                while (!userIP.Success)
+                    while (!userIP.Success)
                     {
-                    Console.WriteLine(userIP.Message);
-                    userIP = new (GetUserInput("How do you want to move? i.e. LLRM"));
+                        Console.WriteLine(userIP.Message);
+                        userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
                     }
-                
-                List<Instructions> userInstructions = userIP.Result;
-                _application.MissionControl.RunInstructions(rover, userInstructions);
-                _application.MissionControl.DisplayGrid();
-                Console.WriteLine($"Rover {rover.Id} is now at {rover.Position.ToString()}");
 
+                    List<Instructions> userInstructions = userIP.Result;
+                    
+                    _application.MissionControl.RunInstructions(rover, userInstructions);
+                    
+                    _application.MissionControl.DisplayGrid();
+                    
+                    if (!rover.IsIntact)
+                    {
+                        Console.WriteLine($"Rover {rover.Id} is destroyed");
+                    } else
+                    {
+                        Console.WriteLine($"Rover {rover.Id} is now at {rover.Position.ToString()}");
+                    }
 
+                }
             }
-
-            _application.MissionControl.DisplayGrid();
 
             _application.Stop();
 

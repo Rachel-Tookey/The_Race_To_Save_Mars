@@ -56,9 +56,9 @@ namespace MarsRoverTests
             roverToTest.Position.Direction.Should().Be(Facing.NORTH);
         }
 
-        [TestCase(Facing.NORTH, 5, 6)]
+        [TestCase(Facing.NORTH, 5, 4)]
         [TestCase(Facing.WEST, 4, 5)]
-        [TestCase(Facing.SOUTH, 5, 4)]
+        [TestCase(Facing.SOUTH, 5, 6)]
         [TestCase(Facing.EAST, 6, 5)]
         public void MoveRover(Facing direction, int endX, int endY)
         {
