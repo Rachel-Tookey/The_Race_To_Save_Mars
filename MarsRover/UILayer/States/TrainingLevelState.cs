@@ -29,7 +29,7 @@ namespace MarsRover.UILayer.States
         {
             
             XYPosition randomPos = _application.MissionControl.PositionGenerator(); 
-            _application.MissionControl.ChargingStation = new ChargingStation(randomPos);
+            _application.MissionControl.AddObject( new ChargingStation(randomPos));
             _application.MissionControl.DisplayGrid();
 
 

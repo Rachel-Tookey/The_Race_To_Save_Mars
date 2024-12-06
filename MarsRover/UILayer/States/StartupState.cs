@@ -29,13 +29,13 @@ namespace MarsRover.UILayer.States
         public void Run()
         {
 
-            Console.WriteLine("A billionaire has landed on Mars");
+            Console.WriteLine("A billionaire has landed on Mars...");
             Console.ReadLine();
-            Console.WriteLine("He intends to take the riches of Mars for himself.");
+            Console.WriteLine("He intends to take the riches of Mars for himself...");
             Console.ReadLine();
-            Console.WriteLine("There is only one person who can save Mars.");
+            Console.WriteLine("There is only one person who can save Mars...");
             Console.ReadLine();
-            Console.WriteLine("(We mean you...)");
+            Console.WriteLine("(We mean you.)");
             Console.ReadLine();
             bool result = Prompt.Confirm("Are you ready to save Mars?", defaultValue: true);
             if (!result) Console.WriteLine("Well, you're going to have to anyway...");

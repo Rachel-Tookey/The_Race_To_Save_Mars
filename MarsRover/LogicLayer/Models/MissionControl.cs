@@ -15,9 +15,9 @@ namespace MarsRover.LogicLayer.Models
     {
         public Plateau Plateau { get; set; }
 
-        public List<Rover> Rovers { get; set; } = new List<Rover>();
+        public List<Rover> Rovers { get; private set; } = new List<Rover>();
 
-        public ChargingStation ChargingStation { get; set; }    
+        public ChargingStation ChargingStation { get; private set; }    
 
         public MissionControl(Plateau plateau)
         {
@@ -54,9 +54,7 @@ namespace MarsRover.LogicLayer.Models
                     {
                         roverToMove.MoveRover();
                     }
-
                 }
-
             }
 
         }

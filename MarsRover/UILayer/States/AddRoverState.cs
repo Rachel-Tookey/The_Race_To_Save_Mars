@@ -30,9 +30,9 @@ namespace MarsRover.UILayer.States
             Console.Clear();
 
             Console.WriteLine("Let's add some rovers!");
-            bool IsUserAdding = true;
+            int RoversAdded = 0; 
 
-            while (IsUserAdding)
+            while (RoversAdded < 6)
             {
 
                 string startingPos = GetUserInput("Please select starting position: x y");
@@ -50,8 +50,11 @@ namespace MarsRover.UILayer.States
                 }
                 _application.MissionControl.AddObject(userRP.Result);
 
-                string userAdding = GetUserInput("Press R to add more rovers. Press enter to exit.");
-                IsUserAdding = userAdding == "" ? false : true;
+                string userAdding = GetUserInput("Done adding rovers? Press E to exit.");
+               
+                if (userAdding == "E") break; 
+               
+                RoversAdded++; 
             }
 
             _application.CurrentState = new TrainingLevelState(_application);
