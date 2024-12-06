@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MarsRover.LogicLater.Models;
 using MarsRover.States;
+using Sharprompt;
 
 namespace MarsRover
 {
@@ -23,7 +24,7 @@ namespace MarsRover
         public void Run()
         {
             _isRunning = true;
-            Console.WriteLine("Welcome to Revenge of the Musk. Press Enter to continue.");
+            Console.WriteLine("Welcome to The Race For Mars. Press Enter to continue.");
             Console.ReadLine(); 
             while (_isRunning)
             {
