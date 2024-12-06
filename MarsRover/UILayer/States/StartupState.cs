@@ -38,9 +38,14 @@ namespace MarsRover.UILayer.States
             Console.WriteLine("(We mean you.)");
             Console.ReadLine();
             bool result = Prompt.Confirm("Are you ready to save Mars?", defaultValue: true);
-            if (!result) Console.WriteLine("Well, you're going to have to anyway...");
-
-            Console.Clear();
+            if (!result)
+            {
+                Console.WriteLine("See you next time then.");
+                _application.Stop() ;
+            } else
+            {
+                Console.Clear();
+            
 
             PlateauSizeParser userPSP = new(GetUserInput("Set the size of the plateau. Format: 'x y'"));
 
@@ -54,7 +59,7 @@ namespace MarsRover.UILayer.States
 
 
             _application.CurrentState = new AddRoverState(_application);
-
+            }
         }
 
     }

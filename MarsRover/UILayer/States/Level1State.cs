@@ -25,8 +25,7 @@ namespace MarsRover.UILayer.States
 
         public void Run()
         {
-            Console.WriteLine("Level 1"); 
-
+            Console.WriteLine("Level 2"); 
             _application.Stop();
         }
     }

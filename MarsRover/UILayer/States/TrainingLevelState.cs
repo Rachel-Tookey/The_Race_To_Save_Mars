@@ -32,12 +32,11 @@ namespace MarsRover.UILayer.States
             _application.MissionControl.AddObject(new ChargingStation(randomPos));
             _application.MissionControl.DisplayGrid();
 
-            Console.Clear(); 
             Console.WriteLine("LEVEL 0: TRAINING");
             Console.WriteLine("Aim: move your Rovers to get to the charging station");
 
-
-            while (true)
+            Boolean isLooping = true; 
+            while (isLooping)
             {
                 foreach (Rover rover in _application.MissionControl.Rovers.Where(x => x.IsIntact == true))
                 {
@@ -70,17 +69,18 @@ namespace MarsRover.UILayer.States
                 if (!HasRoverGotHealthCheck)
                 {
                     Console.WriteLine("You've got the health check. Time to level up!");
-                    _application.CurrentState = new Level1State(_application);
+                    isLooping = false;
                 }
                 else if (!_application.MissionControl.AreRoversIntact())
                 {
                     Console.WriteLine("Sorry. Looks like you have no rovers left...");
-                    _application.CurrentState = new EndState(_application);
+                    isLooping=false;
+                    _application.Stop(); 
                 }
             }
 
+            _application.CurrentState = new Level1State(_application);
 
-            
         }
     }
 }

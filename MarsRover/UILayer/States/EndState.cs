@@ -26,7 +26,8 @@ namespace MarsRover.UILayer.States
         public void Run()
         {
             Console.WriteLine("This was a console app by Tookles");
-            Console.WriteLine("The End"); 
+            Console.WriteLine("The End");
+            _application.Stop(); 
         }
 
     }
