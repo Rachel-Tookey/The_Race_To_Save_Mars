@@ -54,7 +54,7 @@ namespace MarsRover.UILayer.States
                 IsUserAdding = userAdding == "" ? false : true;
             }
 
-            _application.CurrentState = new MoveState(_application);
+            _application.CurrentState = new TrainingLevelState(_application);
         }
 
     }
