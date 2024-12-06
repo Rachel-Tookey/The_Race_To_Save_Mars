@@ -10,5 +10,11 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="Mars-Rover-Project-Tests" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Sharprompt" Version="2.4.5" />
+	  <PackageReference Include="Spectre.Console" Version="0.49.1" />
+	  <PackageReference Include="Terminal.Gui" Version="1.17.1" />
+	</ItemGroup>
 	
 </Project>

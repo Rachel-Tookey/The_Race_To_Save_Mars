@@ -34,17 +34,5 @@ namespace MarsRover.LogicLater.Models
             return myGrid;
         }
 
-        //public void PrintGrid()
-        //{
-        //    for (int rows = 0; rows < _x; rows++)
-        //    {
-        //        for (int cols = 0; cols < _y; cols++)
-        //        {
-        //            Console.Write(Grid[rows, cols]);
-        //        }
-        //        Console.WriteLine(); 
-        //    }
-        //}
-
     }
 }

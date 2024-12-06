@@ -19,7 +19,7 @@ namespace MarsRoverTests
         public void AddRover()
         {
             Position newPos = new Position(5, 5, Facing.NORTH); 
-            Rover newRover = new Rover("test", newPos);
+            Rover newRover = new Rover(newPos);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
 
@@ -36,7 +36,7 @@ namespace MarsRoverTests
         public void IsPositionEmpty_True()
         {
             Position newPos = new Position(5, 5, Facing.NORTH);
-            Rover newRover = new Rover("test", newPos);
+            Rover newRover = new Rover(newPos);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
             testMissionControl.AddRover(newRover);
@@ -51,7 +51,7 @@ namespace MarsRoverTests
         public void IsPositionEmpty_False()
         {
             Position newPos = new Position(5, 5, Facing.NORTH);
-            Rover newRover = new Rover("test", newPos);
+            Rover newRover = new Rover(newPos);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
             testMissionControl.AddRover(newRover);
@@ -66,7 +66,7 @@ namespace MarsRoverTests
         {
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(10, 10); 
+            Boolean result = testMissionControl.IsPositionInRange(9, 9); 
             result.Should().BeTrue(); 
 
         }
@@ -77,7 +77,7 @@ namespace MarsRoverTests
         {
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(11, 11);
+            Boolean result = testMissionControl.IsPositionInRange(10, 10);
             result.Should().BeFalse(); 
 
         }

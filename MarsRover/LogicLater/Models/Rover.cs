@@ -11,17 +11,16 @@ namespace MarsRover.LogicLater.Models
     public class Rover
     {
         public static ulong RoverCounter { get; set; }
-
         public ulong Id { get; init; }
-        public string Name { get; set; }
-
         public Position Position { get; set; }
 
-        public Rover(string name, Position position)
+        public Boolean IsIntact { get; set; }
+
+        public Rover(Position position)
         {
-            Name = name;
             Position = position;
             Id = RoverCounter;
+            IsIntact = true;
             RoverCounter++; 
         }
 
@@ -41,7 +40,7 @@ namespace MarsRover.LogicLater.Models
 
         public void MoveRover()
         {
-            int[,] _positionConversion = { { 0, 1 }, { 1, 0}, { 0, -1 }, { -1, 0 } };
+            int[,] _positionConversion = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
             Position.x += _positionConversion[(int)Position.Direction, 0];
             Position.y += _positionConversion[(int)Position.Direction, 1];
         }
