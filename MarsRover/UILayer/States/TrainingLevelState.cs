@@ -32,7 +32,7 @@ namespace MarsRover.UILayer.States
             _application.MissionControl.AddObject(new ChargingStation(randomPos));
             _application.MissionControl.DisplayGrid();
 
-
+            Console.Clear(); 
             Console.WriteLine("LEVEL 0: TRAINING");
             Console.WriteLine("Aim: move your Rovers to get to the charging station");
 
