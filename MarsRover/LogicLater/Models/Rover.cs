@@ -40,7 +40,7 @@ namespace MarsRover.LogicLater.Models
 
         public void MoveRover()
         {
-            int[,] _positionConversion = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
+            int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
             Position.x += _positionConversion[(int)Position.Direction, 0];
             Position.y += _positionConversion[(int)Position.Direction, 1];
         }

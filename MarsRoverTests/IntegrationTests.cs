@@ -19,9 +19,9 @@ namespace MarsRoverTests
         {
             // Arrange
 
-            Plateau testPlateau = new Plateau(5, 5);
+            Plateau testPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(testPlateau);
-            Position testPosOne = new Position(1, 2, Facing.NORTH);
+            Position testPosOne = new Position(3, 4, Facing.NORTH);
             Rover testRoverOne = new Rover(testPosOne);
             testMissionControl.AddRover(testRoverOne);
             Position testPosTwo = new Position(3, 3, Facing.EAST);
@@ -41,8 +41,8 @@ namespace MarsRoverTests
 
             // Assert
 
-            testRoverOne.Position.ToString().Should().Be($"1, 1 facing {Facing.NORTH}");
-            testRoverTwo.Position.ToString().Should().Be($"5, 3 facing {Facing.EAST}");
+            testRoverOne.Position.ToString().Should().Be($"2, 5 facing {Facing.NORTH}");
+            testRoverTwo.Position.ToString().Should().Be($"5, 1 facing {Facing.EAST}");
 
         }
 

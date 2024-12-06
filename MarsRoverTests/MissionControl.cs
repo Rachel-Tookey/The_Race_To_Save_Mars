@@ -61,24 +61,44 @@ namespace MarsRoverTests
             result.Should().BeFalse();
         }
 
-        [Test, Description("Check if a position is in bounds - true")]
+        [Test, Description("Check if a position is in upper bounds - true")]
         public void IsPositionIsInBounds_True()
         {
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(9, 9); 
+            Boolean result = testMissionControl.IsPositionInRange(10, 10); 
             result.Should().BeTrue(); 
 
         }
 
 
-        [Test, Description("Check if a position is in bounds - false")]
+        [Test, Description("Check if a position is in upper bounds - false")]
         public void IsPositionIsInBounds_False()
         {
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(10, 10);
+            Boolean result = testMissionControl.IsPositionInRange(11, 11);
             result.Should().BeFalse(); 
+
+        }
+
+        [Test, Description("Check if a position is in lower bounds - false")]
+        public void IsPositionIsInLowerBounds_False()
+        {
+            Plateau newPlateau = new Plateau(10, 10);
+            MissionControl testMissionControl = new MissionControl(newPlateau);
+            Boolean result = testMissionControl.IsPositionInRange(0, 0);
+            result.Should().BeFalse();
+
+        }
+
+        [Test, Description("Check if a position is in lower bounds - true")]
+        public void IsPositionIsInLowerBounds_True()
+        {
+            Plateau newPlateau = new Plateau(10, 10);
+            MissionControl testMissionControl = new MissionControl(newPlateau);
+            Boolean result = testMissionControl.IsPositionInRange(1, 1);
+            result.Should().BeTrue();
 
         }
 

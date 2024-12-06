@@ -29,7 +29,7 @@ namespace MarsRover.LogicLater.Models
 
         public PositionCheck ReturnNewPosition(Rover roverToMove)
         {
-            int[,] _positionConversion = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
+            int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
             int futureX = roverToMove.Position.x + _positionConversion[(int)roverToMove.Position.Direction, 0];
             int futureY = roverToMove.Position.y + _positionConversion[(int)roverToMove.Position.Direction, 1];
             return (futureX, futureY);
@@ -74,7 +74,7 @@ namespace MarsRover.LogicLater.Models
 
         public Boolean IsPositionInRange(int x, int y)
         {
-            if ((x >= Plateau._x) || (y >= Plateau._y) || (x < 0) || (y < 0))
+            if ((x > Plateau._x) || (y > Plateau._y) || (x <= 0) || (y <= 0))
             {
                 return false; 
             }
@@ -110,7 +110,7 @@ namespace MarsRover.LogicLater.Models
 
             Dictionary<ulong, PositionCheck> CurrentRoverPositions = GetRoverPositions();
 
-            for (int rows = 0; rows < plateau._y + 4; rows++)
+            for (int rows = plateau._y + 3; rows >= 0; rows--)
             {
                 Text[] gridContents = new Text[plateau._x + 4];
                 for (int cols = 0; cols < plateau._x + 4; cols++)
@@ -124,9 +124,10 @@ namespace MarsRover.LogicLater.Models
                         gridContents[cols] = new Text($"{plat[cols - 2, rows - 2]}", new Style(Color.Red, Color.Black));
                     }
 
+
                     foreach (ulong key in CurrentRoverPositions.Keys)
                     {
-                        if (CurrentRoverPositions[key] == (cols - 2 , rows - 2 ))
+                        if (CurrentRoverPositions[key] == (cols - 1 , rows - 1 ))
                         {
                             gridContents[cols] = new Text($"{key}", new Style(Color.Aquamarine1));
 
