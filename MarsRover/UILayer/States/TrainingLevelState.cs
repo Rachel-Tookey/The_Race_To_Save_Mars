@@ -27,9 +27,9 @@ namespace MarsRover.UILayer.States
 
         public void Run()
         {
-            
-            XYPosition randomPos = _application.MissionControl.PositionGenerator(); 
-            _application.MissionControl.AddObject( new ChargingStation(randomPos));
+
+            XYPosition randomPos = _application.MissionControl.PositionGenerator();
+            _application.MissionControl.AddObject(new ChargingStation(randomPos));
             _application.MissionControl.DisplayGrid();
 
 
@@ -37,58 +37,52 @@ namespace MarsRover.UILayer.States
             Console.WriteLine("Aim: move your Rovers to get to the charging station");
 
 
-            Boolean HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos);
-            Boolean AreRoversAllDestroyed = _application.MissionControl.AreRoversIntact(); 
-            
-
-            while ((HasRoverGotHealthCheck) && (_application.MissionControl.AreRoversIntact()))
-            { 
-                foreach (Rover rover in _application.MissionControl.Rovers)
+            while (true)
+            {
+                foreach (Rover rover in _application.MissionControl.Rovers.Where(x => x.IsIntact == true))
                 {
-                    if (rover.IsIntact)
+
+                    Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
+                    InstructionParser userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
+
+                    while (!userIP.Success)
                     {
-
-                        Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
-                        InstructionParser userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
-
-                        while (!userIP.Success)
-                        {
-                            Console.WriteLine(userIP.Message);
-                            userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
-                        }
-
-                        List<Instructions> userInstructions = userIP.Result;
-                        _application.MissionControl.RunInstructions(rover, userInstructions);   
-                       _application.MissionControl.DisplayGrid();
-
-                        if (!rover.IsIntact)
-                        {
-                            Console.WriteLine($"Rover {rover.Id} is destroyed");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Rover {rover.Id} is now at {rover.Position.ToString()}");
-                        }
-
-                        HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos);
-                        AreRoversAllDestroyed = _application.MissionControl.AreRoversIntact();
-
+                        Console.WriteLine(userIP.Message);
+                        userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
                     }
+
+                    List<Instructions> userInstructions = userIP.Result;
+                    _application.MissionControl.RunInstructions(rover, userInstructions);
+                    _application.MissionControl.DisplayGrid();
+
+                    if (!rover.IsIntact)
+                    {
+                        Console.WriteLine($"Rover {rover.Id} is destroyed");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Rover {rover.Id} is now at {rover.Position.ToString()}");
                     }
 
                 }
 
-            if (!HasRoverGotHealthCheck)
-            {
-                Console.WriteLine("You've got the health check. Time to level up!");
-            } else
-            {
-                Console.WriteLine("Sorry. Looks like you have no rovers left...");
+                Boolean HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos);
+                if (!HasRoverGotHealthCheck)
+                {
+                    Console.WriteLine("You've got the health check. Time to level up!");
+                    _application.CurrentState = new Level1State(_application);
+                }
+                else if (!_application.MissionControl.AreRoversIntact())
+                {
+                    Console.WriteLine("Sorry. Looks like you have no rovers left...");
+                    _application.CurrentState = new EndState(_application);
+                }
             }
 
-            _application.Stop();
 
+            
         }
-
     }
 }
+    
+
