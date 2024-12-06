@@ -69,11 +69,11 @@ namespace MarsRoverTests
         [Test, Description("RoverParser - correct input")]
         public void RoverParser_ValidInput()
         {
-            String mockUserString = "Kelly 5 7 N";
+            String mockUserString = "5 7";
 
             Plateau testPlateau = new Plateau(10, 10);
 
-            RoverParser testRP = new RoverParser(mockUserString, testPlateau);
+            RoverParser testRP = new RoverParser(mockUserString, Facing.NORTH, testPlateau);
 
             testRP.Success.Should().BeTrue();
             testRP.Message.Should().Be("");
@@ -88,14 +88,14 @@ namespace MarsRoverTests
         [Test, Description("RoverParser - invalid input")]
         public void RoverParser_InvalidInput()
         {
-            String mockUserString = "John 57 N";
+            String mockUserString = "57 N";
 
             Plateau testPlateau = new Plateau(10, 10);
 
-            RoverParser testRP = new RoverParser(mockUserString, testPlateau);
+            RoverParser testRP = new RoverParser(mockUserString, Facing.SOUTH, testPlateau);
 
             testRP.Success.Should().BeFalse();
-            testRP.Message.Should().Be("This was not in the correct format: x y d");
+            testRP.Message.Should().Be("This was not in the correct format: x y");
             testRP.Result.Should().BeNull();
    
         }
@@ -104,11 +104,11 @@ namespace MarsRoverTests
         [Test, Description("RoverParser - valid input, outside plateau")]
         public void RoverParser_ValidInput_OutsidePlateau()
         {
-            String mockUserString = "John 55 77 N";
+            String mockUserString = "55 77";
 
             Plateau testPlateau = new Plateau(10, 10);
 
-            RoverParser testRP = new RoverParser(mockUserString, testPlateau);
+            RoverParser testRP = new RoverParser(mockUserString, Facing.NORTH, testPlateau);
 
             testRP.Success.Should().BeFalse();
             testRP.Message.Should().Be("These coordinates are outside the plateau");

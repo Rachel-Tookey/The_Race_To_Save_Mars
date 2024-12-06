@@ -1,4 +1,6 @@
-﻿using MarsRover.Input.ParserModels;
+﻿using MarsRover.Enums;
+using MarsRover.Input.ParserModels;
+using Sharprompt;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,29 +20,36 @@ namespace MarsRover.States
 
         public string GetUserInput(string request)
         {
-            Console.WriteLine(request);
-            string? userInput = Console.ReadLine();
+            string? userInput = Prompt.Input<string>(request);
             return userInput != null ? userInput : "";
         }
 
         public void Run()
         {
+            Console.Clear(); 
+
             Console.WriteLine("Let's add some rovers!");
             Boolean IsUserAdding = true;
 
             while (IsUserAdding)
             {
-                RoverParser userRP = new(GetUserInput("Please provide starting position and direction for your rover: name x y d"),
-                    _application.MissionControl.Plateau);
+
+                string startingPos = GetUserInput("Please select starting position: x y");
+                var direction = Prompt.Select("Please select starting direction", new[] { Facing.NORTH, Facing.SOUTH, Facing.EAST, Facing.WEST });
+                RoverParser userRP = new(startingPos, direction,_application.MissionControl.Plateau);
+                
                 while (!userRP.Success)
                 {
                     Console.WriteLine(userRP.Message);
-                    userRP = new(GetUserInput("Please provide starting position and direction for your rover: name x y d"),
+                    startingPos = GetUserInput("Please select starting position: x y");
+                    direction = Prompt.Select("Please select starting direction", new[] { Facing.NORTH, Facing.SOUTH, Facing.EAST, Facing.WEST });
+                    userRP = new(startingPos, direction, 
                     _application.MissionControl.Plateau);
+
                 }
                 _application.MissionControl.AddRover(userRP.Result);
 
-                String userAdding = GetUserInput("Press enter to stop adding rover. Press any key to continue");
+                String userAdding = GetUserInput("Press R to add more rovers. Press enter to exit.");
                 IsUserAdding = userAdding == "" ? false : true; 
             }
 

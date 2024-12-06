@@ -23,7 +23,8 @@ namespace MarsRover
         public void Run()
         {
             _isRunning = true;
-            Console.WriteLine("Welcome to Revenge of the Musk");
+            Console.WriteLine("Welcome to Revenge of the Musk. Press Enter to continue.");
+            Console.ReadLine(); 
             while (_isRunning)
             {
                 CurrentState.Run();

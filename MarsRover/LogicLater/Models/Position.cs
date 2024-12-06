@@ -26,7 +26,7 @@ namespace MarsRover.LogicLater.Models
 
         public override string ToString()
         {
-            return $"({this.x},{this.y} facing {this.Direction})";
+            return $"{this.x}, {this.y} facing {this.Direction}";
         }
 
     }

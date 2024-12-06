@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Enums;
+using Sharprompt;
+using Spectre.Console;
 using PositionCheck = (int xAxis, int yAxis); 
 
 namespace MarsRover.LogicLater.Models
@@ -43,9 +45,7 @@ namespace MarsRover.LogicLater.Models
                 } else
                 {
                     PositionCheck futurePosition = ReturnNewPosition(roverToMove);
-                    Boolean CheckPosition = IsPositionEmpty(futurePosition.xAxis, futurePosition.yAxis);
-                    Boolean CheckBounds = IsPositionInRange(futurePosition.xAxis, futurePosition.yAxis);
-                    if (CheckPosition && CheckBounds)
+                    if (IsPositionEmpty(futurePosition.xAxis, futurePosition.yAxis) && IsPositionInRange(futurePosition.xAxis, futurePosition.yAxis))
                     {
                         roverToMove.MoveRover();
                     }
@@ -55,7 +55,6 @@ namespace MarsRover.LogicLater.Models
             }
 
         }
-
 
 
         public Boolean IsPositionEmpty(int x, int y)
@@ -78,6 +77,67 @@ namespace MarsRover.LogicLater.Models
             return true; 
         }
 
+
+        public Dictionary<ulong, PositionCheck> GetRoverPositions()
+        {
+
+            Dictionary<ulong, PositionCheck> positions = new Dictionary<ulong, PositionCheck>();
+            foreach (Rover rover in Rovers)
+            {
+                positions.Add(rover.Id, (rover.Position.x, rover.Position.y));
+            }
+            return positions; 
+        }
+
+
+        public void DisplayGrid()
+        {
+
+            var grid = new Grid();
+
+            Plateau plateau = this.Plateau;
+            char[,] plat = this.Plateau.Grid;
+
+
+            for (int cols = 0; cols < plateau._y + 4; cols++)
+            {
+                grid.AddColumn();
+            }
+
+            Dictionary<ulong, PositionCheck> CurrentRoverPositions = GetRoverPositions();
+
+            for (int rows = 0; rows < plateau._x + 4; rows++)
+            {
+                Text[] gridContents = new Text[plateau._y + 4];
+                for (int cols = 0; cols < plateau._y + 4; cols++)
+                {
+                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._x + 2) || (rows == plateau._x + 3) || (cols == plateau._y + 2) || (cols == plateau._y + 3))
+                    {
+                        gridContents[cols] = new Text(new Symbol("☠", "X"), new Style(Color.DarkKhaki));
+                    } 
+                    else
+                    {
+                        gridContents[cols] = new Text($"{plat[rows - 2, cols - 2]}", new Style(Color.Red, Color.Black));
+                    }
+
+                    foreach (ulong key in CurrentRoverPositions.Keys)
+                    {
+                        if (CurrentRoverPositions[key] == (rows, cols))
+                        {
+                            gridContents[cols] = new Text($"{key}", new Style(Color.Aquamarine1));
+
+                        }
+
+                    }
+
+
+                }
+                grid.AddRow(gridContents);
+            }
+
+            AnsiConsole.Write(grid);
+
+        }
 
 
     }

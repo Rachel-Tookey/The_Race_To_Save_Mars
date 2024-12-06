@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sharprompt;
 
 namespace MarsRover.States
 {
@@ -20,18 +21,21 @@ namespace MarsRover.States
 
         public string GetUserInput(string request)
         {
-            Console.WriteLine(request);
-            string? userInput = Console.ReadLine();
+            string? userInput = Prompt.Input<string>(request);
             return userInput != null ? userInput : "";
         }
 
         public void Run()
         {
-            Console.WriteLine("Let's get playin'");
 
             foreach (Rover rover in _application.MissionControl.Rovers)
             {
-                Console.WriteLine($"Rover {rover.Id} {rover.Name} is at {rover.Position.ToString()}");
+                Console.Clear();
+                _application.MissionControl.DisplayGrid();
+                Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
+
+                //var instructions = Prompt.MultiSelect("Choose your moves", new[] { Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M }, pageSize: 3);
+
                 InstructionParser userIP = new (GetUserInput("How do you want to move? i.e. LLRM"));
 
                 while (!userIP.Success)
@@ -41,15 +45,16 @@ namespace MarsRover.States
                     }
                 
                 List<Instructions> userInstructions = userIP.Result;
-
                 _application.MissionControl.RunInstructions(rover, userInstructions);
-
-                Console.WriteLine($"Rover {rover.Id} {rover.Name} is now at {rover.Position.ToString()}");
+                _application.MissionControl.DisplayGrid();
+                Console.WriteLine($"Rover {rover.Id} is now at {rover.Position.ToString()}");
 
 
             }
 
-            _application.CurrentState = new DisplayGrid(_application);
+            _application.MissionControl.DisplayGrid();
+
+            _application.Stop();
 
         }
 
