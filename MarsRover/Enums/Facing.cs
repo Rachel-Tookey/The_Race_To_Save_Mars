@@ -11,6 +11,7 @@ namespace MarsRover.Enums
         NORTH,
         EAST,
         SOUTH,
-        WEST
+        WEST,
+        NONE
     }
 }

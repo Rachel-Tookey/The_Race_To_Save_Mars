@@ -25,7 +25,7 @@ namespace MarsRoverTests
 
             List<Rover> rovers = new List<Rover>() {newRover };
 
-            testMissionControl.AddRover(newRover);
+            testMissionControl.AddObject(newRover);
 
             testMissionControl.Rovers.Should().HaveCount(1);
             testMissionControl.Rovers.Should().BeEquivalentTo(rovers);
@@ -39,9 +39,9 @@ namespace MarsRoverTests
             Rover newRover = new Rover(newPos);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            testMissionControl.AddRover(newRover);
+            testMissionControl.AddObject(newRover);
 
-            Boolean result = testMissionControl.IsPositionEmpty(5, 6);
+            Boolean result = testMissionControl.IsPositionEmpty((5, 6));
 
             result.Should().BeTrue();
 
@@ -54,9 +54,9 @@ namespace MarsRoverTests
             Rover newRover = new Rover(newPos);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            testMissionControl.AddRover(newRover);
+            testMissionControl.AddObject(newRover);
 
-            Boolean result = testMissionControl.IsPositionEmpty(5, 5);
+            Boolean result = testMissionControl.IsPositionEmpty((5, 5));
 
             result.Should().BeFalse();
         }
@@ -65,8 +65,7 @@ namespace MarsRoverTests
         public void IsPositionIsInBounds_True()
         {
             Plateau newPlateau = new Plateau(10, 10);
-            MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(10, 10); 
+            Boolean result = newPlateau.IsPositionInRange((10, 10)); 
             result.Should().BeTrue(); 
 
         }
@@ -76,8 +75,7 @@ namespace MarsRoverTests
         public void IsPositionIsInBounds_False()
         {
             Plateau newPlateau = new Plateau(10, 10);
-            MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(11, 11);
+            Boolean result = newPlateau.IsPositionInRange((11, 11));
             result.Should().BeFalse(); 
 
         }
@@ -86,8 +84,7 @@ namespace MarsRoverTests
         public void IsPositionIsInLowerBounds_False()
         {
             Plateau newPlateau = new Plateau(10, 10);
-            MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(0, 0);
+            Boolean result = newPlateau.IsPositionInRange((0, 0));
             result.Should().BeFalse();
 
         }
@@ -96,8 +93,7 @@ namespace MarsRoverTests
         public void IsPositionIsInLowerBounds_True()
         {
             Plateau newPlateau = new Plateau(10, 10);
-            MissionControl testMissionControl = new MissionControl(newPlateau);
-            Boolean result = testMissionControl.IsPositionInRange(1, 1);
+            Boolean result = newPlateau.IsPositionInRange((1, 1));
             result.Should().BeTrue();
 
         }

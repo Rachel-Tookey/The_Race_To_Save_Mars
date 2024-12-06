@@ -10,11 +10,11 @@ using Sharprompt;
 
 namespace MarsRover.UILayer.States
 {
-    public class MoveState : IState
+    public class TrainingLevelState : IState
     {
         public Application _application;
 
-        public MoveState(Application application)
+        public TrainingLevelState(Application application)
         {
             _application = application;
         }
@@ -28,16 +28,21 @@ namespace MarsRover.UILayer.States
         public void Run()
         {
 
-            foreach (Rover rover in _application.MissionControl.Rovers)
+            XYPosition randomPos = _application.MissionControl.PositionGenerator();
+            _application.MissionControl.AddObject(new ChargingStation(randomPos));
+            _application.MissionControl.DisplayGrid();
+
+
+            Console.WriteLine("LEVEL 0: TRAINING");
+            Console.WriteLine("Aim: move your Rovers to get to the charging station");
+
+
+            while (true)
             {
-                if (rover.IsIntact)
+                foreach (Rover rover in _application.MissionControl.Rovers.Where(x => x.IsIntact == true))
                 {
 
-                    _application.MissionControl.DisplayGrid();
                     Console.WriteLine($"Rover {rover.Id} is at {rover.Position.ToString()}");
-
-                    //var instructions = Prompt.MultiSelect("Choose your moves", new[] { Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M, Instructions.L, Instructions.R, Instructions.M }, pageSize: 3);
-
                     InstructionParser userIP = new(GetUserInput("How do you want to move? i.e. LLRM"));
 
                     while (!userIP.Success)
@@ -47,9 +52,7 @@ namespace MarsRover.UILayer.States
                     }
 
                     List<Instructions> userInstructions = userIP.Result;
-
                     _application.MissionControl.RunInstructions(rover, userInstructions);
-
                     _application.MissionControl.DisplayGrid();
 
                     if (!rover.IsIntact)
@@ -62,11 +65,24 @@ namespace MarsRover.UILayer.States
                     }
 
                 }
+
+                Boolean HasRoverGotHealthCheck = _application.MissionControl.IsPositionEmpty(randomPos);
+                if (!HasRoverGotHealthCheck)
+                {
+                    Console.WriteLine("You've got the health check. Time to level up!");
+                    _application.CurrentState = new Level1State(_application);
+                }
+                else if (!_application.MissionControl.AreRoversIntact())
+                {
+                    Console.WriteLine("Sorry. Looks like you have no rovers left...");
+                    _application.CurrentState = new EndState(_application);
+                }
             }
 
-            _application.Stop();
 
+            
         }
-
     }
 }
+    
+

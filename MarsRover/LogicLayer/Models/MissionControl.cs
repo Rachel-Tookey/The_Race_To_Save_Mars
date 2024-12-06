@@ -1,4 +1,6 @@
-﻿using System;
+﻿global using XYPosition = (int xAxis, int yAxis);
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +8,6 @@ using System.Threading.Tasks;
 using MarsRover.Enums;
 using Sharprompt;
 using Spectre.Console;
-using PositionCheck = (int xAxis, int yAxis); 
 
 namespace MarsRover.LogicLayer.Models
 {
@@ -14,84 +15,101 @@ namespace MarsRover.LogicLayer.Models
     {
         public Plateau Plateau { get; set; }
 
-        public List<Rover> Rovers { get; set; } = new List<Rover>();
+        public List<Rover> Rovers { get; private set; } = new List<Rover>();
+
+        public ChargingStation ChargingStation { get; private set; }    
 
         public MissionControl(Plateau plateau)
         {
             Plateau = plateau;
         }
 
-        public void AddRover(Rover rover)
+        public void AddObject(Rover rover)
         {
             Rovers.Add(rover);
         }
 
-
-        public PositionCheck ReturnNewPosition(Rover roverToMove)
+        public void AddObject(ChargingStation chargingStation)
         {
-            int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-            int futureX = roverToMove.Position.x + _positionConversion[(int)roverToMove.Position.Direction, 0];
-            int futureY = roverToMove.Position.y + _positionConversion[(int)roverToMove.Position.Direction, 1];
-            return (futureX, futureY);
+            ChargingStation = chargingStation;
         }
-
 
         public void RunInstructions(Rover roverToMove, List<Instructions> listOfMoves)
         {
-            foreach (Instructions direction in listOfMoves) { 
+            foreach (Instructions direction in listOfMoves)
+            {
                 if ((direction == Instructions.L) || (direction == Instructions.R))
                 {
                     roverToMove.RotateRover(direction);
-                } else if (roverToMove.IsIntact)
+                }
+                else if (roverToMove.IsIntact)
                 {
-                    PositionCheck futurePosition = ReturnNewPosition(roverToMove);
-                    if (!IsPositionInRange(futurePosition.xAxis, futurePosition.yAxis))
+                    XYPosition futurePosition = roverToMove.PredictNextPosition();
+                    if (!Plateau.IsPositionInRange((futurePosition.xAxis, futurePosition.yAxis)))
                     {
                         roverToMove.MoveRover();
                         roverToMove.IsIntact = false;
-                    } else if (IsPositionEmpty(futurePosition.xAxis, futurePosition.yAxis))
+                    }
+                    else if (IsPositionEmpty((futurePosition.xAxis, futurePosition.yAxis)))
                     {
                         roverToMove.MoveRover();
                     }
-
-                } 
-                       
+                }
             }
 
         }
 
 
-        public Boolean IsPositionEmpty(int x, int y)
+        public Boolean IsPositionEmpty(XYPosition xyPosition)
         {
             foreach (Rover rover in Rovers)
             {
-                if ((rover.Position.x == x) && (rover.Position.y == y)) {
+                if ((rover.Position.x == xyPosition.xAxis) && (rover.Position.y == xyPosition.yAxis)) {
                     return false; 
                 }
             }
             return true; 
         }
 
-        public Boolean IsPositionInRange(int x, int y)
+        public Boolean AreRoversIntact()
         {
-            if ((x > Plateau._x) || (y > Plateau._y) || (x <= 0) || (y <= 0))
+            foreach (Rover rover in Rovers)
             {
-                return false; 
+                if (rover.IsIntact)
+                {
+                    return true; 
+                }
             }
-            return true; 
+            return false;
         }
 
-
-        public Dictionary<ulong, PositionCheck> GetRoverPositions()
+        public Dictionary<ulong, XYPosition> GetRoverPositions()
         {
 
-            Dictionary<ulong, PositionCheck> positions = new Dictionary<ulong, PositionCheck>();
+            Dictionary<ulong, XYPosition> positions = new Dictionary<ulong, XYPosition>();
             foreach (Rover rover in Rovers)
             {
                 positions.Add(rover.Id, (rover.Position.x, rover.Position.y));
             }
-            return positions; 
+            return positions;
         }
+
+
+        public XYPosition PositionGenerator()
+        {
+            Random random = new Random();
+            int xAxis = random.Next(1, Plateau._x);
+            int yAxis = random.Next(1, Plateau._y);
+
+            while (!IsPositionEmpty((xAxis, yAxis)))
+            {
+                xAxis = random.Next(1, Plateau._x);
+                yAxis = random.Next(1, Plateau._y);
+            }
+
+            return (xAxis, yAxis);
+        }
+
 
 
         public void DisplayGrid()
@@ -108,7 +126,7 @@ namespace MarsRover.LogicLayer.Models
                 grid.AddColumn();
             }
 
-            Dictionary<ulong, PositionCheck> CurrentRoverPositions = GetRoverPositions();
+            Dictionary<ulong, XYPosition> CurrentRoverPositions = GetRoverPositions();
 
             for (int rows = plateau._y + 3; rows >= 0; rows--)
             {
@@ -118,7 +136,9 @@ namespace MarsRover.LogicLayer.Models
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 2) || (rows == plateau._y + 3) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
                         gridContents[cols] = new Text(new Symbol("☠", "X"), new Style(Color.DarkKhaki));
-                    } 
+                    } else if (ChargingStation.Position == (cols - 1, rows - 1)) {
+                        gridContents[cols] = new Text(new Symbol("⚕", "£"), new Style(Color.DeepPink3));
+                    }
                     else
                     {
                         gridContents[cols] = new Text($"{plat[cols - 2, rows - 2]}", new Style(Color.Red, Color.Black));
@@ -132,10 +152,7 @@ namespace MarsRover.LogicLayer.Models
                             gridContents[cols] = new Text($"{key}", new Style(Color.Aquamarine1));
 
                         }
-
                     }
-
-
                 }
                 grid.AddRow(gridContents);
             }
