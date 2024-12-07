@@ -112,53 +112,44 @@ namespace MarsRover.LogicLayer.Models
 
 
 
-        public void DisplayGrid()
+        public string[,] GetGrid()
         {
 
-            var grid = new Grid();
-
             Plateau plateau = this.Plateau;
-            char[,] plat = this.Plateau.Grid;
 
-
-            for (int cols = 0; cols < plateau._x + 4; cols++)
-            {
-                grid.AddColumn();
-            }
+            string[,] newGrid = new string[plateau._x + 4, plateau._y + 4];
 
             Dictionary<ulong, XYPosition> CurrentRoverPositions = GetRoverPositions();
 
             for (int rows = plateau._y + 3; rows >= 0; rows--)
             {
-                Text[] gridContents = new Text[plateau._x + 4];
                 for (int cols = 0; cols < plateau._x + 4; cols++)
                 {
-                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 2) || (rows == plateau._y + 3) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
+                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-                        gridContents[cols] = new Text(new Symbol("☠", "X"), new Style(Color.DarkKhaki));
-                    } else if (ChargingStation.Position == (cols - 1, rows - 1)) {
-                        gridContents[cols] = new Text(new Symbol("⚕", "£"), new Style(Color.DeepPink3));
-                    }
+                        newGrid[rows,cols] = new Symbol("☠️", "X");
+                    } 
+                    //else if (ChargingStation.Position == (cols, rows)) {
+                    //    newGrid[rows, cols] = new Symbol("⚕", "$"); 
+                    //}
                     else
                     {
-                        gridContents[cols] = new Text($"{plat[cols - 2, rows - 2]}", new Style(Color.Red, Color.Black));
+                        newGrid[rows, cols] = "_"; 
                     }
 
 
                     foreach (ulong key in CurrentRoverPositions.Keys)
                     {
-                        if (CurrentRoverPositions[key] == (cols - 1 , rows - 1 ))
+                        if (CurrentRoverPositions[key] == (cols, rows))
                         {
-                            gridContents[cols] = new Text($"{key}", new Style(Color.Aquamarine1));
+                            newGrid[rows, cols] = $"{key}";
 
                         }
                     }
                 }
-                grid.AddRow(gridContents);
             }
 
-            AnsiConsole.Write(grid);
-
+            return newGrid; 
         }
 
 

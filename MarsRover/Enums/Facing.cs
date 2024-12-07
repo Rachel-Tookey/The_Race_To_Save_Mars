@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MarsRover.Enums
 {
-    public enum Facing
+    public enum Facing   
     {
         NORTH,
         EAST,
