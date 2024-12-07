@@ -125,15 +125,15 @@ namespace MarsRover.UILayerTG
                     if (userInput.Success)
                     {
                         Application.MissionControl.AddObject(userInput.Result);
-                        var result = MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]);
-                        if (result == 1)
+                        if (Application.MissionControl.Rovers.Count < 3)
                         {
-                            Application.SwitchToNextLevel(new LevelThree(Application).Window);
+                            var result = MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]);
+                            if (result == 0)
+                            {
+                                Application.SwitchToNextLevel(new LevelTwo(Application).Window);
+                            }
                         }
-                        else
-                        {
-                            Application.SwitchToNextLevel(new LevelTwo(Application).Window);
-                        }
+                        Application.SwitchToNextLevel(new LevelThree(Application).Window);
                     }
                     else
                     {

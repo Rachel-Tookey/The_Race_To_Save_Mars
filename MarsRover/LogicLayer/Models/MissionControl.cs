@@ -121,17 +121,18 @@ namespace MarsRover.LogicLayer.Models
 
             Dictionary<ulong, XYPosition> CurrentRoverPositions = GetRoverPositions();
 
-            for (int rows = plateau._y + 3; rows >= 0; rows--)
+            for (int rows = plateau._x + 3; rows >= 0; rows--)
             {
-                for (int cols = 0; cols < plateau._x + 4; cols++)
+                for (int cols = 0; cols < plateau._y + 4; cols++)
                 {
-                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
+                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._x + 3) || (rows == plateau._x + 2) || (cols == plateau._y + 2) || (cols == plateau._y + 3))
                     {
                         newGrid[rows, cols] = new Symbol("☠️", "X");
                     }
-                    //else if (ChargingStation.Position == (cols, rows)) {
-                    //    newGrid[rows, cols] = new Symbol("⚕", "$"); 
-                    //}
+                    else if (ChargingStation.Position == (rows - 2, cols - 2))
+                    {
+                        newGrid[rows, cols] = new Symbol("⚕", "$");
+                    }
                     else
                     {
                         newGrid[rows, cols] = "_";
