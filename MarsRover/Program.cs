@@ -8,7 +8,9 @@ namespace MarsRover
     {
         static void Main(string[] args)
         {
-            Application application = new Application();
+            Terminal.Gui.Application.Init();
+            var top = Terminal.Gui.Application.Top;
+            Application application = new Application(top);
             application.Run();
 
         }

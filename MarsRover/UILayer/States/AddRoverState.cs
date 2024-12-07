@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terminal.Gui;
 
 namespace MarsRover.UILayer.States
 {
@@ -27,6 +28,24 @@ namespace MarsRover.UILayer.States
 
         public void Run()
         {
+            Toplevel top = _application.Toplevel;
+
+            top.RemoveAll();
+
+            var window = new Terminal.Gui.Window("Add Rovers")
+            {
+                X = 0,
+                Y = 0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),
+
+            };
+
+            top.Add(window);
+
+            Terminal.Gui.Application.Run();
+
+
             Console.Clear();
 
             Console.WriteLine("Let's add some rovers!");

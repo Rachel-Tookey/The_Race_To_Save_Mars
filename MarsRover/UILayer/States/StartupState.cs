@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
 using Sharprompt;
+using Terminal.Gui;
 
 namespace MarsRover.UILayer.States
 {
@@ -29,31 +30,62 @@ namespace MarsRover.UILayer.States
         public void Run()
         {
 
-            Console.WriteLine("A billionaire has landed on Mars...");
-            Console.ReadLine();
-            Console.WriteLine("He intends to take the riches of Mars for himself...");
-            Console.ReadLine();
-            Console.WriteLine("There is only one person who can save Mars...");
-            Console.ReadLine();
-            Console.WriteLine("(We mean you.)");
-            Console.ReadLine();
-            bool result = Prompt.Confirm("Are you ready to save Mars?", defaultValue: true);
-            if (!result) Console.WriteLine("Well, you're going to have to anyway...");
+            Toplevel top = _application.Toplevel; 
 
-            Console.Clear();
+            top.RemoveAll();
 
-            PlateauSizeParser userPSP = new(GetUserInput("Set the size of the plateau. Format: 'x y'"));
+            var window = new Terminal.Gui.Window("Race to Save Mars") {
+                X=0,
+                Y=0,
+                Width = Dim.Fill(),
+                Height = Dim.Fill(),    
+            
+            };
 
-            while (!userPSP.Success)
+            string literal = """
+                A billionaire has landed on Mars...
+                There is only one person who can save it...
+                (We mean you)
+                """;
+
+
+            var label = new Terminal.Gui.Label(literal) {
+                X = Pos.Center(),
+                Y = Pos.Center() - 1,
+
+            };
+
+            window.Add(label);
+
+            var nextButton = new Terminal.Gui.Button("Are you ready to save Mars?") {
+                X = Pos.Center(),
+                Y = Pos.Center() + 3,
+
+            };
+
+            nextButton.Clicked += () =>
             {
-                Console.WriteLine(userPSP.Message);
-                userPSP = new(GetUserInput("Set the size of the plateau. Format: 'x y'"));
-            }
+                _application.CurrentState = new AddRoverState(_application);
+            };
 
-            _application.MissionControl = new MissionControl(userPSP.Result);
+            window.Add(nextButton); 
 
+            top.Add(window);
 
-            _application.CurrentState = new AddRoverState(_application);
+            Terminal.Gui.Application.Run();
+          
+
+            //Console.Clear();
+
+            //PlateauSizeParser userPSP = new(GetUserInput("Set the size of the plateau. Format: 'x y'"));
+
+            //while (!userPSP.Success)
+            //{
+            //    Console.WriteLine(userPSP.Message);
+            //    userPSP = new(GetUserInput("Set the size of the plateau. Format: 'x y'"));
+            //}
+
+            //_application.MissionControl = new MissionControl(userPSP.Result);
 
         }
 

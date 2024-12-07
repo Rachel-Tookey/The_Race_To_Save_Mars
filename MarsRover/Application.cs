@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MarsRover.LogicLayer.Models;
 using MarsRover.UILayer.States;
 using Sharprompt;
+using Terminal.Gui;
 
 namespace MarsRover
 {
@@ -16,20 +17,23 @@ namespace MarsRover
         public IState CurrentState { get; set; }
         public MissionControl MissionControl { get; set; }
 
-        public Application()
+        public Toplevel Toplevel { get; set; }
+
+        public Application(Toplevel top)
         {
             CurrentState = new StartupState(this);
+            Toplevel = top; 
         }
 
         public void Run()
         {
+
             _isRunning = true;
-            Console.WriteLine("Welcome to The Race For Mars. Press Enter to continue.");
-            Console.ReadLine(); 
             while (_isRunning)
             {
                 CurrentState.Run();
             }
+
         }
 
         public void Stop()
