@@ -127,27 +127,24 @@ namespace MarsRover.LogicLayer.Models
                 {
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-                        newGrid[rows,cols] = new Symbol("☠️", "X");
-                    } 
+                        newGrid[rows, cols] = new Symbol("☠️", "X");
+                    }
                     //else if (ChargingStation.Position == (cols, rows)) {
                     //    newGrid[rows, cols] = new Symbol("⚕", "$"); 
                     //}
                     else
                     {
-                        newGrid[rows, cols] = "_"; 
-                    }
-
-
-                    foreach (ulong key in CurrentRoverPositions.Keys)
-                    {
-                        if (CurrentRoverPositions[key] == (cols, rows))
-                        {
-                            newGrid[rows, cols] = $"{key}";
-
-                        }
+                        newGrid[rows, cols] = "_";
                     }
                 }
             }
+
+
+            foreach (ulong key in CurrentRoverPositions.Keys)
+                {
+                    newGrid[CurrentRoverPositions[key].xAxis + 2, CurrentRoverPositions[key].yAxis + 2] = $"{key}"; 
+                }
+            
 
             return newGrid; 
         }

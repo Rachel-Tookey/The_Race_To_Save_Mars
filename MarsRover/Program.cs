@@ -14,11 +14,11 @@ namespace MarsRover
             var game = new GameApplication();
             game.Run();
 
-            //Plateau newplat = new Plateau(20, 20);
+            //Plateau newplat = new Plateau(10, 10);
 
             //MissionControl mc = new MissionControl(newplat);
 
-            //Position newPosition = new Position(3, 4, Facing.NORTH);
+            //Position newPosition = new Position(3, 3, Facing.NORTH);
 
             //Rover newRov = new Rover(newPosition);
 
@@ -31,7 +31,7 @@ namespace MarsRover
 
             //foreach (string grid in myGrid)
             //{
-            //    Console.WriteLine(grid);    
+            //    Console.WriteLine(grid);
             //}
 
         }
