@@ -1,5 +1,6 @@
 ﻿using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
+using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +12,14 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace MarsRover.UILayerTG
 {
-    public class LevelThree
+    public class TrainingLevel : ILevel
     {
         public GameApplication Application { get; set; }
 
-        public Window Window { get; set; }
-
-        public LevelThree(GameApplication game)
+        public TrainingLevel(GameApplication game)
         {
 
             Application = game;
-            Window = WindowRun();
         }
 
 
@@ -65,7 +63,7 @@ namespace MarsRover.UILayerTG
                         };
 
                     }
-                    else if (myGrid[i, j] == "$")
+                    else if (myGrid[i, j] == "@")
                     {
                         colorSet = new ColorScheme
                         {
@@ -92,6 +90,8 @@ namespace MarsRover.UILayerTG
 
         public Window WindowRun()
         {
+            MissionControl missionControl = Application.MissionControl;
+
             var openingWindow = new Terminal.Gui.Window("Training Level")
             {
                 X = 0,
@@ -101,37 +101,81 @@ namespace MarsRover.UILayerTG
 
             };
 
-            XYPosition randomPos = Application.MissionControl.PositionGenerator();
-            Application.MissionControl.AddObject(new ChargingStation(randomPos));
 
-            var displayGrid = GetGrid(); 
+            XYPosition randomPos = missionControl.PositionGenerator();
+            missionControl.AddObject(new Hole(randomPos));
+
+            var displayGrid = GetGrid();
+
 
             string instructionLabel = """
-                Your Rovers have landed on Mars to find the capital city abandonned. 
-                The journey has sapped your strength. 
-                You must get to the charging station ($).  
-                You can rotate right (R) or (L), and move one space at a time. 
-                You have three attempts. 
+                Your Rovers have landed on Mars to find it...empty. 
+                Then you remember, the Martians live underground!
+                You spot a door (@)...the entrance! 
+                You must get one of your rovers there.  
+                You can rotate right (R) or (L).
+                You can move one space at a time. 
+                You have 2 minutes...
                 """;
             
             var textLabel = new Label(instructionLabel)
             {
-                X = Pos.Right(displayGrid) + 4,
+                X = 65,
                 Y = 3,
                 Width = Dim.Fill()
             };
 
+
+
+            var comboBoxLabel = new Label("Select a Rover:")
+            {
+                X = 65,
+                Y = Pos.Bottom(textLabel) + 2,
+                Width = Dim.Fill()
+            };
+
+            var comboBox = new ComboBox
+            {
+                X = 65,
+                Y = Pos.Bottom(comboBoxLabel),
+                Width = 40,
+                Height = 40
+            };
+
+
+            var roverPosition = new Label()
+            {
+                X = 65,
+                Y = Pos.Bottom(comboBoxLabel) + 2,
+                ColorScheme = new ColorScheme
+                {
+                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
+                },
+            };
+
+            comboBox.SetSource(missionControl.Rovers.Select(x => x.Id).ToList());
+
+            Rover selectedRover = missionControl.Rovers[0];
+
+            comboBox.SelectedItemChanged += (e) =>
+            {
+                selectedRover = missionControl.GetRoverById( (ulong) comboBox.SelectedItem);
+                roverPosition.Text = selectedRover.ToString(); 
+            };
+
+
             var buttonLabel = new Terminal.Gui.Label("Enter your sequence of moves:")
             {
-                X = Pos.Right(displayGrid) + 5,
-                Y = 7,
+                X = 65,
+                Y = Pos.Center() + 3,
 
             };
 
+
             var textField = new TextField("i.e.: LLRMMMRLR")
             {
-                X = Pos.Right(displayGrid) + 6,
-                Y = 9,
+                X = 65,
+                Y = Pos.Bottom(buttonLabel) + 2,
                 Width = 40
 
             };
@@ -140,15 +184,15 @@ namespace MarsRover.UILayerTG
 
             var submitButton = new Button("Submit")
             {
-                X = Pos.Right(displayGrid) + 7,
-                Y = 11
+                X = 65,
+                Y = Pos.Bottom(textField) + 2,
             };
 
 
             var responseLabel = new Label()
             {
-                X = Pos.Right(displayGrid) + 8,
-                Y = 12,
+                X = 65,
+                Y = Pos.Bottom(submitButton) + 2,
                 TextAlignment = TextAlignment.Right,
                 ColorScheme = new ColorScheme
                 {
@@ -156,14 +200,11 @@ namespace MarsRover.UILayerTG
                 },
             };
 
-
-            // if Rover position == 
-
             int attempts = 0; 
 
             submitButton.Clicked += () =>
             {
-                if (attempts != 3) { 
+                if (attempts < 9) { 
                 InstructionParser userInput = new InstructionParser(textField.Text.ToString());
                     if (!userInput.Success)
                     {
@@ -172,37 +213,34 @@ namespace MarsRover.UILayerTG
                     }
                     else
                     {
-                        Rover thisRover = Application.MissionControl.Rovers[0];
                         attempts += 1;
-                        Application.MissionControl.RunInstructions(thisRover, userInput.Result);
+                        missionControl.RunInstructions(selectedRover, userInput.Result);
                         openingWindow.Remove(displayGrid);
                         displayGrid = GetGrid();
-                        openingWindow.Add(displayGrid);
+                        openingWindow.Add(displayGrid); 
                         openingWindow.SetNeedsDisplay();
 
-                        if ((thisRover.Position.x, thisRover.Position.y) == randomPos)
+                        if (selectedRover.Position == missionControl.Hole.Position)
                         {
-                            Application.SwitchToNextLevel(new LevelFour(Application).Window);
+                            Application.SwitchToNextLevel(new FirstLevel(Application));
                         }
-                        else if (thisRover.IsIntact != true)
+                        else if (missionControl.AreRoversIntact() != true)
                         {
-                            responseLabel.Text = "Game over";
-                            Application.SwitchToNextLevel(new LevelOne(Application).Window);
+                            Application.SwitchToNextLevel(new EndLevel(Application));
 
                         }
 
                     }
                 } else
                 {
-                    responseLabel.Text = "Game over";
+                    Application.SwitchToNextLevel(new EndLevel(Application));
                 }
 
 
             };
 
 
-
-            openingWindow.Add(displayGrid, textLabel, buttonLabel, textField, submitButton, responseLabel);
+            openingWindow.Add(displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, buttonLabel, textField, submitButton, responseLabel);
 
 
             return openingWindow; 

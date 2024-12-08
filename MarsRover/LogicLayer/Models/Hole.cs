@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace MarsRover.LogicLayer.Models
 {
-    public class ChargingStation
+    public class Hole : Landmark
     {
         public XYPosition Position { get; set; }
 
-        public Boolean IsUsed { get; set; } = false; 
-
-        public ChargingStation(XYPosition position) {
+        public Hole(XYPosition position) {
            Position = position;
         
         }

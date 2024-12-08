@@ -7,22 +7,19 @@ using Terminal.Gui;
 
 namespace MarsRover.UILayerTG
 {
-    public class LevelFour
+    public class FirstLevel : ILevel
     {
         public GameApplication Application { get; set; }
 
-        public Window Window { get; set; }
-
-        public LevelFour(GameApplication game)
+        public FirstLevel(GameApplication game)
         {
 
             Application = game;
-            Window = WindowRun();
         }
 
         public Window WindowRun()
         {
-            var openingWindow = new Terminal.Gui.Window("Level Four")
+            var openingWindow = new Terminal.Gui.Window("Level One")
             {
                 X = 0,
                 Y = 0,

@@ -21,7 +21,7 @@ namespace MarsRover.Input.ParserModels
             if (userPattern.IsMatch(UserInput))
             {
                 string[] splitUI = UserInput.Split(' ');
-                if ((int.TryParse(splitUI[0], out int XAxis)) &&  (int.TryParse(splitUI[1], out int YAxis))) {
+                if ((int.TryParse(splitUI[0], out int YAxis)) &&  (int.TryParse(splitUI[1], out int XAxis))) {
 
                     if ((XAxis < 20) || (YAxis < 20)) {
                         Message = "Plateau is too small. It must be a minimum of 20 20";

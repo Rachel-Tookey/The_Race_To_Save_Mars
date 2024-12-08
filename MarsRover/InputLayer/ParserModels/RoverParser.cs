@@ -28,14 +28,13 @@ namespace MarsRover.Input.ParserModels
                 int xAxis = Int32.Parse(userInputArray[0]);
                 int yAxis = Int32.Parse(userInputArray[1]);
 
-                if ((xAxis > plateau._x) || (yAxis > plateau._y))
+                if ((xAxis >= plateau._x) || (yAxis >= plateau._y))
                 {
                     Success = false;
                     Message = "These coordinates are outside the plateau"; 
                 } else
                 {
-                    Position startingPosition = new Position(xAxis, yAxis, direction);
-                    Result = new Rover(startingPosition);
+                    Result = new Rover((xAxis, yAxis), direction);
                     Success = true; 
                 }
             
