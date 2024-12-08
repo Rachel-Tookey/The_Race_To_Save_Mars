@@ -109,7 +109,7 @@ namespace MarsRover.UILayerTG
             var displayGrid = GetGrid();
 
             string instructionLabel = $"""
-                Your Rovers have landed on Mars to find it...empty.
+                Your rovers have landed on Mars to find it...empty.
                 Then you remember, the Martians live underground!
                 You spot a door (@)...the entrance!
                 You must get one of your rovers there.
@@ -136,7 +136,7 @@ namespace MarsRover.UILayerTG
                 }
             };
 
-            int seconds = 120;
+            int seconds = 180;
 
 
             var timerLabel = new Label($"Time left: {seconds}s")
@@ -172,7 +172,7 @@ namespace MarsRover.UILayerTG
             var comboBoxLabel = new Label("Select a rover:")
             {
                 X = xAlignment,
-                Y = Pos.Bottom(timerLabel) + 2,
+                Y = Pos.Bottom(timerLabel) + 1,
                 Width = Dim.Fill()
             };
 
@@ -214,7 +214,7 @@ namespace MarsRover.UILayerTG
             };
 
 
-            var textField = new TextField()
+            var textField = new TextField("i.e.: LLMMRRMM")
             {
                 X = xAlignment,
                 Y = Pos.Bottom(buttonLabel) + 1,
@@ -234,7 +234,7 @@ namespace MarsRover.UILayerTG
             var responseLabel = new Label()
             {
                 X = xAlignment,
-                Y = Pos.Bottom(submitButton) + 2,
+                Y = Pos.Bottom(submitButton) + 1,
                 TextAlignment = TextAlignment.Right,
                 ColorScheme = new ColorScheme
                 {
