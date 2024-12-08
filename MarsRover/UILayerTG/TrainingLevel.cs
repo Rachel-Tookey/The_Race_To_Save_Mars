@@ -37,7 +37,7 @@ namespace MarsRover.UILayerTG
 
             int startX = 2;
             int startY = 2;
-            for (int i = myGrid.GetLength(0) - 1; i >= 0 ; i--)
+            for (int i = myGrid.GetLength(0) - 1; i >= 0; i--)
             {
                 for (int j = 0; j < myGrid.GetLength(1); j++)
                 {
@@ -102,7 +102,7 @@ namespace MarsRover.UILayerTG
 
             int xAlignment = 60;
 
-
+            // move to a getgrid method for level 1? 
             XYPosition randomPos = missionControl.PositionGenerator();
             missionControl.AddObject(new Hole(randomPos));
 
@@ -150,9 +150,8 @@ namespace MarsRover.UILayerTG
             };
 
 
-
-
-            Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ => {
+            Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
+            {
                 seconds--;
                 if (seconds > 0)
                 {
@@ -165,8 +164,6 @@ namespace MarsRover.UILayerTG
                     return false;
                 }
             });
-
-
 
 
             var comboBoxLabel = new Label("Select a rover:")
@@ -201,8 +198,8 @@ namespace MarsRover.UILayerTG
 
             comboBox.SelectedItemChanged += (e) =>
             {
-                selectedRover = missionControl.GetRoverById( (ulong) comboBox.SelectedItem);
-                roverPosition.Text = selectedRover.ToString(); 
+                selectedRover = missionControl.GetRoverById((ulong)comboBox.SelectedItem);
+                roverPosition.Text = selectedRover.ToString();
             };
 
 
@@ -245,40 +242,38 @@ namespace MarsRover.UILayerTG
             submitButton.Clicked += () =>
             {
                 InstructionParser userInput = new InstructionParser(textField.Text.ToString());
-                    if (!userInput.Success)
+                if (!userInput.Success)
+                {
+                    responseLabel.Text = userInput.Message.ToString();
+                }
+                else
+                {
+                    missionControl.RunInstructions(selectedRover, userInput.Result);
+                    openingWindow.Remove(displayGrid);
+                    displayGrid = GetGrid();
+                    openingWindow.Add(displayGrid);
+                    openingWindow.SetNeedsDisplay();
+                    roverPosition.Text = selectedRover.ToString();
+
+                    if (selectedRover.Position == missionControl.Hole.Position)
                     {
-                        responseLabel.Text = userInput.Message.ToString();
+                        Application.SwitchToNextLevel(new FirstLevel(Application));
+                    }
+                    else if (!missionControl.AreRoversIntact())
+                    {
+                        Application.SwitchToNextLevel(new EndLevel(Application));
 
                     }
-                    else
-                    {
-                        
-                        missionControl.RunInstructions(selectedRover, userInput.Result);
-                        openingWindow.Remove(displayGrid);
-                        displayGrid = GetGrid();
-                        openingWindow.Add(displayGrid); 
-                        openingWindow.SetNeedsDisplay();
-                        roverPosition.Text = selectedRover.ToString();
 
-                        if (selectedRover.Position == missionControl.Hole.Position)
-                        {
-                            Application.SwitchToNextLevel(new FirstLevel(Application));
-                        }
-                        else if (missionControl.AreRoversIntact() != true)
-                        {
-                            Application.SwitchToNextLevel(new EndLevel(Application));
+                }
 
-                        }
-
-                    }
-              
             };
 
 
             openingWindow.Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, buttonLabel, textField, submitButton, responseLabel);
 
 
-            return openingWindow; 
+            return openingWindow;
         }
 
     }

@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Enums;
 using Sharprompt;
-using Spectre.Console;
 
 namespace MarsRover.LogicLayer.Models
 {
@@ -18,6 +17,7 @@ namespace MarsRover.LogicLayer.Models
         public List<Rover> Rovers { get; private set; } = new List<Rover>();
 
         public Hole Hole { get; private set; }    
+
 
         public MissionControl(Plateau plateau)
         {
@@ -50,41 +50,35 @@ namespace MarsRover.LogicLayer.Models
                 else if (roverToMove.IsIntact)
                 {
                     roverToMove.MoveRover();
-                    if (!Plateau.IsPositionInRange(roverToMove.Position)) 
-                    {
-                        roverToMove.IsIntact = false;
-                    }
-                    else if (IsPositionEmpty(roverToMove.Position))
+                    if ((!Plateau.IsPositionInRange(roverToMove.Position)) || HaveRoversCollided(roverToMove))
                     {
                         roverToMove.IsIntact = false;
                     }
                 }
             }
 
+        }
+
+        public Boolean HaveRoversCollided(Rover rover)
+        {
+            if (Rovers.Where(x => x.Position == rover.Position && x.Id != rover.Id).Any())
+            {
+                Rover roverCrash = Rovers.Where(x => x.Position == rover.Position && x.Id != rover.Id).First();
+                roverCrash.IsIntact = false;
+                return true; 
+            }
+            return false; 
         }
 
 
         public Boolean IsPositionEmpty(XYPosition xyPosition)
         {
-            foreach (Rover rover in Rovers)
-            {
-                if (rover.Position == xyPosition) {
-                    return false; 
-                }
-            }
-            return true; 
+            return ! Rovers.Where(x => x.Position ==  xyPosition).Any();
         }
 
         public Boolean AreRoversIntact()
         {
-            foreach (Rover rover in Rovers)
-            {
-                if (rover.IsIntact)
-                {
-                    return true; 
-                }
-            }
-            return false;
+            return Rovers.Where(x => x.IsIntact).Any();
         }
 
         public Dictionary<ulong, XYPosition> GetRoverPositions()
@@ -97,6 +91,7 @@ namespace MarsRover.LogicLayer.Models
             }
             return positions;
         }
+
 
 
         public XYPosition PositionGenerator()

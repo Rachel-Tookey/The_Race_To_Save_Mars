@@ -53,6 +53,7 @@ namespace MarsRover.LogicLayer.Models
 
         public override string ToString()
         {
+            if (!IsIntact) return $"Rover {Id} is destroyed.";
             return $"Rover {Id} is at ({Position.xAxis}, {Position.yAxis}) facing {Direction}";
         }
 

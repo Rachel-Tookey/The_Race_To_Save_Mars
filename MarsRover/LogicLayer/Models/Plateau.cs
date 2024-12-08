@@ -20,7 +20,7 @@ namespace MarsRover.LogicLayer.Models
 
         public Boolean IsPositionInRange(XYPosition xyPosition)
         {
-            if ((xyPosition.xAxis > _x) || (xyPosition.yAxis > _y) || (xyPosition.xAxis <= 0) || (xyPosition.yAxis <= 0))
+            if ((xyPosition.xAxis > _x) || (xyPosition.yAxis > _y) || (xyPosition.xAxis < 0) || (xyPosition.yAxis < 0))
             {
                 return false;
             }
