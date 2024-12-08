@@ -127,13 +127,17 @@ namespace MarsRover.UILayerTG
                         Application.MissionControl.AddObject(userInput.Result);
                         if (Application.MissionControl.Rovers.Count < 3)
                         {
-                            var result = MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]);
-                            if (result == 0)
+                            if (MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]) == 1)
+                            {
+                                Application.SwitchToNextLevel(new LevelThree(Application).Window);
+                            } else
                             {
                                 Application.SwitchToNextLevel(new LevelTwo(Application).Window);
                             }
+                        } else
+                        {
+                            Application.SwitchToNextLevel(new LevelThree(Application).Window);
                         }
-                        Application.SwitchToNextLevel(new LevelThree(Application).Window);
                     }
                     else
                     {
@@ -144,9 +148,7 @@ namespace MarsRover.UILayerTG
 
             };
 
-            openingWindow.Add(submitButton);
-            openingWindow.Add(responseLabel);
-
+            openingWindow.Add(submitButton, responseLabel);
 
             return openingWindow;
 
