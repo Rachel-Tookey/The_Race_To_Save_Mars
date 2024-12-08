@@ -219,6 +219,7 @@ namespace MarsRover.UILayerTG
                         displayGrid = GetGrid();
                         openingWindow.Add(displayGrid); 
                         openingWindow.SetNeedsDisplay();
+                        roverPosition.Text = selectedRover.ToString();
 
                         if (selectedRover.Position == missionControl.Hole.Position)
                         {
