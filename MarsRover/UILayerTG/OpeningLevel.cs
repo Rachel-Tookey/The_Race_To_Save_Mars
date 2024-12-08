@@ -29,21 +29,31 @@ namespace MarsRover.UILayerTG
                 Height = Dim.Fill(),
             };
 
-            string literal = """
+            string introText = """
                 Elon Musk has landed on Mars intending to take its resources for himself...
                 There is only one person who can save it...
                 (We mean you)
                 """;
 
 
-            var label = new Terminal.Gui.Label(literal)
+            var label = new Terminal.Gui.Label(introText)
             {
                 X = Pos.Center(),
-                Y = Pos.Center() - 1,
+                Y = Pos.Center() - 4,
+                ColorScheme = new ColorScheme
+                {
+                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
+                },
+                Border = new Terminal.Gui.Border()
+                {
+                    BorderStyle = BorderStyle.Single,
+                    Padding = new Thickness(0),
+                    BorderBrush = Color.BrightMagenta,
+                    Background = Color.Black,
+                }
 
             };
 
-            openingWindow.Add(label);
 
             var nextButton = new Terminal.Gui.Button("Are you ready to save Mars?")
             {
@@ -57,7 +67,7 @@ namespace MarsRover.UILayerTG
                 Application.SwitchToNextLevel(new AddRoversLevel(Application));
             };
 
-            openingWindow.Add(nextButton);
+            openingWindow.Add(label, nextButton);
 
             return openingWindow;   
         }

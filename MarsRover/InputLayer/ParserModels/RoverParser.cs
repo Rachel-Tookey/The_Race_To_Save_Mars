@@ -20,7 +20,7 @@ namespace MarsRover.Input.ParserModels
 
         public RoverParser(String userInput, Facing direction, Plateau plateau) {
 
-            Regex userPattern = new Regex("^[0-9]+\\s[0-9]+$");
+            Regex userPattern = new Regex("^[0-9]+\\s[0-9]+");
             
             if (userPattern.IsMatch(userInput)) {
 

@@ -1,6 +1,5 @@
 ﻿using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
-using Spectre.Console;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +37,7 @@ namespace MarsRover.UILayerTG
 
             int startX = 2;
             int startY = 2;
-            for (int i = 0; i < myGrid.GetLength(0); i++)
+            for (int i = myGrid.GetLength(0) - 1; i >= 0 ; i--)
             {
                 for (int j = 0; j < myGrid.GetLength(1); j++)
                 {
@@ -101,43 +100,86 @@ namespace MarsRover.UILayerTG
 
             };
 
+            int xAlignment = 60;
+
 
             XYPosition randomPos = missionControl.PositionGenerator();
             missionControl.AddObject(new Hole(randomPos));
 
             var displayGrid = GetGrid();
 
-
-            string instructionLabel = """
-                Your Rovers have landed on Mars to find it...empty. 
+            string instructionLabel = $"""
+                Your Rovers have landed on Mars to find it...empty.
                 Then you remember, the Martians live underground!
-                You spot a door (@)...the entrance! 
-                You must get one of your rovers there.  
+                You spot a door (@)...the entrance!
+                You must get one of your rovers there.
                 You can rotate right (R) or (L).
-                You can move one space at a time. 
-                You have 2 minutes...
+                You can move (M) one space at a time.
                 """;
-            
+
+
             var textLabel = new Label(instructionLabel)
             {
-                X = 65,
+                X = xAlignment,
                 Y = 3,
-                Width = Dim.Fill()
+                Width = 40,
+                ColorScheme = new ColorScheme
+                {
+                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
+                },
+                Border = new Terminal.Gui.Border()
+                {
+                    BorderStyle = BorderStyle.Single,
+                    Padding = new Thickness(0),
+                    BorderBrush = Color.BrightMagenta,
+                    Background = Color.Black,
+                }
+            };
+
+            int seconds = 120;
+
+
+            var timerLabel = new Label($"Time left: {seconds}s")
+            {
+                X = xAlignment,
+                Y = Pos.Bottom(textLabel) + 2,
+                ColorScheme = new ColorScheme
+                {
+                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, Terminal.Gui.Color.White)
+                },
             };
 
 
 
-            var comboBoxLabel = new Label("Select a Rover:")
+
+            Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ => {
+                seconds--;
+                if (seconds > 0)
+                {
+                    timerLabel.Text = $"Time left: {seconds}s";
+                    return true;
+                }
+                else
+                {
+                    Application.SwitchToNextLevel(new EndLevel(Application));
+                    return false;
+                }
+            });
+
+
+
+
+            var comboBoxLabel = new Label("Select a rover:")
             {
-                X = 65,
-                Y = Pos.Bottom(textLabel) + 2,
+                X = xAlignment,
+                Y = Pos.Bottom(timerLabel) + 2,
                 Width = Dim.Fill()
             };
 
             var comboBox = new ComboBox
             {
-                X = 65,
-                Y = Pos.Bottom(comboBoxLabel),
+                X = xAlignment,
+                Y = Pos.Bottom(comboBoxLabel) + 1,
                 Width = 40,
                 Height = 40
             };
@@ -145,8 +187,8 @@ namespace MarsRover.UILayerTG
 
             var roverPosition = new Label()
             {
-                X = 65,
-                Y = Pos.Bottom(comboBoxLabel) + 2,
+                X = xAlignment,
+                Y = Pos.Bottom(comboBoxLabel) + 3,
                 ColorScheme = new ColorScheme
                 {
                     Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
@@ -166,16 +208,16 @@ namespace MarsRover.UILayerTG
 
             var buttonLabel = new Terminal.Gui.Label("Enter your sequence of moves:")
             {
-                X = 65,
-                Y = Pos.Center() + 3,
+                X = xAlignment,
+                Y = Pos.Center() + 6,
 
             };
 
 
-            var textField = new TextField("i.e.: LLRMMMRLR")
+            var textField = new TextField()
             {
-                X = 65,
-                Y = Pos.Bottom(buttonLabel) + 2,
+                X = xAlignment,
+                Y = Pos.Bottom(buttonLabel) + 1,
                 Width = 40
 
             };
@@ -184,14 +226,14 @@ namespace MarsRover.UILayerTG
 
             var submitButton = new Button("Submit")
             {
-                X = 65,
+                X = xAlignment,
                 Y = Pos.Bottom(textField) + 2,
             };
 
 
             var responseLabel = new Label()
             {
-                X = 65,
+                X = xAlignment,
                 Y = Pos.Bottom(submitButton) + 2,
                 TextAlignment = TextAlignment.Right,
                 ColorScheme = new ColorScheme
@@ -200,11 +242,8 @@ namespace MarsRover.UILayerTG
                 },
             };
 
-            int attempts = 0; 
-
             submitButton.Clicked += () =>
             {
-                if (attempts < 9) { 
                 InstructionParser userInput = new InstructionParser(textField.Text.ToString());
                     if (!userInput.Success)
                     {
@@ -213,7 +252,7 @@ namespace MarsRover.UILayerTG
                     }
                     else
                     {
-                        attempts += 1;
+                        
                         missionControl.RunInstructions(selectedRover, userInput.Result);
                         openingWindow.Remove(displayGrid);
                         displayGrid = GetGrid();
@@ -232,16 +271,11 @@ namespace MarsRover.UILayerTG
                         }
 
                     }
-                } else
-                {
-                    Application.SwitchToNextLevel(new EndLevel(Application));
-                }
-
-
+              
             };
 
 
-            openingWindow.Add(displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, buttonLabel, textField, submitButton, responseLabel);
+            openingWindow.Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, buttonLabel, textField, submitButton, responseLabel);
 
 
             return openingWindow; 

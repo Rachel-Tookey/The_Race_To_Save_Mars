@@ -1,4 +1,5 @@
 ﻿using MarsRover.LogicLayer.Models;
+using MarsRover.UILayerTG;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,15 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace MarsRover.UILayerTG
+namespace MarsRover
 {
     public class GameApplication
     {
-        public Window CurrentWindow { get; set; }   
+        public Window CurrentWindow { get; set; }
 
-        public MissionControl MissionControl {  get; set; } 
+        public MissionControl MissionControl { get; set; }
 
-        public Toplevel Toplevel { get; set; }  
+        public Toplevel Toplevel { get; set; }
 
         public void Run()
         {
@@ -41,7 +42,7 @@ namespace MarsRover.UILayerTG
 
             Toplevel.Add(CurrentWindow);
 
-            Terminal.Gui.Application.Refresh(); 
+            Terminal.Gui.Application.Refresh();
 
         }
 

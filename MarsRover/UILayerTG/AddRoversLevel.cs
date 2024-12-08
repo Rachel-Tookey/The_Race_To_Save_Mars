@@ -35,11 +35,27 @@ namespace MarsRover.UILayerTG
 
             };
 
-            var instructionLabel = new Terminal.Gui.Label("You are allowed up to 3 rovers for the duration of the game.")
+            string labelText = """
+                You can add up to 3 rovers for the duration of the game.
+                These are your lives. 
+                But you can take your chances with less.
+                """; 
+
+            var instructionLabel = new Terminal.Gui.Label(labelText)
             {
                 X = Pos.Center(),
-                Y = 1,
-
+                Y = 2,
+                ColorScheme = new ColorScheme
+                {
+                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
+                }, 
+                Border = new Terminal.Gui.Border()
+                {
+                    BorderStyle = BorderStyle.Single,
+                    Padding = new Thickness(0),
+                    BorderBrush = Color.BrightMagenta,
+                    Background = Color.Black,
+                }
             };
 
 
@@ -51,23 +67,10 @@ namespace MarsRover.UILayerTG
             };
 
 
-            var responseCBLabel = new Label()
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(comboLabel) + 1,
-                TextAlignment = TextAlignment.Centered,
-                ColorScheme = new ColorScheme
-                {
-                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
-                },
-                Width = Dim.Fill()
-            };
-
-
             var comboBox = new ComboBox()
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(responseCBLabel) + 1,
+                Y = Pos.Bottom(comboLabel) + 1,
                 Width = 40,
                 Height = 40,
             };
@@ -78,7 +81,7 @@ namespace MarsRover.UILayerTG
             var positionLabel = new Terminal.Gui.Label("Enter a starting position:")
             {
                 X = Pos.Center(),
-                Y = Pos.Center(),
+                Y = Pos.Center() + 1,
 
             };
 
@@ -87,17 +90,25 @@ namespace MarsRover.UILayerTG
             var textField = new TextField("x y")
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(positionLabel),
+                Y = Pos.Bottom(positionLabel) + 1,
                 Width = 40
 
             };
 
     
 
+
+            var submitButton = new Button("Submit")
+            {
+                X = Pos.Center(),
+                Y = Pos.Bottom(textField) + 3,
+            };
+
+
             var responseLabel = new Label()
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(textField),
+                Y = Pos.Bottom(submitButton) + 2,
                 TextAlignment = TextAlignment.Centered,
                 ColorScheme = new ColorScheme
                 {
@@ -105,13 +116,6 @@ namespace MarsRover.UILayerTG
                 },
                 Width = Dim.Fill()
             };
-
-            var submitButton = new Button("Submit")
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(responseLabel),
-            };
-
 
 
             submitButton.Clicked += () =>
@@ -151,7 +155,7 @@ namespace MarsRover.UILayerTG
 
             };
 
-            openingWindow.Add(instructionLabel, comboLabel, responseCBLabel, comboBox, positionLabel, textField, responseLabel, submitButton);
+            openingWindow.Add(instructionLabel, comboLabel, comboBox, positionLabel, textField, responseLabel, submitButton);
 
             return openingWindow;
 

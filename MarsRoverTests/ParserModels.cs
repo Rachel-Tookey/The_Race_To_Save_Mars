@@ -1,5 +1,4 @@
 using MarsRover;
-using MarsRover.UILayer.States;
 using MarsRover.Input.ParserModels;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -15,56 +14,6 @@ namespace MarsRoverTests
         {
         }
 
-        [Test, Description("PlateauSizeParser - correct input")]
-        public void PlateauSizeParser_ValidInput()
-        {
-            String mockUserString = "10 20"; 
-
-            PlateauSizeParser testPSP = new PlateauSizeParser(mockUserString);
-
-            testPSP.Success.Should().BeTrue();
-            testPSP.Message.Should().Be("");
-            testPSP.Result._x.Should().Be(10);
-            testPSP.Result._y.Should().Be(20);
-         
-        }
-
-        [Test, Description("PlateauSizeParser - invalid input, no space")]
-        public void PlateauSizeParser_InvalidInput_NoSpace()
-        {
-            String mockUserString = "1020";
-
-            PlateauSizeParser testPSP = new PlateauSizeParser(mockUserString);
-
-            testPSP.Success.Should().BeFalse();
-            testPSP.Message.Should().Be("Incorrect format provided. It must be 'x y'");
-            testPSP.Result.Should().BeNull();
-        }
-
-
-        [Test, Description("PlateauSizeParser - invalid input, negative numbers")]
-        public void PlateauSizeParser_InvalidInput_NegNumbers()
-        {
-            String mockUserString = "10 -20";
-
-            PlateauSizeParser testPSP = new PlateauSizeParser(mockUserString);
-
-            testPSP.Success.Should().BeFalse();
-            testPSP.Message.Should().Be("Incorrect format provided. It must be 'x y'");
-            testPSP.Result.Should().BeNull();
-        }
-
-        [Test, Description("PlateauSizeParser - invalid input, too many numbers")]
-        public void PlateauSizeParser_InvalidInput_TooManyNumbers()
-        {
-            String mockUserString = "10 20 30";
-
-            PlateauSizeParser testPSP = new PlateauSizeParser(mockUserString);
-
-            testPSP.Success.Should().BeFalse();
-            testPSP.Message.Should().Be("Incorrect format provided. It must be 'x y'");
-            testPSP.Result.Should().BeNull();
-        }
 
         [Test, Description("RoverParser - correct input")]
         public void RoverParser_ValidInput()
@@ -78,9 +27,9 @@ namespace MarsRoverTests
             testRP.Success.Should().BeTrue();
             testRP.Message.Should().Be("");
             testRP.Result.Should().NotBeNull();
-            testRP.Result.Position.x.Should().Be(5);
-            testRP.Result.Position.y.Should().Be(7);
-            testRP.Result.Position.Direction.Should().Be(MarsRover.Enums.Facing.NORTH);
+            testRP.Result.Position.xAxis.Should().Be(5);
+            testRP.Result.Position.yAxis.Should().Be(7);
+            testRP.Result.Direction.Should().Be(MarsRover.Enums.Facing.NORTH);
 
         }
 
