@@ -9,23 +9,23 @@ using MarsRover.UILayerTG.Utils;
 
 namespace MarsRover.UILayerTG
 {
-    public class EndLevel : ILevel 
+    public class EndLevel : StyledWindow 
     {
         public GameApplication Application { get; set; }
 
-        public EndLevel(GameApplication game)
+        public EndLevel(GameApplication game) : base("Game Over")
         {
-
             Application = game;
+            InitialiseLevel();
         }
 
-        public Window GetWindow()
+        public void InitialiseLevel()
         {
-            var openingWindow = new StyledWindow("Game Over");
+            Application.Stop();
 
-            Application.Stop(); 
-
-            return openingWindow;
         }
+
+
     }
+
 }

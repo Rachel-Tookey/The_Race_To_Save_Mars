@@ -11,38 +11,30 @@ using Terminal.Gui;
 
 namespace MarsRover.UILayerTG
 {
-    public class AddRoversLevel : ILevel
+    public class AddRoversLevel : StyledWindow
     {
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
-        public AddRoversLevel(GameApplication game)
+        public AddRoversLevel(GameApplication game) : base("Add your rovers")
         {
-
-            Application = game;
+            App = game;
+            InitialiseLevel();
         }
 
-        public Window GetWindow()
+
+        public void InitialiseLevel()
         {
-
-            Plateau newPlateau = new(60, 20);
-            Application.MissionControl = new MissionControl(newPlateau);
-
-
-            var openingWindow = new StyledWindow("Add your rovers");
-
-
-            var instructionLabel = new StyledLabel(Text.GetLevelText("Add Rovers Level"))
+            
+            var instructionLabel = new StyledLabel(Utils.Text.GetLevelText("Add Rovers Level"))
             {
                 X = Pos.Center(),
                 Y = 2,
             };
 
-
             var comboLabel = new Terminal.Gui.Label("Select a starting direction:")
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(instructionLabel) + 4,
-
             };
 
             var comboBox = new ComboBox()
@@ -68,7 +60,7 @@ namespace MarsRover.UILayerTG
                 X = Pos.Center(),
                 Y = Pos.Bottom(positionLabel) + 1,
                 Width = 40,
-                Text = $"Max: {newPlateau._x - 1}, {newPlateau._y - 1}"
+                Text = $"Max: {App.MissionControl.Plateau._x - 1}, {App.MissionControl.Plateau._y - 1}"
             };
 
             var submitButton = new Button("Submit")
@@ -85,7 +77,6 @@ namespace MarsRover.UILayerTG
                 Width = Dim.Fill()
             };
 
-
             submitButton.Clicked += () =>
             {
                 Facing selectedEnum = (Facing)comboBox.SelectedItem;
@@ -95,17 +86,17 @@ namespace MarsRover.UILayerTG
                 }
                 else
                 {
-                    RoverParser userInput = new RoverParser(textField.Text.ToString(), selectedEnum, Application.MissionControl.Plateau);
+                    RoverParser userInput = new RoverParser(textField.Text.ToString(), selectedEnum, App.MissionControl.Plateau);
                     if (!userInput.Success)
                     {
                         responseLabel.Text = userInput.Message.ToString();
                     }
                     else
                     {
-                        Application.MissionControl.AddObject(userInput.Result);
-                        if ((Application.MissionControl.Rovers.Count == 3) || (MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]) == 1))
+                        App.MissionControl.AddObject(userInput.Result);
+                        if ((App.MissionControl.Rovers.Count == 3) || (MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]) == 1))
                         {
-                            Application.SwitchToNextLevel(new InstructionLevel(Application));
+                            App.SwitchToNextLevel(new InstructionLevel(App));
                         }
                         else
                         {
@@ -119,11 +110,11 @@ namespace MarsRover.UILayerTG
 
             };
 
-            openingWindow.Add(instructionLabel, comboLabel, comboBox, positionLabel, textField, responseLabel, submitButton);
-
-            return openingWindow;
-
+            Add(instructionLabel, comboLabel, comboBox, positionLabel, textField, responseLabel, submitButton);
 
         }
     }
+
+
 }
+

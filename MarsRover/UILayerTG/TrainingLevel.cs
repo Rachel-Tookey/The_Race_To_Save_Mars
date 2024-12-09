@@ -13,43 +13,37 @@ using NStack;
 
 namespace MarsRover.UILayerTG
 {
-    public class TrainingLevel : ILevel
+    public class TrainingLevel : StyledWindow 
     {
         public GameApplication Application { get; set; }
 
-        public TrainingLevel(GameApplication game)
+        public TrainingLevel(GameApplication game) : base("Training Level")
         {
 
             Application = game;
+            InitialiseLevel();
         }
 
-
-        public Window GetWindow()
+        public void InitialiseLevel()
         {
             int xAlignment = 70;
-
             MissionControl missionControl = Application.MissionControl;
-            
+
             // adding the objects of a class? 
             // where should this happen? 
             XYPosition randomPos = missionControl.PositionGenerator();
             missionControl.AddObject(new Hole(randomPos));
 
             Rover selectedRover = missionControl.Rovers[0];
-
-
             var displayGrid = Views.GetGrid(missionControl.GetGrid());
 
             var openingWindow = new StyledWindow("Training Level");
-
-
-            var textLabel = new StyledLabel(Text.GetLevelText("Training Level"))
+            var textLabel = new StyledLabel(Utils.Text.GetLevelText("Training Level"))
             {
                 X = xAlignment,
                 Y = 3,
                 Width = 40,
             };
-
 
             int seconds = 180 / missionControl.Rovers.Count();
 
@@ -62,6 +56,7 @@ namespace MarsRover.UILayerTG
                     Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, Terminal.Gui.Color.White)
                 },
             };
+
 
             Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
             {
@@ -122,13 +117,13 @@ namespace MarsRover.UILayerTG
             };
 
 
-            openingWindow.KeyDown += (e) =>
+            this.KeyDown += (e) =>
             {
-                Instructions inputInstruction = (Instructions) (-1);
+                Instructions inputInstruction = (Instructions)(-1);
                 if (e.KeyEvent.Key == Key.CursorLeft)
                 {
                     inputInstruction = Instructions.L;
-                } 
+                }
                 else if (e.KeyEvent.Key == Key.CursorRight)
                 {
                     inputInstruction = Instructions.R;
@@ -136,19 +131,20 @@ namespace MarsRover.UILayerTG
                 else if (e.KeyEvent.Key == Key.CursorUp)
                 {
                     inputInstruction = Instructions.M;
-                } else if (e.KeyEvent.Key == Key.CursorDown)
+                }
+                else if (e.KeyEvent.Key == Key.CursorDown)
                 {
                     inputInstruction = Instructions.B;
-                } 
+                }
 
                 if (inputInstruction != (Instructions)(-1))
                 {
                     e.Handled = true;
                     missionControl.RunInstructions(selectedRover, inputInstruction);
-                    openingWindow.Remove(displayGrid);
+                    this.Remove(displayGrid);
                     displayGrid = Views.GetGrid(missionControl.GetGrid());
-                    openingWindow.Add(displayGrid);
-                    openingWindow.SetNeedsDisplay();
+                    this.Add(displayGrid);
+                    this.SetNeedsDisplay();
                     roverPosition.Text = selectedRover.ToString();
 
                     if (selectedRover.Position == missionControl.Hole.Position)
@@ -161,15 +157,13 @@ namespace MarsRover.UILayerTG
                     }
 
                 }
-
             };
 
-           
-            openingWindow.Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, responseLabel);
+
+            Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, responseLabel);
+
+            }
+            }
 
 
-            return openingWindow;
-        }
-
-    }
 }

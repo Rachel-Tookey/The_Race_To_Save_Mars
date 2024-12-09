@@ -10,9 +10,12 @@ namespace MarsRover
     {
         static void Main(string[] args)
         {
+            Terminal.Gui.Application.Init();
 
             GameApplication game = new GameApplication();
-            game.Run();
+
+            Terminal.Gui.Application.Run();
+            Terminal.Gui.Application.Shutdown(); 
 
         }
     }
