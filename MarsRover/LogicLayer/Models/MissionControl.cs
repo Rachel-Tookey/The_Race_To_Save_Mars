@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Enums;
-using Sharprompt;
 
 namespace MarsRover.LogicLayer.Models
 {
@@ -126,17 +125,11 @@ namespace MarsRover.LogicLayer.Models
                 {
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-<<<<<<< HEAD
-                        newGrid[rows, cols] = new Symbol("☠️", "X");
+                        newGrid[rows, cols] = "X";
                     }
                     else if (Hole.Position == (cols - 2, rows - 2))
                     {
-                        newGrid[rows, cols] = "@";
-=======
-                        gridContents[cols] = new Text("X", new Style(Color.DarkKhaki));
-                    } else if (ChargingStation.Position == (cols - 1, rows - 1)) {
-                        gridContents[cols] = new Text("$", new Style(Color.DarkViolet));
->>>>>>> main
+                        newGrid[rows, cols] = "@"; 
                     }
                     else
                     {

@@ -1,15 +1,15 @@
 ﻿using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
 using MarsRover.Enums;
+using MarsRover.UILayerTG.Utils; 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
-using Terminal.Gui.Graphs;
-using static System.Net.Mime.MediaTypeNames;
 using NStack;
+
 
 namespace MarsRover.UILayerTG
 {
@@ -23,116 +23,35 @@ namespace MarsRover.UILayerTG
             Application = game;
         }
 
-        public View GetGrid()
+
+        public Window GetWindow()
         {
-            string[,] myGrid = Application.MissionControl.GetGrid();
+            int xAlignment = 70;
 
-            var displayGrid = new View()
-            {
-                X = 0,
-                Y = 0,
-                Width = 4 + myGrid.GetLength(1),
-                Height = 4 + myGrid.GetLength(0),
-            };
-
-
-            int startX = 2;
-            int startY = 2;
-            for (int i = myGrid.GetLength(0) - 1; i >= 0; i--)
-            {
-                for (int j = 0; j < myGrid.GetLength(1); j++)
-                {
-                    var colorSet = new ColorScheme
-                    {
-                        Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightCyan, Terminal.Gui.Color.Black)
-                    };
-
-                    if (myGrid[i, j] == "X")
-                    {
-                        colorSet = new ColorScheme
-                        {
-                            Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightGreen, Terminal.Gui.Color.Black)
-                        };
-
-                    }
-                    else if (myGrid[i, j] == "_")
-                    {
-                        colorSet = new ColorScheme
-                        {
-                            Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, Terminal.Gui.Color.Black)
-                        };
-
-                    }
-                    else if (myGrid[i, j] == "@")
-                    {
-                        colorSet = new ColorScheme
-                        {
-                            Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightYellow, Terminal.Gui.Color.Black)
-                        };
-                    }
-
-                    var label = new Label(myGrid[i, j])
-                    {
-                        X = startX + j,
-                        Y = startY + i,
-                        Height = 1,
-                        ColorScheme = colorSet
-                    };
-
-                    displayGrid.Add(label);
-                }
-            }
-
-            return displayGrid;
-
-        }
-
-
-        public Window WindowRun()
-        {
             MissionControl missionControl = Application.MissionControl;
-
-            var openingWindow = new Terminal.Gui.Window("Training Level")
-            {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill(),
-            };
-
-            int xAlignment = 60;
- 
+            
+            // adding the objects of a class? 
+            // where should this happen? 
             XYPosition randomPos = missionControl.PositionGenerator();
             missionControl.AddObject(new Hole(randomPos));
 
-            var displayGrid = GetGrid();
-
-            string instructionLabel = $"""
-                Your mission: 
-                Get to the entrance (@) of the Martian Kingdom.
-                """;
+            Rover selectedRover = missionControl.Rovers[0];
 
 
-            var textLabel = new Label(instructionLabel)
+            var displayGrid = Views.GetGrid(missionControl.GetGrid());
+
+            var openingWindow = new StyledWindow("Training Level");
+
+
+            var textLabel = new StyledLabel(Text.GetLevelText("Training Level"))
             {
                 X = xAlignment,
                 Y = 3,
                 Width = 40,
-                ColorScheme = new ColorScheme
-                {
-                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
-                },
-                Border = new Terminal.Gui.Border()
-                {
-                    BorderStyle = BorderStyle.Single,
-                    Padding = new Thickness(0),
-                    BorderBrush = Color.BrightMagenta,
-                    Background = Color.Black,
-                }
             };
 
-            int seconds = 180 / missionControl.Rovers.Count();
 
+            int seconds = 180 / missionControl.Rovers.Count();
 
             var timerLabel = new Label($"Time left: {seconds}s")
             {
@@ -143,7 +62,6 @@ namespace MarsRover.UILayerTG
                     Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, Terminal.Gui.Color.White)
                 },
             };
-
 
             Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
             {
@@ -159,9 +77,6 @@ namespace MarsRover.UILayerTG
                     return false;
                 }
             });
-
-            Rover selectedRover = missionControl.Rovers[0];
-
 
 
             var comboBoxLabel = new Label("Select a rover:")
@@ -180,18 +95,15 @@ namespace MarsRover.UILayerTG
 
             };
 
+            comboBox.SetSource(missionControl.Rovers.Select(x => x.Id).ToList());
 
-            var roverPosition = new Label()
+
+            var roverPosition = new ResponseLabel()
             {
                 X = xAlignment,
                 Y = Pos.Bottom(comboBoxLabel) + 3,
-                ColorScheme = new ColorScheme
-                {
-                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
-                },
             };
 
-            comboBox.SetSource(missionControl.Rovers.Select(x => x.Id).ToList());
 
 
             comboBox.SelectedItemChanged += (e) =>
@@ -202,15 +114,11 @@ namespace MarsRover.UILayerTG
 
 
 
-            var responseLabel = new Label()
+            var responseLabel = new ResponseLabel()
             {
                 X = xAlignment,
                 Y = Pos.Center() + 4,
                 TextAlignment = TextAlignment.Right,
-                ColorScheme = new ColorScheme
-                {
-                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
-                },
             };
 
 
@@ -238,7 +146,7 @@ namespace MarsRover.UILayerTG
                     e.Handled = true;
                     missionControl.RunInstructions(selectedRover, inputInstruction);
                     openingWindow.Remove(displayGrid);
-                    displayGrid = GetGrid();
+                    displayGrid = Views.GetGrid(missionControl.GetGrid());
                     openingWindow.Add(displayGrid);
                     openingWindow.SetNeedsDisplay();
                     roverPosition.Text = selectedRover.ToString();
@@ -249,7 +157,6 @@ namespace MarsRover.UILayerTG
                     }
                     else if (!missionControl.AreRoversIntact())
                     {
-                        // add in a query box -> game over? 
                         Application.SwitchToNextLevel(new EndLevel(Application));
                     }
 

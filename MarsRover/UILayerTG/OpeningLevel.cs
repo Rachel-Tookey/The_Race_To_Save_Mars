@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
+using MarsRover.UILayerTG.Utils; 
 
 namespace MarsRover.UILayerTG
 {
@@ -20,58 +21,29 @@ namespace MarsRover.UILayerTG
             Application = game;
         }
 
-        public Window WindowRun()
+        public Window GetWindow()
         {
 
-            var openingWindow = new Terminal.Gui.Window("Race to Save Mars")
-            {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill(),
-            };
+            var openingWindow = new StyledWindow("Race to Save Mars");
 
-            string introText = """
-                An alien race has landed on Mars intending to take its resources for themselves...
-                The group of cyberpunks and Martians form a rebel alliance to fight back.
-                They put a call-out for an aspiring software developer to pilot their rovers.
-                You stop your job hunting on LinkedIn and think 'Hey, I could do that!' 
-                """;
-
-
-            var label = new Terminal.Gui.Label(introText)
+            var introLabel = new StyledLabel(Text.GetLevelText("Opening Level"))
             {
                 X = Pos.Center(),
-                Y = Pos.Center() - 4,
-                ColorScheme = new ColorScheme
-                {
-                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
-                },
-                Border = new Terminal.Gui.Border()
-                {
-                    BorderStyle = BorderStyle.Single,
-                    Padding = new Thickness(0),
-                    BorderBrush = Color.BrightMagenta,
-                    Background = Color.Black,
-                }
-
+                Y = Pos.Center() - 2,
             };
-
 
             var nextButton = new Terminal.Gui.Button("Are you ready to save Mars?")
             {
                 X = Pos.Center(),
-                Y = Pos.Center() + 3,
+                Y = Pos.Bottom(introLabel) + 4,
             };
-
-
 
             nextButton.Clicked += () =>
             {
                 Application.SwitchToNextLevel(new AddRoversLevel(Application));
             };
 
-            openingWindow.Add(label, nextButton);
+            openingWindow.Add(introLabel, nextButton);
 
             return openingWindow;   
         }

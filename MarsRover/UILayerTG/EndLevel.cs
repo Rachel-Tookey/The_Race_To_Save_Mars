@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
+using MarsRover.UILayerTG.Utils;
+
 
 namespace MarsRover.UILayerTG
 {
@@ -17,17 +19,11 @@ namespace MarsRover.UILayerTG
             Application = game;
         }
 
-        public Window WindowRun()
+        public Window GetWindow()
         {
+            var openingWindow = new StyledWindow("Game Over");
 
-            var openingWindow = new Terminal.Gui.Window("Game Over")
-            {
-                X = 0,
-                Y = 0,
-                Width = Dim.Fill(),
-                Height = Dim.Fill(),
-
-            };
+            Application.Stop(); 
 
             return openingWindow;
         }

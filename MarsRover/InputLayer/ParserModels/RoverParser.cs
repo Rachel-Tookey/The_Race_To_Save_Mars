@@ -20,11 +20,11 @@ namespace MarsRover.Input.ParserModels
 
         public RoverParser(String userInput, Facing direction, Plateau plateau) {
 
-            Regex userPattern = new Regex("^[0-9]+\\s[0-9]+");
+            Regex userPattern = new Regex("^[0-9]+,\\s[0-9]+$");
             
             if (userPattern.IsMatch(userInput)) {
 
-                string[] userInputArray = userInput.Split(" ");
+                string[] userInputArray = userInput.Split(", ");
                 int xAxis = Int32.Parse(userInputArray[0]);
                 int yAxis = Int32.Parse(userInputArray[1]);
 
@@ -41,7 +41,7 @@ namespace MarsRover.Input.ParserModels
             }
             else {
                 Success = false;
-                Message = "This was not in the correct format: x y";
+                Message = "This was not in the correct format: x, y";
             }
 
         }

@@ -18,6 +18,8 @@ namespace MarsRover
 
         public Toplevel Toplevel { get; set; }
 
+        public User User { get; set; }
+
         public void Run()
         {
 
@@ -25,7 +27,7 @@ namespace MarsRover
 
             Toplevel = Terminal.Gui.Application.Top;
 
-            CurrentWindow = new OpeningLevel(this).WindowRun();
+            CurrentWindow = new OpeningLevel(this).GetWindow();
 
             Toplevel.Add(CurrentWindow);
 
@@ -38,12 +40,17 @@ namespace MarsRover
         {
             Toplevel.Remove(CurrentWindow);
 
-            CurrentWindow = currentLevel.WindowRun();
+            CurrentWindow = currentLevel.GetWindow();
 
             Toplevel.Add(CurrentWindow);
 
             Terminal.Gui.Application.Refresh();
 
+        }
+
+        public void Stop()
+        {
+            Terminal.Gui.Application.RequestStop();
         }
 
 

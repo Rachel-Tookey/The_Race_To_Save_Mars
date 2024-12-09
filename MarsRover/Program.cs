@@ -11,7 +11,7 @@ namespace MarsRover
         static void Main(string[] args)
         {
 
-            var game = new GameApplication();
+            GameApplication game = new GameApplication();
             game.Run();
 
         }

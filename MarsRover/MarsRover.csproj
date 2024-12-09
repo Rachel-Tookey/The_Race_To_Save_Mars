@@ -18,6 +18,7 @@
     <Compile Remove="InputLayer\ParserModels\PlateauSizeParser.cs" />
     <Compile Remove="LogicLayer\Models\Position.cs" />
     <Compile Remove="UILayerTG\LevelOne.cs" />
+    <Compile Remove="UILayerTG\Utils\Labels.cs" />
   </ItemGroup>
 
 	<ItemGroup>
