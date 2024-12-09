@@ -43,11 +43,12 @@ namespace MarsRover.LogicLayer.Models
         }
 
 
-        public void MoveRover()
+        public void MoveRover(Instructions forwardOrBack)
         {
-            int[,] _positionConversion = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
-            int newXAxis = Position.xAxis + _positionConversion[(int)Direction, 0];
-            int newYAxis = Position.yAxis + _positionConversion[(int)Direction, 1];
+            int forwardOrBackInt = forwardOrBack == Instructions.B ? -1 : 1; 
+            int[,] positionConversion = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
+            int newXAxis = Position.xAxis + (positionConversion[(int)Direction, 0] * forwardOrBackInt);
+            int newYAxis = Position.yAxis + (positionConversion[(int)Direction, 1] * forwardOrBackInt);
             Position = (newXAxis, newYAxis);
         }
 

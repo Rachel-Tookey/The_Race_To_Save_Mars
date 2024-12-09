@@ -16,7 +16,7 @@ namespace MarsRover.LogicLayer.Models
 
         public List<Rover> Rovers { get; private set; } = new List<Rover>();
 
-        public Hole Hole { get; private set; }    
+        public Hole Hole { get; private set; }
 
 
         public MissionControl(Plateau plateau)
@@ -36,28 +36,27 @@ namespace MarsRover.LogicLayer.Models
 
         public Rover GetRoverById(ulong Id)
         {
-            return Rovers.Where(x => x.Id == Id).First(); 
+            return Rovers.Where(x => x.Id == Id).First();
         }
 
-        public void RunInstructions(Rover roverToMove, List<Instructions> listOfMoves)
+        public void RunInstructions(Rover roverToMove, Instructions instruction)
         {
-            foreach (Instructions direction in listOfMoves)
+            if (!roverToMove.IsIntact) return; 
+            if ((instruction == Instructions.L) || (instruction == Instructions.R))
             {
-                if ((direction == Instructions.L) || (direction == Instructions.R))
+                roverToMove.RotateRover(instruction);
+            }
+            else 
+            {
+                roverToMove.MoveRover(instruction); 
+                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || HaveRoversCollided(roverToMove))
                 {
-                    roverToMove.RotateRover(direction);
-                }
-                else if (roverToMove.IsIntact)
-                {
-                    roverToMove.MoveRover();
-                    if ((!Plateau.IsPositionInRange(roverToMove.Position)) || HaveRoversCollided(roverToMove))
-                    {
-                        roverToMove.IsIntact = false;
-                    }
+                    roverToMove.IsIntact = false;
                 }
             }
-
         }
+    
+        
 
         public Boolean HaveRoversCollided(Rover rover)
         {

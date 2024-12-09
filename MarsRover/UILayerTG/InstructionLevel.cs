@@ -1,6 +1,4 @@
-﻿using MarsRover.Enums;
-using MarsRover.LogicLayer.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,21 +7,22 @@ using Terminal.Gui;
 
 namespace MarsRover.UILayerTG
 {
-    public class OpeningLevel : ILevel 
+    public class InstructionLevel : ILevel 
     {
 
         public GameApplication Application { get; set; }
 
-        public OpeningLevel(GameApplication game)
+        public InstructionLevel(GameApplication game)
         {
 
             Application = game;
         }
 
+
         public Window WindowRun()
         {
 
-            var openingWindow = new Terminal.Gui.Window("Race to Save Mars")
+            var openingWindow = new Terminal.Gui.Window("Instructions")
             {
                 X = 0,
                 Y = 0,
@@ -32,17 +31,26 @@ namespace MarsRover.UILayerTG
             };
 
             string introText = """
-                An alien race has landed on Mars intending to take its resources for themselves...
-                The group of cyberpunks and Martians form a rebel alliance to fight back.
-                They put a call-out for an aspiring software developer to pilot their rovers.
-                You stop your job hunting on LinkedIn and think 'Hey, I could do that!' 
+                You arrive at the cyberpunk's headquarters and ask, "So, we didn't discuss rates on the phone-"
+
+                But the cyberpunks cut you off: 
+
+                "There's no time! The rovers have already landed. You must get them to the entrance of the underground kingdom.
+
+                        Use the Mouse to select the Rover to control from the dropdown. 
+                        Up arrow to move the selected Rover forward.
+                        Down arrow to reverse.
+                        Left arrow to turn 90 degrees left.
+                        Right arrow to turn 90 degrees left.
+                
+                Good luck! Oh, and breaks are not part of your billable hours"
                 """;
 
 
             var label = new Terminal.Gui.Label(introText)
             {
                 X = Pos.Center(),
-                Y = Pos.Center() - 4,
+                Y = 2,
                 ColorScheme = new ColorScheme
                 {
                     Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
@@ -58,23 +66,27 @@ namespace MarsRover.UILayerTG
             };
 
 
-            var nextButton = new Terminal.Gui.Button("Are you ready to save Mars?")
+            var nextButton = new Terminal.Gui.Button("Enter the training level")
             {
                 X = Pos.Center(),
-                Y = Pos.Center() + 3,
+                Y = Pos.Bottom(label) + 4,
             };
 
 
 
             nextButton.Clicked += () =>
             {
-                Application.SwitchToNextLevel(new AddRoversLevel(Application));
+                Application.SwitchToNextLevel(new TrainingLevel(Application));
             };
 
             openingWindow.Add(label, nextButton);
 
-            return openingWindow;   
+            return openingWindow;
         }
 
     }
 }
+
+
+    
+
