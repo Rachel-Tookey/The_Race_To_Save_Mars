@@ -15,8 +15,11 @@ namespace MarsRover.LogicLayer.Models
 
         public List<Rover> Rovers { get; private set; } = new List<Rover>();
 
-        public Hole Hole { get; private set; }
+        public List<XYPosition> Rocks { get; private set; } = new List<XYPosition> { };
 
+        public Hole Hole { get; private set; } // turn into a list of objects?
+
+        public XYPosition EndOfLevel { get; set; }
 
         public MissionControl(Plateau plateau)
         {
@@ -48,14 +51,13 @@ namespace MarsRover.LogicLayer.Models
             else 
             {
                 roverToMove.MoveRover(instruction); 
-                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || HaveRoversCollided(roverToMove))
+                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)) || !IsPositionEmptyRocks(roverToMove.Position) )
                 {
                     roverToMove.IsIntact = false;
                 }
             }
         }
     
-        
 
         public Boolean HaveRoversCollided(Rover rover)
         {
@@ -69,10 +71,16 @@ namespace MarsRover.LogicLayer.Models
         }
 
 
-        public Boolean IsPositionEmpty(XYPosition xyPosition)
+        public Boolean IsPositionEmptyRovers(XYPosition xyPosition)
         {
-            return ! Rovers.Where(x => x.Position ==  xyPosition).Any();
+            return !Rovers.Where(x => x.Position == xyPosition).Any();  
         }
+
+        public Boolean IsPositionEmptyRocks(XYPosition xyPosition)
+        {
+            return !Rocks.Where(x => x == xyPosition).Any();
+        }
+
 
         public Boolean AreRoversIntact()
         {
@@ -98,13 +106,32 @@ namespace MarsRover.LogicLayer.Models
             int xAxis = random.Next(0, Plateau._x - 1);
             int yAxis = random.Next(0, Plateau._y - 1);
 
-            while (!IsPositionEmpty((xAxis, yAxis)))
+            while (!IsPositionEmptyRovers((xAxis, yAxis)))
             {
                 xAxis = random.Next(0, Plateau._x - 1);
                 yAxis = random.Next(0, Plateau._y - 1);
             }
 
             return (xAxis, yAxis);
+        }
+
+        public void RockGenerator(int percent, XYPosition EndLeveLPosition)
+        {
+            Random rand = new Random();
+            for (int i = 0; i < Plateau._x; i++)
+            {
+                for (int j = 0; j < Plateau._y; j++)
+                {
+                    if (rand.Next(0, 100) < percent)
+                    {
+                        XYPosition genPos = PositionGenerator();
+                        if (genPos != EndLeveLPosition)
+                        {
+                            Rocks.Add(genPos);
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -125,7 +152,7 @@ namespace MarsRover.LogicLayer.Models
                 {
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-                        newGrid[rows, cols] = "X";
+                        newGrid[rows, cols] = "V";
                     }
                     else if (Hole.Position == (cols - 2, rows - 2))
                     {
@@ -138,16 +165,31 @@ namespace MarsRover.LogicLayer.Models
                 }
             }
 
+            foreach (XYPosition xYPosition in Rocks)
+            {
+                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "V"; 
+            }
 
             foreach (ulong key in CurrentRoverPositions.Keys)
                 {
                     newGrid[CurrentRoverPositions[key].yAxis + 2, CurrentRoverPositions[key].xAxis + 2] = $"{key}"; 
                 }
             
-
             return newGrid; 
+        }
+
+        public void SetUpTrainingLevel()
+        {
+            XYPosition EndOfLevel = PositionGenerator();
+
+            RockGenerator(20, EndOfLevel);
+
+            EndOfLevel = EndOfLevel;
+
+            AddObject(new Hole(EndOfLevel));
+
         }
 
 
     }
-}
+    }

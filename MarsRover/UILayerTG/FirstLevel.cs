@@ -11,11 +11,11 @@ namespace MarsRover.UILayerTG
     public class FirstLevel : StyledWindow
     {
 
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
         public FirstLevel(GameApplication game) : base("Level One")
         {
-            Application = game;
+            App = game;
             InitialiseLevel();
         }
 

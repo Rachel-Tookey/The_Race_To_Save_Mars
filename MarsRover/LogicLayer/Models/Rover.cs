@@ -20,6 +20,8 @@ namespace MarsRover.LogicLayer.Models
 
         public Boolean IsIntact { get; set; }
 
+        public int Acceleration { get; set; } = 1; 
+
         public Rover(XYPosition position, Facing direction)
         {
             Position = position;
@@ -47,8 +49,8 @@ namespace MarsRover.LogicLayer.Models
         {
             int forwardOrBackInt = forwardOrBack == Instructions.B ? -1 : 1; 
             int[,] positionConversion = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
-            int newXAxis = Position.xAxis + (positionConversion[(int)Direction, 0] * forwardOrBackInt);
-            int newYAxis = Position.yAxis + (positionConversion[(int)Direction, 1] * forwardOrBackInt);
+            int newXAxis = Position.xAxis + (positionConversion[(int)Direction, 0] * forwardOrBackInt * Acceleration);
+            int newYAxis = Position.yAxis + (positionConversion[(int)Direction, 1] * forwardOrBackInt * Acceleration);
             Position = (newXAxis, newYAxis);
         }
 

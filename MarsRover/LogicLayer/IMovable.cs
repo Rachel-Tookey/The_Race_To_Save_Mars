@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsRover.UILayerTG
+namespace MarsRover.LogicLayer
 {
-    public class User
+    public interface IMovable
     {
     }
 }

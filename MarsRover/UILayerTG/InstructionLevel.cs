@@ -11,11 +11,11 @@ namespace MarsRover.UILayerTG
     public class InstructionLevel : StyledWindow  
     {
 
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
         public InstructionLevel(GameApplication game) : base("Instructions")
         {
-            Application = game;
+            App = game;
             InitialiseLevel(); 
         }
 
@@ -38,7 +38,7 @@ namespace MarsRover.UILayerTG
 
             nextButton.Clicked += () =>
             {
-                Application.SwitchToNextLevel(new TrainingLevel(Application));
+                App.SwitchToNextLevel(new TrainingLevel(App));
             };
 
             Add(instructionText,nextButton);

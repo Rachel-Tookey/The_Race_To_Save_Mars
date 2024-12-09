@@ -60,7 +60,7 @@ namespace MarsRover.UILayerTG
                 X = Pos.Center(),
                 Y = Pos.Bottom(positionLabel) + 1,
                 Width = 40,
-                Text = $"Max: {App.MissionControl.Plateau._x - 1}, {App.MissionControl.Plateau._y - 1}"
+                Text = $"Max: {App.MissionControl.Plateau._x}, {App.MissionControl.Plateau._y}"
             };
 
             var submitButton = new Button("Submit")

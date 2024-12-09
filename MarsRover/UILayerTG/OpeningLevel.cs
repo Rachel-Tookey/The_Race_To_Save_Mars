@@ -13,11 +13,11 @@ namespace MarsRover.UILayerTG
     public class OpeningLevel : StyledWindow  
     {
 
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
         public OpeningLevel(GameApplication game) : base("Race to Save Mars")
         {
-            Application = game;
+            App = game;
             InitialiseLevel();
 
         }
@@ -39,7 +39,7 @@ namespace MarsRover.UILayerTG
 
             nextButton.Clicked += () =>
             {
-                Application.SwitchToNextLevel(new AddRoversLevel(Application));
+                App.SwitchToNextLevel(new AddRoversLevel(App));
             };        
 
             Add(introLabel, nextButton);

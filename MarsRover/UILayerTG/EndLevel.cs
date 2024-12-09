@@ -11,17 +11,17 @@ namespace MarsRover.UILayerTG
 {
     public class EndLevel : StyledWindow 
     {
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
         public EndLevel(GameApplication game) : base("Game Over")
         {
-            Application = game;
+            App = game;
             InitialiseLevel();
         }
 
         public void InitialiseLevel()
         {
-            Application.Stop();
+            App.Stop();
 
         }
 

@@ -15,29 +15,27 @@ namespace MarsRover.UILayerTG
 {
     public class TrainingLevel : StyledWindow 
     {
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
         public TrainingLevel(GameApplication game) : base("Training Level")
         {
 
-            Application = game;
+            App = game;
             InitialiseLevel();
         }
 
         public void InitialiseLevel()
         {
+            MissionControl mc = App.MissionControl;
+
+            mc.SetUpTrainingLevel();
+
             int xAlignment = 70;
-            MissionControl missionControl = Application.MissionControl;
 
-            // adding the objects of a class? 
-            // where should this happen? 
-            XYPosition randomPos = missionControl.PositionGenerator();
-            missionControl.AddObject(new Hole(randomPos));
+            Rover selectedRover = mc.Rovers[0];
 
-            Rover selectedRover = missionControl.Rovers[0];
-            var displayGrid = Views.GetGrid(missionControl.GetGrid());
-
-            var openingWindow = new StyledWindow("Training Level");
+            var displayGrid = new GridView(mc.GetGrid());
+        
             var textLabel = new StyledLabel(Utils.Text.GetLevelText("Training Level"))
             {
                 X = xAlignment,
@@ -45,7 +43,7 @@ namespace MarsRover.UILayerTG
                 Width = 40,
             };
 
-            int seconds = 180 / missionControl.Rovers.Count();
+            int seconds = 360 / mc.Rovers.Where(x => x.IsIntact).Count();
 
             var timerLabel = new Label($"Time left: {seconds}s")
             {
@@ -68,7 +66,7 @@ namespace MarsRover.UILayerTG
                 }
                 else
                 {
-                    Application.SwitchToNextLevel(new EndLevel(Application));
+                    App.SwitchToNextLevel(new EndLevel(App));
                     return false;
                 }
             });
@@ -90,7 +88,7 @@ namespace MarsRover.UILayerTG
 
             };
 
-            comboBox.SetSource(missionControl.Rovers.Select(x => x.Id).ToList());
+            comboBox.SetSource(mc.Rovers.Select(x => x.Id).ToList());
 
 
             var roverPosition = new ResponseLabel()
@@ -103,7 +101,7 @@ namespace MarsRover.UILayerTG
 
             comboBox.SelectedItemChanged += (e) =>
             {
-                selectedRover = missionControl.GetRoverById((ulong)comboBox.SelectedItem);
+                selectedRover = mc.GetRoverById((ulong)comboBox.SelectedItem);
                 roverPosition.Text = selectedRover.ToString();
             };
 
@@ -119,41 +117,36 @@ namespace MarsRover.UILayerTG
 
             this.KeyDown += (e) =>
             {
-                Instructions inputInstruction = (Instructions)(-1);
-                if (e.KeyEvent.Key == Key.CursorLeft)
+                var keyPressed = e.KeyEvent.Key;
+
+                Instructions inputInstruction = (e.KeyEvent.Key) switch
                 {
-                    inputInstruction = Instructions.L;
-                }
-                else if (e.KeyEvent.Key == Key.CursorRight)
-                {
-                    inputInstruction = Instructions.R;
-                }
-                else if (e.KeyEvent.Key == Key.CursorUp)
-                {
-                    inputInstruction = Instructions.M;
-                }
-                else if (e.KeyEvent.Key == Key.CursorDown)
-                {
-                    inputInstruction = Instructions.B;
-                }
+                    Key.CursorLeft => Instructions.L,
+                    Key.CursorRight => Instructions.R,
+                    Key.CursorUp => Instructions.M,
+                    Key.CursorDown => Instructions.B,
+                    _ => (Instructions)(-1),
+                };
 
                 if (inputInstruction != (Instructions)(-1))
                 {
                     e.Handled = true;
-                    missionControl.RunInstructions(selectedRover, inputInstruction);
+
+                    mc.RunInstructions(selectedRover, inputInstruction);
+             
                     this.Remove(displayGrid);
-                    displayGrid = Views.GetGrid(missionControl.GetGrid());
-                    this.Add(displayGrid);
+                    this.Add(new GridView(mc.GetGrid()));
                     this.SetNeedsDisplay();
+
                     roverPosition.Text = selectedRover.ToString();
 
-                    if (selectedRover.Position == missionControl.Hole.Position)
+                    if (selectedRover.Position == mc.EndOfLevel)
                     {
-                        Application.SwitchToNextLevel(new FirstLevel(Application));
+                        App.SwitchToNextLevel(new FirstLevel(App));
                     }
-                    else if (!missionControl.AreRoversIntact())
+                    else if (!mc.AreRoversIntact())
                     {
-                        Application.SwitchToNextLevel(new EndLevel(Application));
+                        App.SwitchToNextLevel(new EndLevel(App));
                     }
 
                 }
@@ -162,8 +155,7 @@ namespace MarsRover.UILayerTG
 
             Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, responseLabel);
 
-            }
-            }
+        }
 
-
+    }
 }

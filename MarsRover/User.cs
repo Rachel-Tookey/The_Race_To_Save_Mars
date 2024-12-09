@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Terminal.Gui;
 
-namespace MarsRover.UILayerTG
+namespace MarsRover
 {
-    public interface ILevel
+    public class User
     {
-        public Window GetWindow(); 
     }
 }
