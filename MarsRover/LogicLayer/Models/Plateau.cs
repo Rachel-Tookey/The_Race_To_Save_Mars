@@ -12,6 +12,8 @@ namespace MarsRover.LogicLayer.Models
 
         public int _y { get; init; }
 
+        public int _z { get; init; } 
+
         public Plateau(int x, int y)
         {
             _x = x;

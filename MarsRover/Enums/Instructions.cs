@@ -11,6 +11,7 @@ namespace MarsRover.Enums
         L,
         R,
         M,
-        N
+        B
+
     }
 }

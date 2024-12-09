@@ -23,7 +23,6 @@ namespace MarsRover.UILayerTG
             Application = game;
         }
 
-
         public View GetGrid()
         {
             string[,] myGrid = Application.MissionControl.GetGrid();
@@ -99,24 +98,18 @@ namespace MarsRover.UILayerTG
                 Y = 0,
                 Width = Dim.Fill(),
                 Height = Dim.Fill(),
-
             };
 
             int xAlignment = 60;
-
-            // move to a getgrid method for level 1? 
+ 
             XYPosition randomPos = missionControl.PositionGenerator();
             missionControl.AddObject(new Hole(randomPos));
 
             var displayGrid = GetGrid();
 
             string instructionLabel = $"""
-                Your rovers have landed on Mars to find it...empty.
-                Then you remember, the Martians live underground!
-                You spot a door (@)...the entrance!
-                You must get one of your rovers there.
-                You can rotate right (R) or (L).
-                You can move (M) one space at a time.
+                Your mission: 
+                Get to the entrance (@) of the Martian Kingdom.
                 """;
 
 
@@ -138,7 +131,7 @@ namespace MarsRover.UILayerTG
                 }
             };
 
-            int seconds = 180;
+            int seconds = 180 / missionControl.Rovers.Count();
 
 
             var timerLabel = new Label($"Time left: {seconds}s")
@@ -171,7 +164,6 @@ namespace MarsRover.UILayerTG
 
 
 
-
             var comboBoxLabel = new Label("Select a rover:")
             {
                 X = xAlignment,
@@ -179,7 +171,7 @@ namespace MarsRover.UILayerTG
                 Width = Dim.Fill()
             };
 
-            var comboBox = new CustomComboBox
+            var comboBox = new ComboBox
             {
                 X = xAlignment,
                 Y = Pos.Bottom(comboBoxLabel) + 1,
@@ -224,23 +216,27 @@ namespace MarsRover.UILayerTG
 
             openingWindow.KeyDown += (e) =>
             {
-                Instructions inputInstruction = Instructions.N;
+                Instructions inputInstruction = (Instructions) (-1);
                 if (e.KeyEvent.Key == Key.CursorLeft)
                 {
                     inputInstruction = Instructions.L;
-                } else if (e.KeyEvent.Key == Key.CursorRight)
+                } 
+                else if (e.KeyEvent.Key == Key.CursorRight)
                 {
                     inputInstruction = Instructions.R;
                 }
                 else if (e.KeyEvent.Key == Key.CursorUp)
                 {
                     inputInstruction = Instructions.M;
-                }
+                } else if (e.KeyEvent.Key == Key.CursorDown)
+                {
+                    inputInstruction = Instructions.B;
+                } 
 
-                if (inputInstruction != Instructions.N)
+                if (inputInstruction != (Instructions)(-1))
                 {
                     e.Handled = true;
-                    missionControl.RunInstructions(selectedRover, new List<Instructions>() { inputInstruction });
+                    missionControl.RunInstructions(selectedRover, inputInstruction);
                     openingWindow.Remove(displayGrid);
                     displayGrid = GetGrid();
                     openingWindow.Add(displayGrid);
@@ -253,6 +249,7 @@ namespace MarsRover.UILayerTG
                     }
                     else if (!missionControl.AreRoversIntact())
                     {
+                        // add in a query box -> game over? 
                         Application.SwitchToNextLevel(new EndLevel(Application));
                     }
 

@@ -37,8 +37,9 @@ namespace MarsRover.UILayerTG
 
             string labelText = """
                 You can add up to 3 rovers for the duration of the game.
-                These are your lives. 
-                But you can take your chances with less.
+                But due to a quirk in the time-space continuum:
+                The more rovers you have, the less time you get for each level 
+                Take your pick...
                 """; 
 
             var instructionLabel = new Terminal.Gui.Label(labelText)
@@ -135,7 +136,7 @@ namespace MarsRover.UILayerTG
                         {
                             if (MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]) == 1)
                             {
-                                Application.SwitchToNextLevel(new TrainingLevel(Application));
+                                Application.SwitchToNextLevel(new InstructionLevel(Application));
                             } else
                             {
                                 textField.Text = "x y"; 
@@ -143,7 +144,7 @@ namespace MarsRover.UILayerTG
                             }
                         } else
                         {
-                            Application.SwitchToNextLevel(new TrainingLevel(Application));
+                            Application.SwitchToNextLevel(new InstructionLevel(Application));
                         }
                     }
                     else
