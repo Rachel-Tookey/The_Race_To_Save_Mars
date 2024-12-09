@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terminal.Gui;
 
-namespace MarsRover.Enums
+namespace MarsRover.UILayerTG
 {
-    public enum Facing   
+    public interface ILevel
     {
-        NORTH,
-        EAST,
-        SOUTH,
-        WEST
+        public Window WindowRun(); 
     }
 }

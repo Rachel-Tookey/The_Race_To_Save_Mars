@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsRover.Enums
+namespace MarsRover.LogicLayer.Models
 {
-    public enum Facing   
+    public abstract class Landmark
     {
-        NORTH,
-        EAST,
-        SOUTH,
-        WEST
+        XYPosition Position; 
     }
 }

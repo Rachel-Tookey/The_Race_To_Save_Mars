@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Enums;
 using Sharprompt;
-using Spectre.Console;
 
 namespace MarsRover.LogicLayer.Models
 {
@@ -17,7 +16,8 @@ namespace MarsRover.LogicLayer.Models
 
         public List<Rover> Rovers { get; private set; } = new List<Rover>();
 
-        public ChargingStation ChargingStation { get; private set; }    
+        public Hole Hole { get; private set; }
+
 
         public MissionControl(Plateau plateau)
         {
@@ -29,58 +29,55 @@ namespace MarsRover.LogicLayer.Models
             Rovers.Add(rover);
         }
 
-        public void AddObject(ChargingStation chargingStation)
+        public void AddObject(Hole hole)
         {
-            ChargingStation = chargingStation;
+            Hole = hole;
         }
 
-        public void RunInstructions(Rover roverToMove, List<Instructions> listOfMoves)
+        public Rover GetRoverById(ulong Id)
         {
-            foreach (Instructions direction in listOfMoves)
+            return Rovers.Where(x => x.Id == Id).First();
+        }
+
+        public void RunInstructions(Rover roverToMove, Instructions instruction)
+        {
+            if (!roverToMove.IsIntact) return; 
+            if ((instruction == Instructions.L) || (instruction == Instructions.R))
             {
-                if ((direction == Instructions.L) || (direction == Instructions.R))
+                roverToMove.RotateRover(instruction);
+            }
+            else 
+            {
+                roverToMove.MoveRover(instruction); 
+                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || HaveRoversCollided(roverToMove))
                 {
-                    roverToMove.RotateRover(direction);
-                }
-                else if (roverToMove.IsIntact)
-                {
-                    XYPosition futurePosition = roverToMove.PredictNextPosition();
-                    if (!Plateau.IsPositionInRange((futurePosition.xAxis, futurePosition.yAxis)))
-                    {
-                        roverToMove.MoveRover();
-                        roverToMove.IsIntact = false;
-                    }
-                    else if (IsPositionEmpty((futurePosition.xAxis, futurePosition.yAxis)))
-                    {
-                        roverToMove.MoveRover();
-                    }
+                    roverToMove.IsIntact = false;
                 }
             }
+        }
+    
+        
 
+        public Boolean HaveRoversCollided(Rover rover)
+        {
+            if (Rovers.Where(x => x.Position == rover.Position && x.Id != rover.Id).Any())
+            {
+                Rover roverCrash = Rovers.Where(x => x.Position == rover.Position && x.Id != rover.Id).First();
+                roverCrash.IsIntact = false;
+                return true; 
+            }
+            return false; 
         }
 
 
         public Boolean IsPositionEmpty(XYPosition xyPosition)
         {
-            foreach (Rover rover in Rovers)
-            {
-                if ((rover.Position.x == xyPosition.xAxis) && (rover.Position.y == xyPosition.yAxis)) {
-                    return false; 
-                }
-            }
-            return true; 
+            return ! Rovers.Where(x => x.Position ==  xyPosition).Any();
         }
 
         public Boolean AreRoversIntact()
         {
-            foreach (Rover rover in Rovers)
-            {
-                if (rover.IsIntact)
-                {
-                    return true; 
-                }
-            }
-            return false;
+            return Rovers.Where(x => x.IsIntact).Any();
         }
 
         public Dictionary<ulong, XYPosition> GetRoverPositions()
@@ -89,22 +86,23 @@ namespace MarsRover.LogicLayer.Models
             Dictionary<ulong, XYPosition> positions = new Dictionary<ulong, XYPosition>();
             foreach (Rover rover in Rovers)
             {
-                positions.Add(rover.Id, (rover.Position.x, rover.Position.y));
+                positions.Add(rover.Id, rover.Position);
             }
             return positions;
         }
 
 
+
         public XYPosition PositionGenerator()
         {
             Random random = new Random();
-            int xAxis = random.Next(1, Plateau._x);
-            int yAxis = random.Next(1, Plateau._y);
+            int xAxis = random.Next(0, Plateau._x - 1);
+            int yAxis = random.Next(0, Plateau._y - 1);
 
             while (!IsPositionEmpty((xAxis, yAxis)))
             {
-                xAxis = random.Next(1, Plateau._x);
-                yAxis = random.Next(1, Plateau._y);
+                xAxis = random.Next(0, Plateau._x - 1);
+                yAxis = random.Next(0, Plateau._y - 1);
             }
 
             return (xAxis, yAxis);
@@ -112,53 +110,49 @@ namespace MarsRover.LogicLayer.Models
 
 
 
-        public void DisplayGrid()
+        public string[,] GetGrid()
         {
-
-            var grid = new Grid();
+            // myGrid is indexed [y, x]
 
             Plateau plateau = this.Plateau;
-            char[,] plat = this.Plateau.Grid;
 
-
-            for (int cols = 0; cols < plateau._x + 4; cols++)
-            {
-                grid.AddColumn();
-            }
+            string[,] newGrid = new string[plateau._y + 4, plateau._x + 4];
 
             Dictionary<ulong, XYPosition> CurrentRoverPositions = GetRoverPositions();
 
             for (int rows = plateau._y + 3; rows >= 0; rows--)
             {
-                Text[] gridContents = new Text[plateau._x + 4];
                 for (int cols = 0; cols < plateau._x + 4; cols++)
                 {
-                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 2) || (rows == plateau._y + 3) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
+                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
+<<<<<<< HEAD
+                        newGrid[rows, cols] = new Symbol("☠️", "X");
+                    }
+                    else if (Hole.Position == (cols - 2, rows - 2))
+                    {
+                        newGrid[rows, cols] = "@";
+=======
                         gridContents[cols] = new Text("X", new Style(Color.DarkKhaki));
                     } else if (ChargingStation.Position == (cols - 1, rows - 1)) {
                         gridContents[cols] = new Text("$", new Style(Color.DarkViolet));
+>>>>>>> main
                     }
                     else
                     {
-                        gridContents[cols] = new Text($"{plat[cols - 2, rows - 2]}", new Style(Color.Red, Color.Black));
-                    }
-
-
-                    foreach (ulong key in CurrentRoverPositions.Keys)
-                    {
-                        if (CurrentRoverPositions[key] == (cols - 1 , rows - 1 ))
-                        {
-                            gridContents[cols] = new Text($"{key}", new Style(Color.Aquamarine1));
-
-                        }
+                        newGrid[rows, cols] = "_";
                     }
                 }
-                grid.AddRow(gridContents);
             }
 
-            AnsiConsole.Write(grid);
 
+            foreach (ulong key in CurrentRoverPositions.Keys)
+                {
+                    newGrid[CurrentRoverPositions[key].yAxis + 2, CurrentRoverPositions[key].xAxis + 2] = $"{key}"; 
+                }
+            
+
+            return newGrid; 
         }
 
 

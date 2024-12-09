@@ -8,17 +8,22 @@ using MarsRover.Enums;
 
 namespace MarsRover.LogicLayer.Models
 {
-    public class Rover
+    public class Rover : Vehicle 
     {
         public static ulong RoverCounter { get; set; }
+        
         public ulong Id { get; init; }
-        public Position Position { get; set; }
+
+        public XYPosition Position { get; set; }
+
+        public Facing Direction { get; set; }
 
         public Boolean IsIntact { get; set; }
 
-        public Rover(Position position)
+        public Rover(XYPosition position, Facing direction)
         {
             Position = position;
+            Direction = direction; 
             Id = RoverCounter;
             IsIntact = true;
             RoverCounter++; 
@@ -29,30 +34,29 @@ namespace MarsRover.LogicLayer.Models
             if (instruction == Instructions.M) return;
 
             int rotateBy = instruction == Instructions.R ? 1 : -1;
-            int shiftPosition = (int)Position.Direction + rotateBy;
+            int shiftPosition = (int)Direction + rotateBy;
 
             if (shiftPosition == -1) shiftPosition = 3;
             if (shiftPosition == 4) shiftPosition = 0;
 
-            Position.Direction = (Facing)(shiftPosition);
+            Direction = (Facing)(shiftPosition);
         }
 
-        public XYPosition PredictNextPosition()
+
+        public void MoveRover(Instructions forwardOrBack)
         {
-            int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-            int futureX = Position.x + _positionConversion[(int)Position.Direction, 0];
-            int futureY = Position.y + _positionConversion[(int)Position.Direction, 1];
-            return (futureX, futureY);
+            int forwardOrBackInt = forwardOrBack == Instructions.B ? -1 : 1; 
+            int[,] positionConversion = { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 } };
+            int newXAxis = Position.xAxis + (positionConversion[(int)Direction, 0] * forwardOrBackInt);
+            int newYAxis = Position.yAxis + (positionConversion[(int)Direction, 1] * forwardOrBackInt);
+            Position = (newXAxis, newYAxis);
         }
 
-
-        public void MoveRover()
+        public override string ToString()
         {
-            int[,] _positionConversion = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
-            Position.x += _positionConversion[(int)Position.Direction, 0];
-            Position.y += _positionConversion[(int)Position.Direction, 1];
+            if (!IsIntact) return $"Rover {Id} is destroyed.";
+            return $"Rover {Id} is at ({Position.xAxis}, {Position.yAxis}) facing {Direction}";
         }
-
 
     }
 }

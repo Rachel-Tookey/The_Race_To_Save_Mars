@@ -1,5 +1,4 @@
 ﻿using MarsRover;
-using MarsRover.UILayer.States;
 using MarsRover.Input.ParserModels;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -18,8 +17,7 @@ namespace MarsRoverTests
         [Test, Description("Add Rover")]
         public void AddRover()
         {
-            Position newPos = new Position(5, 5, Facing.NORTH); 
-            Rover newRover = new Rover(newPos);
+            Rover newRover = new Rover((5, 5), Facing.NORTH);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
 
@@ -35,8 +33,7 @@ namespace MarsRoverTests
         [Test, Description("Check if position is empty, true")]
         public void IsPositionEmpty_True()
         {
-            Position newPos = new Position(5, 5, Facing.NORTH);
-            Rover newRover = new Rover(newPos);
+            Rover newRover = new Rover((5, 5), Facing.NORTH);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
             testMissionControl.AddObject(newRover);
@@ -50,8 +47,7 @@ namespace MarsRoverTests
         [Test, Description("Check if a position is empty - false")]
         public void IsPositionEmpty_False()
         {
-            Position newPos = new Position(5, 5, Facing.NORTH);
-            Rover newRover = new Rover(newPos);
+            Rover newRover = new Rover((5, 5), Facing.NORTH);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
             testMissionControl.AddObject(newRover);

@@ -7,6 +7,19 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="UILayer\**" />
+    <EmbeddedResource Remove="UILayer\**" />
+    <None Remove="UILayer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Application.cs" />
+    <Compile Remove="InputLayer\ParserModels\PlateauSizeParser.cs" />
+    <Compile Remove="LogicLayer\Models\Position.cs" />
+    <Compile Remove="UILayerTG\LevelOne.cs" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<InternalsVisibleTo Include="Mars-Rover-Project-Tests" />
 	</ItemGroup>

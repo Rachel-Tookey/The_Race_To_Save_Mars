@@ -1,5 +1,7 @@
 ﻿using MarsRover.Enums;
 using MarsRover.Input.ParserModels;
+using MarsRover.LogicLayer.Models;
+using MarsRover.UILayerTG;
 
 
 namespace MarsRover
@@ -8,8 +10,9 @@ namespace MarsRover
     {
         static void Main(string[] args)
         {
-            Application application = new Application();
-            application.Run();
+
+            var game = new GameApplication();
+            game.Run();
 
         }
     }
