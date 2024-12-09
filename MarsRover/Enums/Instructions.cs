@@ -10,6 +10,7 @@ namespace MarsRover.Enums
     {
         L,
         R,
-        M
+        M,
+        N
     }
 }

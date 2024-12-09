@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MarsRover.Enums;
+using MarsRover.LogicLayer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,6 +62,7 @@ namespace MarsRover.UILayerTG
                 X = Pos.Center(),
                 Y = Pos.Center() + 3,
             };
+
 
 
             nextButton.Clicked += () =>

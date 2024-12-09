@@ -1,5 +1,6 @@
 ﻿using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
+using MarsRover.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using Terminal.Gui.Graphs;
 using static System.Net.Mime.MediaTypeNames;
+using NStack;
 
 namespace MarsRover.UILayerTG
 {
@@ -165,6 +167,10 @@ namespace MarsRover.UILayerTG
                 }
             });
 
+            Rover selectedRover = missionControl.Rovers[0];
+
+
+
 
             var comboBoxLabel = new Label("Select a rover:")
             {
@@ -173,12 +179,13 @@ namespace MarsRover.UILayerTG
                 Width = Dim.Fill()
             };
 
-            var comboBox = new ComboBox
+            var comboBox = new CustomComboBox
             {
                 X = xAlignment,
                 Y = Pos.Bottom(comboBoxLabel) + 1,
                 Width = 40,
                 Height = 40
+
             };
 
 
@@ -194,7 +201,6 @@ namespace MarsRover.UILayerTG
 
             comboBox.SetSource(missionControl.Rovers.Select(x => x.Id).ToList());
 
-            Rover selectedRover = missionControl.Rovers[0];
 
             comboBox.SelectedItemChanged += (e) =>
             {
@@ -203,35 +209,11 @@ namespace MarsRover.UILayerTG
             };
 
 
-            var buttonLabel = new Terminal.Gui.Label("Enter your sequence of moves:")
-            {
-                X = xAlignment,
-                Y = Pos.Center() + 6,
-
-            };
-
-
-            var textField = new TextField("i.e.: LLMMRRMM")
-            {
-                X = xAlignment,
-                Y = Pos.Bottom(buttonLabel) + 1,
-                Width = 40
-
-            };
-
-            openingWindow.Add(textField);
-
-            var submitButton = new Button("Submit")
-            {
-                X = xAlignment,
-                Y = Pos.Bottom(textField) + 2,
-            };
-
 
             var responseLabel = new Label()
             {
                 X = xAlignment,
-                Y = Pos.Bottom(submitButton) + 1,
+                Y = Pos.Center() + 4,
                 TextAlignment = TextAlignment.Right,
                 ColorScheme = new ColorScheme
                 {
@@ -239,16 +221,26 @@ namespace MarsRover.UILayerTG
                 },
             };
 
-            submitButton.Clicked += () =>
+
+            openingWindow.KeyDown += (e) =>
             {
-                InstructionParser userInput = new InstructionParser(textField.Text.ToString());
-                if (!userInput.Success)
+                Instructions inputInstruction = Instructions.N;
+                if (e.KeyEvent.Key == Key.CursorLeft)
                 {
-                    responseLabel.Text = userInput.Message.ToString();
+                    inputInstruction = Instructions.L;
+                } else if (e.KeyEvent.Key == Key.CursorRight)
+                {
+                    inputInstruction = Instructions.R;
                 }
-                else
+                else if (e.KeyEvent.Key == Key.CursorUp)
                 {
-                    missionControl.RunInstructions(selectedRover, userInput.Result);
+                    inputInstruction = Instructions.M;
+                }
+
+                if (inputInstruction != Instructions.N)
+                {
+                    e.Handled = true;
+                    missionControl.RunInstructions(selectedRover, new List<Instructions>() { inputInstruction });
                     openingWindow.Remove(displayGrid);
                     displayGrid = GetGrid();
                     openingWindow.Add(displayGrid);
@@ -262,15 +254,14 @@ namespace MarsRover.UILayerTG
                     else if (!missionControl.AreRoversIntact())
                     {
                         Application.SwitchToNextLevel(new EndLevel(Application));
-
                     }
 
                 }
 
             };
 
-
-            openingWindow.Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, buttonLabel, textField, submitButton, responseLabel);
+           
+            openingWindow.Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, responseLabel);
 
 
             return openingWindow;
