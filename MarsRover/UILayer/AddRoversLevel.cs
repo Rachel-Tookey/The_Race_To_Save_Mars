@@ -60,7 +60,7 @@ namespace MarsRover.UILayerTG
                 X = Pos.Center(),
                 Y = Pos.Bottom(positionLabel) + 1,
                 Width = 40,
-                Text = $"Max: {App.MissionControl.Plateau._x}, {App.MissionControl.Plateau._y}"
+                Text = $"Max: {App.MissionControl.Plateau._x - 1}, {App.MissionControl.Plateau._y - 1}"
             };
 
             var submitButton = new Button("Submit")
@@ -86,7 +86,7 @@ namespace MarsRover.UILayerTG
                 }
                 else
                 {
-                    RoverParser userInput = new RoverParser(textField.Text.ToString(), selectedEnum, App.MissionControl.Plateau);
+                    RoverParser userInput = new RoverParser(textField.Text.ToString(), selectedEnum, App.MissionControl);
                     if (!userInput.Success)
                     {
                         responseLabel.Text = userInput.Message.ToString();

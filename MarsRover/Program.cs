@@ -14,8 +14,6 @@ namespace MarsRover
 
             Terminal.Gui.Application.Init();
 
-            Console.OutputEncoding = Encoding.UTF8;
-
             GameApplication game = new GameApplication();
 
             Terminal.Gui.Application.Run();

@@ -18,7 +18,7 @@ namespace MarsRover.Input.ParserModels
 
         public string Message { get; set; } = "";
 
-        public RoverParser(String userInput, Facing direction, Plateau plateau) {
+        public RoverParser(String userInput, Facing direction, MissionControl mc) {
 
             Regex userPattern = new Regex("^[0-9]+,\\s[0-9]+$");
             
@@ -28,11 +28,16 @@ namespace MarsRover.Input.ParserModels
                 int xAxis = Int32.Parse(userInputArray[0]);
                 int yAxis = Int32.Parse(userInputArray[1]);
 
-                if ((xAxis >= plateau._x) || (yAxis >= plateau._y))
+                if ((xAxis >= mc.Plateau._x) || (yAxis >= mc.Plateau._y))
                 {
                     Success = false;
                     Message = "These coordinates are outside the plateau"; 
-                } else
+                } else if (!mc.IsPositionEmptyRovers((xAxis, yAxis)))
+                {
+                    Success = false;
+                    Message = "There is already a rover at that position";
+                }
+                else
                 {
                     Result = new Rover((xAxis, yAxis), direction);
                     Success = true; 
