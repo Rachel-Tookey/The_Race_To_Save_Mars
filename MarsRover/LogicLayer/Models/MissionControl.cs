@@ -153,11 +153,11 @@ namespace MarsRover.LogicLayer.Models
                 {
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-                        newGrid[rows, cols] = "⠍";
+                        newGrid[rows, cols] = "⡺";
                     }
-                    else if (Hole.Position == (cols - 2, rows - 2))
+                    else if (EndOfLevel == (cols - 2, rows - 2))
                     {
-                        newGrid[rows, cols] = "X"; 
+                        newGrid[rows, cols] = "x"; 
                     }
                     else
                     {
@@ -168,7 +168,7 @@ namespace MarsRover.LogicLayer.Models
 
             foreach (XYPosition xYPosition in Rocks)
             {
-                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⠍"; //░ ⠍
+                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⡺"; 
             }
 
             foreach (ulong key in CurrentRoverPositions.Keys)
@@ -178,6 +178,7 @@ namespace MarsRover.LogicLayer.Models
             
             return newGrid; 
         }
+
 
         public void SetUpTrainingLevel()
         {
@@ -189,6 +190,12 @@ namespace MarsRover.LogicLayer.Models
 
             AddObject(new Hole(endOfLevel));
 
+        }
+
+        public string GetObjectByPosition(XYPosition posToSearch)
+        {
+            string[,] myGrid = GetGrid();
+            return myGrid[posToSearch.yAxis + 2, posToSearch.xAxis + 2]; 
         }
 
 

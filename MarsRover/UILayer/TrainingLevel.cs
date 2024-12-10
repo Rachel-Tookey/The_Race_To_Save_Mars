@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
 using NStack;
+using System.Reflection.Emit;
 
 
 namespace MarsRover.UILayerTG
@@ -24,6 +25,7 @@ namespace MarsRover.UILayerTG
             InitialiseLevel();
         }
 
+
         public void InitialiseLevel()
         {
             MissionControl mc = App.MissionControl;
@@ -35,7 +37,7 @@ namespace MarsRover.UILayerTG
             Rover selectedRover = mc.Rovers[0];
 
             var displayGrid = new GridView(mc.GetGrid());
-        
+
             var textLabel = new StyledLabel(Utils.Text.GetLevelText("Training Level"))
             {
                 X = xAlignment,
@@ -43,9 +45,10 @@ namespace MarsRover.UILayerTG
                 Width = 40,
             };
 
-            int seconds = 360 / mc.Rovers.Where(x => x.IsIntact).Count();
 
-            var timerLabel = new Label($"Time left: {seconds}s")
+            int seconds = 360 / App.MissionControl.Rovers.Where(x => x.IsIntact).Count();
+
+            var timerLabel = new Terminal.Gui.Label($"Time left: {seconds}s")
             {
                 X = xAlignment,
                 Y = Pos.Bottom(textLabel) + 2,
@@ -55,10 +58,16 @@ namespace MarsRover.UILayerTG
                 },
             };
 
+            Boolean stopTimeout = false; 
 
             Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
             {
                 seconds--;
+                if (stopTimeout)
+                {
+                    return false;
+                }
+
                 if (seconds > 0)
                 {
                     timerLabel.Text = $"Time left: {seconds}s";
@@ -72,7 +81,7 @@ namespace MarsRover.UILayerTG
             });
 
 
-            var comboBoxLabel = new Label("Select a rover:")
+            var comboBoxLabel = new Terminal.Gui.Label("Select a rover:")
             {
                 X = xAlignment,
                 Y = Pos.Bottom(timerLabel) + 1,
@@ -97,15 +106,11 @@ namespace MarsRover.UILayerTG
                 Y = Pos.Bottom(comboBoxLabel) + 3,
             };
 
-
-
             comboBox.SelectedItemChanged += (e) =>
             {
                 selectedRover = mc.GetRoverById((ulong)comboBox.SelectedItem);
                 roverPosition.Text = selectedRover.ToString();
             };
-
-
 
             var responseLabel = new ResponseLabel()
             {
@@ -113,6 +118,7 @@ namespace MarsRover.UILayerTG
                 Y = Pos.Center() + 4,
                 TextAlignment = TextAlignment.Right,
             };
+
 
 
             this.KeyDown += (e) =>
@@ -128,30 +134,32 @@ namespace MarsRover.UILayerTG
 
                 if (inputInstruction != (Instructions)(-1))
                 {
-                    e.Handled = true;
 
+                    e.Handled = true;
+                    XYPosition oldPos = selectedRover.Position;
                     mc.RunInstructions(selectedRover, inputInstruction);
-             
-                    this.Remove(displayGrid);
-                    this.Add(new GridView(mc.GetGrid()));
-                    this.SetNeedsDisplay();
+
+                    if (inputInstruction == Instructions.M || inputInstruction == Instructions.B) {
+                        displayGrid.MoveObjectTo(selectedRover.Id, oldPos, selectedRover.Position, mc.GetObjectByPosition(oldPos));
+                        this.SetNeedsDisplay();
+                    }
 
                     roverPosition.Text = selectedRover.ToString();
-
+                   
                     if (selectedRover.Position == mc.EndOfLevel)
                     {
+                        stopTimeout = true; 
                         App.SwitchToNextLevel(new FirstLevel(App));
                     }
                     else if (!mc.AreRoversIntact())
                     {
                         App.SwitchToNextLevel(new EndLevel(App));
-                    }
-
+                    } 
                 }
             };
 
 
-            Add(timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, textLabel, responseLabel);
+            Add(textLabel, timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, responseLabel);
 
         }
 
