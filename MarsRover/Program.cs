@@ -2,6 +2,7 @@
 using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
 using MarsRover.UILayerTG;
+using System.Text;
 
 
 namespace MarsRover
@@ -10,7 +11,10 @@ namespace MarsRover
     {
         static void Main(string[] args)
         {
+
             Terminal.Gui.Application.Init();
+
+            Console.OutputEncoding = Encoding.UTF8;
 
             GameApplication game = new GameApplication();
 

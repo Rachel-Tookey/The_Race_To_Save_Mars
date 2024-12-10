@@ -117,8 +117,6 @@ namespace MarsRover.UILayerTG
 
             this.KeyDown += (e) =>
             {
-                var keyPressed = e.KeyEvent.Key;
-
                 Instructions inputInstruction = (e.KeyEvent.Key) switch
                 {
                     Key.CursorLeft => Instructions.L,

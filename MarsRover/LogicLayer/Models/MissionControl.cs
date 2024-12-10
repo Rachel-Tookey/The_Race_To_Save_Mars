@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Enums;
+using Sharprompt; 
 
 namespace MarsRover.LogicLayer.Models
 {
@@ -152,22 +153,22 @@ namespace MarsRover.LogicLayer.Models
                 {
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-                        newGrid[rows, cols] = "V";
+                        newGrid[rows, cols] = "⠍";
                     }
                     else if (Hole.Position == (cols - 2, rows - 2))
                     {
-                        newGrid[rows, cols] = "@"; 
+                        newGrid[rows, cols] = "X"; 
                     }
                     else
                     {
-                        newGrid[rows, cols] = "_";
+                        newGrid[rows, cols] = " ";
                     }
                 }
             }
 
             foreach (XYPosition xYPosition in Rocks)
             {
-                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "V"; 
+                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⠍"; //░ ⠍
             }
 
             foreach (ulong key in CurrentRoverPositions.Keys)
@@ -180,13 +181,13 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpTrainingLevel()
         {
-            XYPosition EndOfLevel = PositionGenerator();
+            XYPosition endOfLevel = PositionGenerator();
 
-            RockGenerator(20, EndOfLevel);
+            RockGenerator(20, endOfLevel);
 
-            EndOfLevel = EndOfLevel;
+            EndOfLevel = endOfLevel;
 
-            AddObject(new Hole(EndOfLevel));
+            AddObject(new Hole(endOfLevel));
 
         }
 
