@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MarsRover.LogicLayer.Models
 {
-    public abstract class Vehicle 
+    public abstract class Vehicle  
     {
         ulong Id;
 
@@ -15,8 +15,9 @@ namespace MarsRover.LogicLayer.Models
 
         Facing Direction; 
 
-        Boolean IsIntact { get; set; }
+        Boolean IsIntact;
 
+        int Acceleration; 
         
     }
 }

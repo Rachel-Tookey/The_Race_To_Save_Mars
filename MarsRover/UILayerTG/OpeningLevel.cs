@@ -10,23 +10,22 @@ using MarsRover.UILayerTG.Utils;
 
 namespace MarsRover.UILayerTG
 {
-    public class OpeningLevel : ILevel 
+    public class OpeningLevel : StyledWindow  
     {
 
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
-        public OpeningLevel(GameApplication game)
+        public OpeningLevel(GameApplication game) : base("Race to Save Mars")
         {
+            App = game;
+            InitialiseLevel();
 
-            Application = game;
         }
 
-        public Window GetWindow()
+        public void InitialiseLevel()
         {
 
-            var openingWindow = new StyledWindow("Race to Save Mars");
-
-            var introLabel = new StyledLabel(Text.GetLevelText("Opening Level"))
+            var introLabel = new StyledLabel(Utils.Text.GetLevelText("Opening Level"))
             {
                 X = Pos.Center(),
                 Y = Pos.Center() - 2,
@@ -40,13 +39,11 @@ namespace MarsRover.UILayerTG
 
             nextButton.Clicked += () =>
             {
-                Application.SwitchToNextLevel(new AddRoversLevel(Application));
-            };
+                App.SwitchToNextLevel(new AddRoversLevel(App));
+            };        
 
-            openingWindow.Add(introLabel, nextButton);
-
-            return openingWindow;   
-        }
+            Add(introLabel, nextButton);
 
     }
+}
 }

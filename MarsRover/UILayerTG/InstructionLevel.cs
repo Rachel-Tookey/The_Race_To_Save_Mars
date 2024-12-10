@@ -8,25 +8,21 @@ using Terminal.Gui;
 
 namespace MarsRover.UILayerTG
 {
-    public class InstructionLevel : ILevel 
+    public class InstructionLevel : StyledWindow  
     {
 
-        public GameApplication Application { get; set; }
+        public GameApplication App { get; set; }
 
-        public InstructionLevel(GameApplication game)
+        public InstructionLevel(GameApplication game) : base("Instructions")
         {
-
-            Application = game;
+            App = game;
+            InitialiseLevel(); 
         }
 
 
-        public Window GetWindow()
+        public void InitialiseLevel()
         {
-
-            var openingWindow = new StyledWindow("Instructions");
-
-
-            var instructionText = new StyledLabel(Text.GetLevelText("Instruction Level"))
+            var instructionText = new StyledLabel(Utils.Text.GetLevelText("Instruction Level"))
             {
                 X = Pos.Center(),
                 Y = 2,
@@ -42,12 +38,11 @@ namespace MarsRover.UILayerTG
 
             nextButton.Clicked += () =>
             {
-                Application.SwitchToNextLevel(new TrainingLevel(Application));
+                App.SwitchToNextLevel(new TrainingLevel(App));
             };
 
-            openingWindow.Add(instructionText, nextButton);
+            Add(instructionText,nextButton);
 
-            return openingWindow;
         }
 
     }

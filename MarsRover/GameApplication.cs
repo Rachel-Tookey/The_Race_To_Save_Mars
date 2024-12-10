@@ -16,33 +16,24 @@ namespace MarsRover
 
         public MissionControl MissionControl { get; set; }
 
-        public Toplevel Toplevel { get; set; }
-
         public User User { get; set; }
 
-        public void Run()
+        public GameApplication()
         {
-
-            Terminal.Gui.Application.Init();
-
-            Toplevel = Terminal.Gui.Application.Top;
-
-            CurrentWindow = new OpeningLevel(this).GetWindow();
-
-            Toplevel.Add(CurrentWindow);
-
-            Terminal.Gui.Application.Run();
-
-
+            User = new User();
+            MissionControl = new MissionControl(new Plateau(60, 20));
+            CurrentWindow = new OpeningLevel(this);
+            SwitchToNextLevel(CurrentWindow); 
         }
 
-        public void SwitchToNextLevel(ILevel currentLevel)
+     
+        public void SwitchToNextLevel(Window nextWindow)
         {
-            Toplevel.Remove(CurrentWindow);
+            Terminal.Gui.Application.Top.RemoveAll();
 
-            CurrentWindow = currentLevel.GetWindow();
+            CurrentWindow = nextWindow; 
 
-            Toplevel.Add(CurrentWindow);
+            Terminal.Gui.Application.Top.Add(CurrentWindow);
 
             Terminal.Gui.Application.Refresh();
 

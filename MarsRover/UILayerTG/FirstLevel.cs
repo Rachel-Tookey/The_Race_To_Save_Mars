@@ -8,22 +8,23 @@ using MarsRover.UILayerTG.Utils;
 
 namespace MarsRover.UILayerTG
 {
-    public class FirstLevel : ILevel
+    public class FirstLevel : StyledWindow
     {
-        public GameApplication Application { get; set; }
 
-        public FirstLevel(GameApplication game)
+        public GameApplication App { get; set; }
+
+        public FirstLevel(GameApplication game) : base("Level One")
         {
-
-            Application = game;
+            App = game;
+            InitialiseLevel();
         }
 
-        public Window GetWindow()
+        public void InitialiseLevel()
         {
-            var openingWindow = new StyledWindow("Level One");
 
-            return openingWindow;
         }
+
 
     }
+
 }
