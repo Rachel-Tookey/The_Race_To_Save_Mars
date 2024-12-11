@@ -1,7 +1,7 @@
 ﻿using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
 using MarsRover.Enums;
-using MarsRover.UILayerTG.Utils; 
+using MarsRover.UILayerTG.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using NStack;
 using System.Reflection.Emit;
+using MarsRover.UILayer.Superclasses;
 
 
 namespace MarsRover.UILayerTG
@@ -30,16 +31,26 @@ namespace MarsRover.UILayerTG
 
         public Terminal.Gui.Label TimerLabel; 
 
-        public Boolean HasTimeOut = false; 
+        public Boolean HasTimeOut = false;
 
         public TrainingLevel(GameApplication game) : base("Training Level")
         {
 
             App = game;
-            SelectedRover = App.MissionControl.Rovers[0];
+
+            SelectedRover = App.MissionControl.Rovers.Where(x => x.Health > 0).First();
+            
             App.MissionControl.SetUpTrainingLevel();
+            
             SetTimer();
-            DisplayGrid = new GridView(App.MissionControl.GetGrid());
+            
+            DisplayGrid = new GridView(0, App.MissionControl.GetGrid());
+            
+            AddUI();
+
+        }
+
+        public void AddUI() { 
 
 
             var textLabel = new StyledLabel(Utils.Text.GetLevelText("Training Level"))

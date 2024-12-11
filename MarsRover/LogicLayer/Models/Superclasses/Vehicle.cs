@@ -5,19 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsRover.LogicLayer.Models
+namespace MarsRover.LogicLayer.Models.Superclasses
 {
-    public abstract class Vehicle  
+    public abstract class Vehicle
     {
         ulong Id;
 
         XYPosition Position;
 
-        Facing Direction; 
+        Facing Direction;
 
-        Boolean IsIntact;
+        bool IsIntact;
 
-        int Acceleration; 
-        
+        int Acceleration;
+
     }
 }

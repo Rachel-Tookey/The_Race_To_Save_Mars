@@ -7,10 +7,10 @@ namespace MarsRover.UILayerTG.Utils
 
         public Dictionary<XYPosition, Label> gridLabels = new Dictionary<(int xAxis, int yAxis), Label>();
 
-        public GridView(string[,] myGrid)
+        public GridView(int y, string[,] myGrid)
         {
             X = 0;
-            Y = 0;
+            Y = y;
             Width = 4 + myGrid.GetLength(1);
             Height = 4 + myGrid.GetLength(0);
 

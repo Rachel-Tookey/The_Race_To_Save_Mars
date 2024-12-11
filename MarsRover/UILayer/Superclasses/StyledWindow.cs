@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
 
-namespace MarsRover.UILayerTG.Utils
+namespace MarsRover.UILayer.Superclasses
 {
-    public class StyledWindow : Window
+    public abstract class StyledWindow : Window
     {
         public StyledWindow(string text) : base(text)
         {

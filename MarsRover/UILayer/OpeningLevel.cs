@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
-using MarsRover.UILayerTG.Utils; 
+using MarsRover.UILayerTG.Utils;
+using MarsRover.UILayer.Superclasses;
 
 namespace MarsRover.UILayerTG
 {
@@ -18,12 +19,10 @@ namespace MarsRover.UILayerTG
         public OpeningLevel(GameApplication game) : base("Race to Save Mars")
         {
             App = game;
-            InitialiseLevel();
-
+            AddUI(); 
         }
 
-        public void InitialiseLevel()
-        {
+        public void AddUI() { 
 
             var introLabel = new StyledLabel(Utils.Text.GetLevelText("Opening Level"))
             {

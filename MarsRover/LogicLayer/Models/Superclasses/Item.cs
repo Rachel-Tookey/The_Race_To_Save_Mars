@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsRover.LogicLayer.Models
+namespace MarsRover.LogicLayer.Models.Superclasses
 {
     public abstract class Item
     {
-        public Boolean IsUsed = false; 
+        public bool IsUsed = false;
 
         public XYPosition Position;
 

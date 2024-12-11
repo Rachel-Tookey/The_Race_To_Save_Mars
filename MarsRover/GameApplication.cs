@@ -21,8 +21,11 @@ namespace MarsRover
         public GameApplication()
         {
             User = new User();
+
             MissionControl = new MissionControl(new Plateau(60, 20));
+
             CurrentWindow = new OpeningLevel(this);
+
             SwitchToNextLevel(CurrentWindow); 
         }
 

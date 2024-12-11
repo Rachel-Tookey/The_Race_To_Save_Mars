@@ -1,4 +1,5 @@
-﻿using MarsRover.UILayerTG.Utils;
+﻿using MarsRover.UILayer.Superclasses;
+using MarsRover.UILayerTG.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,7 @@ namespace MarsRover.UILayerTG
         public InstructionLevel(GameApplication game) : base("Instructions")
         {
             App = game;
-            InitialiseLevel(); 
-        }
 
-
-        public void InitialiseLevel()
-        {
             var instructionText = new StyledLabel(Utils.Text.GetLevelText("Instruction Level"))
             {
                 X = Pos.Center(),

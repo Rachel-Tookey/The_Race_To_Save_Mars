@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MarsRover.Enums;
-using Sharprompt; 
+using MarsRover.LogicLayer.Models.Superclasses;
+using Sharprompt;
 
 namespace MarsRover.LogicLayer.Models
 {
@@ -32,8 +33,19 @@ namespace MarsRover.LogicLayer.Models
             Rovers.Add(rover);
         }
 
-        public void AddObject(Item item)
+        public void IsPositionHealth()
         {
+
+        }
+
+        public void IsPositionFly()
+        {
+
+        }
+
+        public void IsPositionOil()
+        {
+
         }
 
         public Rover GetRoverById(ulong Id)
@@ -182,6 +194,12 @@ namespace MarsRover.LogicLayer.Models
             return newGrid; 
         }
 
+        public string GetObjectByPosition(XYPosition posToSearch)
+        {
+            string[,] myGrid = GetGrid();
+            return myGrid[posToSearch.yAxis + 2, posToSearch.xAxis + 2];
+        }
+
 
         public void SetUpTrainingLevel()
         {
@@ -189,15 +207,25 @@ namespace MarsRover.LogicLayer.Models
 
             RockGenerator(20);
 
-
         }
 
-        public string GetObjectByPosition(XYPosition posToSearch)
+        public void SetUpFirstLevel()
         {
-            string[,] myGrid = GetGrid();
-            return myGrid[posToSearch.yAxis + 2, posToSearch.xAxis + 2]; 
+            Plateau = new Plateau(120, 24);
+            EndOfLevel = PositionGenerator();
+            RockGenerator(40);
+
         }
 
+        public void SetUpSecondLevel()
+        {
+
+        }
+
+        public void SetUpThirdLevel()
+        {
+
+        }
 
     }
     }

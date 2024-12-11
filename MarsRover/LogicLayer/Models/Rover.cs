@@ -4,7 +4,8 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
-using MarsRover.Enums; 
+using MarsRover.Enums;
+using MarsRover.LogicLayer.Models.Superclasses;
 
 namespace MarsRover.LogicLayer.Models
 {
