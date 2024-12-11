@@ -55,25 +55,25 @@ namespace MarsRover.LogicLayer.Models
 
         public void RunInstructions(Rover roverToMove, Instructions instruction)
         {
-            if (roverToMove.Health == 0) return; 
+            if (roverToMove.Health == 0) return;
             if ((instruction == Instructions.L) || (instruction == Instructions.R))
             {
                 roverToMove.RotateRover(instruction);
             }
-            else 
+            else
             {
-                roverToMove.MoveRover(instruction); 
+                roverToMove.MoveRover(instruction);
                 if (!IsPositionEmptyRocks(roverToMove.Position))
                 {
-                    roverToMove.Health -= 10; 
+                    roverToMove.Health -= 10;
                 }
                 else if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)))
                 {
-                    roverToMove.Health = 0; 
+                    roverToMove.Health = 0;
                 }
             }
         }
-    
+
 
         public Boolean HaveRoversCollided(Rover rover)
         {
@@ -81,15 +81,15 @@ namespace MarsRover.LogicLayer.Models
             {
                 Rover roverCrash = Rovers.Where(x => x.Position == rover.Position && x.Id != rover.Id).First();
                 roverCrash.Health = 0;
-                return true; 
+                return true;
             }
-            return false; 
+            return false;
         }
 
 
         public Boolean IsPositionEmptyRovers(XYPosition xyPosition)
         {
-            return !Rovers.Where(x => x.Position == xyPosition).Any();  
+            return !Rovers.Where(x => x.Position == xyPosition).Any();
         }
 
         public Boolean IsPositionEmptyRocks(XYPosition xyPosition)
@@ -107,7 +107,7 @@ namespace MarsRover.LogicLayer.Models
         {
 
             Dictionary<ulong, XYPosition> positions = new Dictionary<ulong, XYPosition>();
-            foreach (Rover rover in Rovers)
+            foreach (Rover rover in Rovers.Where(x => x.Health != 0).ToList())
             {
                 positions.Add(rover.Id, rover.Position);
             }
@@ -124,8 +124,8 @@ namespace MarsRover.LogicLayer.Models
 
             while (!IsPositionEmptyRovers((xAxis, yAxis)))
             {
-                xAxis = random.Next(0, Plateau._x - 1);
-                yAxis = random.Next(0, Plateau._y - 1);
+                xAxis = random.Next(1, Plateau._x - 1);
+                yAxis = random.Next(1, Plateau._y - 1);
             }
 
             return (xAxis, yAxis);
@@ -134,22 +134,16 @@ namespace MarsRover.LogicLayer.Models
         public void RockGenerator(int percent)
         {
             Random rand = new Random();
-            for (int i = 0; i < Plateau._x; i++)
+            for (int i = 0; i < Plateau._x * Plateau._y; i++)
             {
-                for (int j = 0; j < Plateau._y; j++)
+                if (rand.Next(0, 100) < percent)
                 {
-                    if (rand.Next(0, 100) < percent)
-                    {
-                        XYPosition genPos = PositionGenerator();
-                        if (genPos != EndOfLevel)
-                        {
-                            Rocks.Add(genPos);
-                        }
-                    }
+                    XYPosition genPos = PositionGenerator();
+                    Rocks.Add(genPos); 
                 }
             }
-        }
 
+        }
 
 
         public string[,] GetGrid()
@@ -170,10 +164,6 @@ namespace MarsRover.LogicLayer.Models
                     {
                         newGrid[rows, cols] = "⣫";
                     }
-                    else if (EndOfLevel == (cols - 2, rows - 2))
-                    {
-                        newGrid[rows, cols] = "⊕"; 
-                    }
                     else
                     {
                         newGrid[rows, cols] = " ";
@@ -183,15 +173,17 @@ namespace MarsRover.LogicLayer.Models
 
             foreach (XYPosition xYPosition in Rocks)
             {
-                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⡺"; 
+                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⡺";
             }
 
             foreach (ulong key in CurrentRoverPositions.Keys)
-                {
-                    newGrid[CurrentRoverPositions[key].yAxis + 2, CurrentRoverPositions[key].xAxis + 2] = $"{key}"; 
-                }
-            
-            return newGrid; 
+            {
+                newGrid[CurrentRoverPositions[key].yAxis + 2, CurrentRoverPositions[key].xAxis + 2] = $"{key}";
+            }
+
+            newGrid[EndOfLevel.yAxis + 2, EndOfLevel.xAxis + 2] = "⊕";
+
+            return newGrid;
         }
 
         public string GetObjectByPosition(XYPosition posToSearch)
@@ -204,17 +196,14 @@ namespace MarsRover.LogicLayer.Models
         public void SetUpTrainingLevel()
         {
             EndOfLevel = PositionGenerator();
-
             RockGenerator(20);
-
         }
 
         public void SetUpFirstLevel()
         {
-            Plateau = new Plateau(120, 24);
+            Plateau = new Plateau(110, 20);
             EndOfLevel = PositionGenerator();
-            RockGenerator(40);
-
+            RockGenerator(30);
         }
 
         public void SetUpSecondLevel()
@@ -228,4 +217,4 @@ namespace MarsRover.LogicLayer.Models
         }
 
     }
-    }
+}
