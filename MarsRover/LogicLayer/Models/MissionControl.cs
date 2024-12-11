@@ -18,7 +18,7 @@ namespace MarsRover.LogicLayer.Models
 
         public List<XYPosition> Rocks { get; private set; } = new List<XYPosition> { };
 
-        public Hole Hole { get; private set; } // turn into a list of objects?
+        public List<Item> Items { get; private set; }
 
         public XYPosition EndOfLevel { get; set; }
 
@@ -32,9 +32,8 @@ namespace MarsRover.LogicLayer.Models
             Rovers.Add(rover);
         }
 
-        public void AddObject(Hole hole)
+        public void AddObject(Item item)
         {
-            Hole = hole;
         }
 
         public Rover GetRoverById(ulong Id)
@@ -56,7 +55,7 @@ namespace MarsRover.LogicLayer.Models
                 {
                     roverToMove.Health -= 10; 
                 }
-                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)))
+                else if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)))
                 {
                     roverToMove.Health = 0; 
                 }
@@ -120,7 +119,7 @@ namespace MarsRover.LogicLayer.Models
             return (xAxis, yAxis);
         }
 
-        public void RockGenerator(int percent, XYPosition EndLeveLPosition)
+        public void RockGenerator(int percent)
         {
             Random rand = new Random();
             for (int i = 0; i < Plateau._x; i++)
@@ -130,7 +129,7 @@ namespace MarsRover.LogicLayer.Models
                     if (rand.Next(0, 100) < percent)
                     {
                         XYPosition genPos = PositionGenerator();
-                        if (genPos != EndLeveLPosition)
+                        if (genPos != EndOfLevel)
                         {
                             Rocks.Add(genPos);
                         }
@@ -186,13 +185,10 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpTrainingLevel()
         {
-            XYPosition endOfLevel = PositionGenerator();
+            EndOfLevel = PositionGenerator();
 
-            RockGenerator(20, endOfLevel);
+            RockGenerator(20);
 
-            EndOfLevel = endOfLevel;
-
-            AddObject(new Hole(endOfLevel));
 
         }
 

@@ -18,25 +18,29 @@ namespace MarsRover.UILayerTG
     {
         public GameApplication App { get; set; }
 
-        public int xAlignment = 70; 
+        public int xAlignment = 70;
+
+        public Rover SelectedRover;
+
+        public int Seconds = 360;
+
+        public GridView DisplayGrid;
+
+        public ResponseLabel RoverLabel;
+
+        public Terminal.Gui.Label TimerLabel; 
+
+        public Boolean HasTimeOut = false; 
 
         public TrainingLevel(GameApplication game) : base("Training Level")
         {
 
             App = game;
-            InitialiseLevel();
-        }
+            SelectedRover = App.MissionControl.Rovers[0];
+            App.MissionControl.SetUpTrainingLevel();
+            SetTimer();
+            DisplayGrid = new GridView(App.MissionControl.GetGrid());
 
-
-        public void InitialiseLevel()
-        {
-            MissionControl mc = App.MissionControl;
-
-            mc.SetUpTrainingLevel();
-
-            Rover selectedRover = mc.Rovers[0];
-
-            var displayGrid = new GridView(mc.GetGrid());
 
             var textLabel = new StyledLabel(Utils.Text.GetLevelText("Training Level"))
             {
@@ -45,10 +49,7 @@ namespace MarsRover.UILayerTG
                 Width = 40,
             };
 
-
-            int seconds = 360 / App.MissionControl.Rovers.Where(x => x.Health != 0).Count();
-
-            var timerLabel = new Terminal.Gui.Label($"Time left: {seconds}s")
+            TimerLabel = new Terminal.Gui.Label($"Time left: {Seconds}s")
             {
                 X = xAlignment,
                 Y = Pos.Bottom(textLabel) + 2,
@@ -58,32 +59,11 @@ namespace MarsRover.UILayerTG
                 },
             };
 
-            Boolean stopTimeout = false; 
-            Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
-            {
-                seconds--;
-                if (stopTimeout)
-                {
-                    return false;
-                }
-
-                if (seconds > 0)
-                {
-                    timerLabel.Text = $"Time left: {seconds}s";
-                    return true;
-                }
-                else
-                {
-                    App.SwitchToNextLevel(new EndLevel(App));
-                    return false;
-                }
-            });
-
 
             var comboBoxLabel = new Terminal.Gui.Label("Select a rover:")
             {
                 X = xAlignment,
-                Y = Pos.Bottom(timerLabel) + 1,
+                Y = Pos.Bottom(TimerLabel) + 1,
                 Width = Dim.Fill()
             };
 
@@ -96,71 +76,93 @@ namespace MarsRover.UILayerTG
 
             };
 
-            comboBox.SetSource(mc.Rovers.Select(x => x.Id).ToList());
+            comboBox.SetSource(App.MissionControl.Rovers.Select(x => x.Id).ToList());
 
-
-            var roverPosition = new ResponseLabel()
+            RoverLabel = new ResponseLabel()
             {
                 X = xAlignment,
                 Y = Pos.Bottom(comboBoxLabel) + 3,
             };
 
+
             comboBox.SelectedItemChanged += (e) =>
             {
-                selectedRover = mc.GetRoverById((ulong)comboBox.SelectedItem);
-                roverPosition.Text = selectedRover.ToString();
+                SelectedRover = App.MissionControl.GetRoverById((ulong)comboBox.SelectedItem);
+                RoverLabel.Text = SelectedRover.ToString();
             };
 
-            var responseLabel = new ResponseLabel()
-            {
-                X = xAlignment,
-                Y = Pos.Center() + 4,
-                TextAlignment = TextAlignment.Right,
-            };
-
-
-
-            this.KeyDown += (e) =>
-            {
-                Instructions inputInstruction = (e.KeyEvent.Key) switch
-                {
-                    Key.CursorLeft => Instructions.L,
-                    Key.CursorRight => Instructions.R,
-                    Key.CursorUp => Instructions.M,
-                    Key.CursorDown => Instructions.B,
-                    _ => (Instructions)(-1),
-                };
-
-                if (inputInstruction != (Instructions)(-1))
-                {
-
-                    e.Handled = true;
-                    XYPosition oldPos = selectedRover.Position;
-                    mc.RunInstructions(selectedRover, inputInstruction);
-
-                    if (inputInstruction == Instructions.M || inputInstruction == Instructions.B) {
-                        displayGrid.MoveObjectTo(selectedRover.Id, oldPos, selectedRover.Position, mc.GetObjectByPosition(oldPos));
-                        this.SetNeedsDisplay();
-                    }
-
-                    roverPosition.Text = selectedRover.ToString();
-                   
-                    if (selectedRover.Position == mc.EndOfLevel)
-                    {
-                        stopTimeout = true; 
-                        App.SwitchToNextLevel(new FirstLevel(App));
-                    }
-                    else if (!mc.AreRoversIntact())
-                    {
-                        App.SwitchToNextLevel(new EndLevel(App));
-                    } 
-                }
-            };
-
-
-            Add(textLabel, timerLabel, displayGrid, comboBox, comboBoxLabel, roverPosition, responseLabel);
+            Add(textLabel, TimerLabel, DisplayGrid, comboBox, comboBoxLabel, RoverLabel);
 
         }
+
+        public void SetTimer()
+        {
+
+            Seconds = Seconds / App.MissionControl.Rovers.Where(x => x.Health != 0).Count();
+
+            Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
+            {
+                Seconds--;
+                if (HasTimeOut)
+                {
+                    return false;
+                }
+
+                if (Seconds > 0)
+                {
+                    TimerLabel.Text = $"Time left: {Seconds}s";
+                    return true;
+                }
+                else
+                {
+                    App.SwitchToNextLevel(new EndLevel(App));
+                    return false;
+                }
+            });
+
+        }
+
+
+        public override bool OnKeyDown(KeyEvent keyEvent)
+        {
+
+            Instructions inputInstruction = (keyEvent.Key) switch
+            {
+                Key.CursorLeft => Instructions.L,
+                Key.CursorRight => Instructions.R,
+                Key.CursorUp => Instructions.M,
+                Key.CursorDown => Instructions.B,
+                _ => (Instructions)(-1),
+            };
+
+            if (inputInstruction != (Instructions)(-1))
+            {
+                XYPosition oldPos = SelectedRover.Position;
+                App.MissionControl.RunInstructions(SelectedRover, inputInstruction);
+                RoverLabel.Text = SelectedRover.ToString();
+
+
+                if (inputInstruction == Instructions.M || inputInstruction == Instructions.B)
+                {
+                    DisplayGrid.MoveObjectTo(SelectedRover.Id, oldPos, SelectedRover.Position, App.MissionControl.GetObjectByPosition(oldPos));
+                    this.SetNeedsDisplay();
+                }
+
+
+                if (SelectedRover.Position == App.MissionControl.EndOfLevel)
+                {
+                    HasTimeOut = true;
+                    App.SwitchToNextLevel(new FirstLevel(App));
+                }
+                else if (!App.MissionControl.AreRoversIntact())
+                {
+                    App.SwitchToNextLevel(new EndLevel(App));
+                }
+            }
+
+            return true ;
+        }
+
 
     }
 }
