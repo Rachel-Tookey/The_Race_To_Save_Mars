@@ -44,7 +44,7 @@ namespace MarsRover.LogicLayer.Models
 
         public void RunInstructions(Rover roverToMove, Instructions instruction)
         {
-            if (!roverToMove.IsIntact) return; 
+            if (roverToMove.Health == 0) return; 
             if ((instruction == Instructions.L) || (instruction == Instructions.R))
             {
                 roverToMove.RotateRover(instruction);
@@ -52,9 +52,13 @@ namespace MarsRover.LogicLayer.Models
             else 
             {
                 roverToMove.MoveRover(instruction); 
-                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)) || !IsPositionEmptyRocks(roverToMove.Position) )
+                if (!IsPositionEmptyRocks(roverToMove.Position))
                 {
-                    roverToMove.IsIntact = false;
+                    roverToMove.Health -= 10; 
+                }
+                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)))
+                {
+                    roverToMove.Health = 0; 
                 }
             }
         }
@@ -65,7 +69,7 @@ namespace MarsRover.LogicLayer.Models
             if (Rovers.Where(x => x.Position == rover.Position && x.Id != rover.Id).Any())
             {
                 Rover roverCrash = Rovers.Where(x => x.Position == rover.Position && x.Id != rover.Id).First();
-                roverCrash.IsIntact = false;
+                roverCrash.Health = 0;
                 return true; 
             }
             return false; 
@@ -85,7 +89,7 @@ namespace MarsRover.LogicLayer.Models
 
         public Boolean AreRoversIntact()
         {
-            return Rovers.Where(x => x.IsIntact).Any();
+            return Rovers.Where(x => x.Health > 0).Any();
         }
 
         public Dictionary<ulong, XYPosition> GetRoverPositions()
@@ -153,11 +157,11 @@ namespace MarsRover.LogicLayer.Models
                 {
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-                        newGrid[rows, cols] = "⡺";
+                        newGrid[rows, cols] = "⣫";
                     }
                     else if (EndOfLevel == (cols - 2, rows - 2))
                     {
-                        newGrid[rows, cols] = "x"; 
+                        newGrid[rows, cols] = "⊕"; 
                     }
                     else
                     {

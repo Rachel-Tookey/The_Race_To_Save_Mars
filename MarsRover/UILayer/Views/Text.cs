@@ -20,7 +20,7 @@ namespace MarsRover.UILayerTG.Utils
 
             string trainingLevel = """
                 Your mission: 
-                Get to the entrance (x) of the Martian Kingdom.
+                Get to the entrance (⊕) of the Martian Kingdom.
                 Do not crash into the rocks (⡺).
                 """;
 

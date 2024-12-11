@@ -39,6 +39,10 @@ namespace MarsRover.UILayerTG.Utils
 
         public ColorScheme GetColor(string itemToColor) => itemToColor switch
         {
+            "⣫" => new ColorScheme
+            {
+                Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
+            },
             "⡺" => new ColorScheme
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
@@ -47,9 +51,9 @@ namespace MarsRover.UILayerTG.Utils
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Black, Terminal.Gui.Color.Black)
             },
-            "x" => new ColorScheme
+            "⊕" => new ColorScheme
             {
-                Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightYellow, Terminal.Gui.Color.Black)
+                Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightGreen, Terminal.Gui.Color.Black)
             },
             _ => new ColorScheme
             {

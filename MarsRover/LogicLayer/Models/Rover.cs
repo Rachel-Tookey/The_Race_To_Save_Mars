@@ -18,7 +18,7 @@ namespace MarsRover.LogicLayer.Models
 
         public Facing Direction { get; set; }
 
-        public Boolean IsIntact { get; set; }
+        public int Health { get; set; } = 100; 
 
         public int Acceleration { get; set; } = 1; 
 
@@ -27,8 +27,8 @@ namespace MarsRover.LogicLayer.Models
             Position = position;
             Direction = direction; 
             Id = RoverCounter;
-            IsIntact = true;
             RoverCounter++; 
+           
         }
 
         public void RotateRover(Instructions instruction)
@@ -56,8 +56,14 @@ namespace MarsRover.LogicLayer.Models
 
         public override string ToString()
         {
-            if (!IsIntact) return $"Rover {Id} is destroyed.";
-            return $"Rover {Id} is at ({Position.xAxis}, {Position.yAxis}) facing {Direction}";
+            if (Health == 0) return $"Rover {Id} is destroyed.";
+
+            string roverPos = $"""
+                Rover {Id} is at ({Position.xAxis}, {Position.yAxis}) facing {Direction}
+                Health is {Health}
+                """;
+
+            return roverPos;
         }
 
     }

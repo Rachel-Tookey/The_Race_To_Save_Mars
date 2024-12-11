@@ -18,6 +18,8 @@ namespace MarsRover.UILayerTG
     {
         public GameApplication App { get; set; }
 
+        public int xAlignment = 70; 
+
         public TrainingLevel(GameApplication game) : base("Training Level")
         {
 
@@ -32,8 +34,6 @@ namespace MarsRover.UILayerTG
 
             mc.SetUpTrainingLevel();
 
-            int xAlignment = 70;
-
             Rover selectedRover = mc.Rovers[0];
 
             var displayGrid = new GridView(mc.GetGrid());
@@ -46,7 +46,7 @@ namespace MarsRover.UILayerTG
             };
 
 
-            int seconds = 360 / App.MissionControl.Rovers.Where(x => x.IsIntact).Count();
+            int seconds = 360 / App.MissionControl.Rovers.Where(x => x.Health != 0).Count();
 
             var timerLabel = new Terminal.Gui.Label($"Time left: {seconds}s")
             {
@@ -59,7 +59,6 @@ namespace MarsRover.UILayerTG
             };
 
             Boolean stopTimeout = false; 
-
             Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
             {
                 seconds--;
