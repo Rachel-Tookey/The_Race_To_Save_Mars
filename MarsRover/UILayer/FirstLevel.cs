@@ -73,7 +73,11 @@ namespace MarsRover.UILayerTG
             {
                 X = Pos.Right(comboBox) + 3,
                 Y = 0,
-                Text = SelectedRover.ToString()
+                Text = SelectedRover.ToString(),
+                ColorScheme = new ColorScheme
+                {
+                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Brown, Terminal.Gui.Color.Black)
+                },
             };
 
 

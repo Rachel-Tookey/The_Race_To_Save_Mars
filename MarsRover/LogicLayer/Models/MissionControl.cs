@@ -17,11 +17,13 @@ namespace MarsRover.LogicLayer.Models
 
         public List<Rover> Rovers { get; private set; } = new List<Rover>();
 
-        public List<XYPosition> Rocks { get; private set; } = new List<XYPosition> { };
+        public List<XYPosition> Obstructions { get; private set; } = new List<XYPosition> { };
 
-        public List<Item> Items { get; private set; }
+        public List<XYPosition> Health { get; private set; }
 
         public XYPosition EndOfLevel { get; set; }
+
+        public List<string> GridSymbols = new List<string>();
 
         public MissionControl(Plateau plateau)
         {
@@ -33,8 +35,14 @@ namespace MarsRover.LogicLayer.Models
             Rovers.Add(rover);
         }
 
-        public void IsPositionHealth()
+        public Boolean IsPositionHealth(XYPosition xypos)
         {
+            if (Health.Where(x => x == xypos).Any())
+            {
+                Health.Remove(xypos);
+                return true; 
+            }
+            return false; 
 
         }
 
@@ -66,6 +74,8 @@ namespace MarsRover.LogicLayer.Models
                 if (!IsPositionEmptyRocks(roverToMove.Position))
                 {
                     roverToMove.Health -= 10;
+                } else if (IsPositionHealth(roverToMove.Position)) {
+                    roverToMove.Health += 20; 
                 }
                 else if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)))
                 {
@@ -94,7 +104,7 @@ namespace MarsRover.LogicLayer.Models
 
         public Boolean IsPositionEmptyRocks(XYPosition xyPosition)
         {
-            return !Rocks.Where(x => x == xyPosition).Any();
+            return !Obstructions.Where(x => x == xyPosition).Any();
         }
 
 
@@ -131,17 +141,19 @@ namespace MarsRover.LogicLayer.Models
             return (xAxis, yAxis);
         }
 
-        public void RockGenerator(int percent)
+        public List<XYPosition> GeneratePositions(int percent)
         {
             Random rand = new Random();
+            List<XYPosition> positionHolder = new List<XYPosition>();
             for (int i = 0; i < Plateau._x * Plateau._y; i++)
             {
                 if (rand.Next(0, 100) < percent)
                 {
                     XYPosition genPos = PositionGenerator();
-                    Rocks.Add(genPos); 
+                    positionHolder.Add(genPos);
                 }
             }
+            return positionHolder;
 
         }
 
@@ -162,7 +174,7 @@ namespace MarsRover.LogicLayer.Models
                 {
                     if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
                     {
-                        newGrid[rows, cols] = "⣫";
+                        newGrid[rows, cols] = GridSymbols[0];
                     }
                     else
                     {
@@ -171,10 +183,17 @@ namespace MarsRover.LogicLayer.Models
                 }
             }
 
-            foreach (XYPosition xYPosition in Rocks)
+            foreach (XYPosition xYPosition in Obstructions)
             {
-                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⡺";
+                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = GridSymbols[1];
             }
+
+
+            foreach (XYPosition xYPosition in Health)
+            {
+                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⟡";
+            }
+
 
             foreach (ulong key in CurrentRoverPositions.Keys)
             {
@@ -195,26 +214,29 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpTrainingLevel()
         {
+            GridSymbols = new List<string> { "⣫", "⡺" };
             EndOfLevel = PositionGenerator();
-            RockGenerator(20);
+            Obstructions = GeneratePositions(20);
         }
 
         public void SetUpFirstLevel()
         {
+            GridSymbols = new List<string> { "⠿", "⣤"};
             Plateau = new Plateau(110, 20);
             EndOfLevel = PositionGenerator();
-            RockGenerator(25);
+            Obstructions = GeneratePositions(25);
+            Health = GeneratePositions(5);
         }
 
         public void SetUpSecondLevel()
         {
-            RockGenerator(30);
+            Obstructions = GeneratePositions(30);
 
         }
 
         public void SetUpThirdLevel()
         {
-            RockGenerator(35);
+            Obstructions = GeneratePositions(35);
 
         }
 
