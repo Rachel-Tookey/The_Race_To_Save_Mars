@@ -43,7 +43,7 @@ namespace MarsRover.UILayerTG
 
             TimerLabel = new Terminal.Gui.Label($"Time left: {Seconds}s")
             {
-                X = 2,
+                X = 20,
                 Y = 0,
                 ColorScheme = new ColorScheme
                 {
@@ -54,13 +54,13 @@ namespace MarsRover.UILayerTG
 
             var comboBoxLabel = new Terminal.Gui.Label("Select a rover:")
             {
-                X = Pos.Right(TimerLabel) + 2,
+                X = Pos.Right(TimerLabel) + 3,
                 Y = 0
             };
 
             var comboBox = new ComboBox
             {
-                X = Pos.Right(comboBoxLabel) + 2,
+                X = Pos.Right(comboBoxLabel) + 3,
                 Y = 0,
                 Width = 15,
                 Height = 40
@@ -73,7 +73,7 @@ namespace MarsRover.UILayerTG
             {
                 X = Pos.Right(comboBox) + 3,
                 Y = 0,
-                Text = App.MissionControl.EndOfLevel.ToString()
+                Text = SelectedRover.ToString()
             };
 
 

@@ -203,16 +203,18 @@ namespace MarsRover.LogicLayer.Models
         {
             Plateau = new Plateau(110, 20);
             EndOfLevel = PositionGenerator();
-            RockGenerator(30);
+            RockGenerator(25);
         }
 
         public void SetUpSecondLevel()
         {
+            RockGenerator(30);
 
         }
 
         public void SetUpThirdLevel()
         {
+            RockGenerator(35);
 
         }
 

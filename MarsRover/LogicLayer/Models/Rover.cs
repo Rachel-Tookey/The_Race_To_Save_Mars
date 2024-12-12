@@ -60,8 +60,8 @@ namespace MarsRover.LogicLayer.Models
             if (Health == 0) return $"Rover {Id} is destroyed.";
 
             string roverPos = $"""
-                Rover {Id} is at ({Position.xAxis}, {Position.yAxis}) facing {Direction}
-                Health is {Health}
+                 Rover {Id} is at ({Position.xAxis}, {Position.yAxis}) facing {Direction} 
+                 Health is {Health} 
                 """;
 
             return roverPos;
