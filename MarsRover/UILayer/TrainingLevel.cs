@@ -21,17 +21,17 @@ namespace MarsRover.UILayerTG
 
         public int xAlignment = 70;
 
-        public Rover SelectedRover;
-
         public int Seconds = 360;
+
+        public Boolean HasTimeOut = false;
+
+        public Rover SelectedRover;
 
         public GridView DisplayGrid;
 
         public ResponseLabel RoverLabel;
 
         public Terminal.Gui.Label TimerLabel; 
-
-        public Boolean HasTimeOut = false;
 
         public TrainingLevel(GameApplication game) : base("Training Level")
         {
