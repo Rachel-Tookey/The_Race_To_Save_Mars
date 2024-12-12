@@ -19,7 +19,9 @@ namespace MarsRover.LogicLayer.Models
 
         public List<XYPosition> Obstructions { get; private set; } = new List<XYPosition> { };
 
-        public List<XYPosition> Health { get; private set; }
+        public List<XYPosition> Health { get; private set; } = new List<XYPosition> { };
+
+        public List<XYPosition> Oil { get; private set; } = new List<XYPosition> { }; 
 
         public XYPosition EndOfLevel { get; set; }
 
@@ -35,15 +37,14 @@ namespace MarsRover.LogicLayer.Models
             Rovers.Add(rover);
         }
 
-        public Boolean IsPositionHealth(XYPosition xypos)
+        public Boolean IsPositionUsable(List<XYPosition> list, XYPosition xypos)
         {
-            if (Health.Where(x => x == xypos).Any())
+            if (list.Where(x => x == xypos).Any())
             {
-                Health.Remove(xypos);
+                list.Remove(xypos);
                 return true; 
             }
             return false; 
-
         }
 
         public void IsPositionFly()
@@ -51,10 +52,6 @@ namespace MarsRover.LogicLayer.Models
 
         }
 
-        public void IsPositionOil()
-        {
-
-        }
 
         public Rover GetRoverById(ulong Id)
         {
@@ -74,10 +71,18 @@ namespace MarsRover.LogicLayer.Models
                 if (!IsPositionEmptyRocks(roverToMove.Position))
                 {
                     roverToMove.Health -= 10;
-                } else if (IsPositionHealth(roverToMove.Position)) {
+                }
+                
+                if (IsPositionUsable(Health, roverToMove.Position)) {
                     roverToMove.Health += 20; 
                 }
-                else if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)))
+
+                if (IsPositionUsable(Oil, roverToMove.Position))
+                {
+                    roverToMove.Acceleration = 5; 
+                }
+
+                if ((!Plateau.IsPositionInRange(roverToMove.Position)) || (HaveRoversCollided(roverToMove)))
                 {
                     roverToMove.Health = 0;
                 }
@@ -195,6 +200,12 @@ namespace MarsRover.LogicLayer.Models
             }
 
 
+            foreach (XYPosition xYPosition in Oil)
+            {
+                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "☢";
+            }
+
+
             foreach (ulong key in CurrentRoverPositions.Keys)
             {
                 newGrid[CurrentRoverPositions[key].yAxis + 2, CurrentRoverPositions[key].xAxis + 2] = $"{key}";
@@ -224,8 +235,9 @@ namespace MarsRover.LogicLayer.Models
             GridSymbols = new List<string> { "⠿", "⣤"};
             Plateau = new Plateau(110, 20);
             EndOfLevel = PositionGenerator();
-            Obstructions = GeneratePositions(25);
-            Health = GeneratePositions(5);
+            Obstructions = GeneratePositions(35);
+            Health = GeneratePositions(1);
+            Oil = GeneratePositions(1);
         }
 
         public void SetUpSecondLevel()

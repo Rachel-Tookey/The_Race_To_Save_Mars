@@ -59,6 +59,10 @@ namespace MarsRover.UILayerTG.Utils
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
             },
+            "☢" => new ColorScheme
+            {
+                Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, Terminal.Gui.Color.Black)
+            },
             " " => new ColorScheme
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Black, Terminal.Gui.Color.Black)
