@@ -38,10 +38,11 @@ namespace MarsRover.UILayerTG
                 Y = 2,
             };
 
-            var comboLabel = new Terminal.Gui.Label("Select a starting direction:")
+            var comboLabel = new Terminal.Gui.Label()
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(instructionLabel) + 4,
+                Text = "Select a starting direction:"
             };
 
             ComboBox = new ComboBox()
@@ -55,10 +56,11 @@ namespace MarsRover.UILayerTG
             ComboBox.SetSource(new List<Facing>() { Facing.NORTH, Facing.EAST, Facing.SOUTH, Facing.WEST });
 
 
-            var positionLabel = new Terminal.Gui.Label("Enter a starting position:")
+            var positionLabel = new Terminal.Gui.Label()
             {
                 X = Pos.Center(),
                 Y = Pos.Center() + 1,
+                Text = "Enter a starting position:"
 
             };
 
@@ -70,10 +72,11 @@ namespace MarsRover.UILayerTG
                 Text = $"Max: {App.MissionControl.Plateau._x - 1}, {App.MissionControl.Plateau._y - 1}"
             };
 
-            var submitButton = new Button("Submit")
+            var submitButton = new Button()
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(TextField) + 3,
+                Text = "Submit"
             };
 
             ResponseLabel = new ResponseLabel()
@@ -84,14 +87,14 @@ namespace MarsRover.UILayerTG
                 Width = Dim.Fill()
             };
 
-            submitButton.Clicked += SubmitButtonClicked; 
+            submitButton.MouseClick += SubmitButtonClicked; 
 
             Add(instructionLabel, comboLabel, ComboBox, positionLabel, TextField, ResponseLabel, submitButton);
 
         }
 
 
-        public void SubmitButtonClicked()
+        public void SubmitButtonClicked(object sender, MouseEventEventArgs e)
         {
             Facing selectedEnum = (Facing)ComboBox.SelectedItem;
             if ((int)selectedEnum < 0)

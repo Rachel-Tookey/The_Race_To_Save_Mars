@@ -16,11 +16,11 @@ namespace MarsRover.UILayerTG
 
         public GameApplication App { get; set; }
 
+        public int Seconds = 240;
+
         public Boolean HasTimeOut = false;
 
         public Rover SelectedRover;
-
-        public int Seconds = 240;
 
         public GridView DisplayGrid;
 
@@ -41,7 +41,7 @@ namespace MarsRover.UILayerTG
         public void AddUI()
         {
 
-            TimerLabel = new Terminal.Gui.Label($"Time left: {Seconds}s")
+            TimerLabel = new Terminal.Gui.Label()
             {
                 X = 20,
                 Y = 0,
@@ -49,13 +49,15 @@ namespace MarsRover.UILayerTG
                 {
                     Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, Terminal.Gui.Color.White)
                 },
+                Text = $"Time left: {Seconds}s"
             };
 
 
-            var comboBoxLabel = new Terminal.Gui.Label("Select a rover:")
+            var comboBoxLabel = new Terminal.Gui.Label()
             {
                 X = Pos.Right(TimerLabel) + 3,
-                Y = 0
+                Y = 0,
+                Text = "Select a rover:"
             };
 
             var comboBox = new ComboBox
@@ -77,7 +79,7 @@ namespace MarsRover.UILayerTG
             };
 
 
-            comboBox.SelectedItemChanged += (e) =>
+            comboBox.SelectedItemChanged += (s, e) =>
             {
                 SelectedRover = App.MissionControl.GetRoverById((ulong)comboBox.SelectedItem);
                 RoverLabel.Text = SelectedRover.ToString();
@@ -93,7 +95,7 @@ namespace MarsRover.UILayerTG
 
             Seconds = Seconds / App.MissionControl.Rovers.Where(x => x.Health != 0).Count();
 
-            Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
+            Terminal.Gui.Application.AddTimeout(TimeSpan.FromSeconds(1), () =>
             {
                 Seconds--;
                 if (HasTimeOut)
@@ -113,17 +115,18 @@ namespace MarsRover.UILayerTG
                 }
             });
 
+
         }
 
-        public override bool OnKeyDown(KeyEvent keyEvent)
+        public override bool OnProcessKeyDown(Key e)
         {
 
-            Instructions inputInstruction = (keyEvent.Key) switch
+            Instructions inputInstruction = (e.KeyCode) switch
             {
-                Key.CursorLeft => Instructions.L,
-                Key.CursorRight => Instructions.R,
-                Key.CursorUp => Instructions.M,
-                Key.CursorDown => Instructions.B,
+                (KeyCode)37 => Instructions.L,
+                (KeyCode)39 => Instructions.R,
+                (KeyCode)38 => Instructions.M,
+                (KeyCode)40 => Instructions.B,
                 _ => (Instructions)(-1),
             };
 

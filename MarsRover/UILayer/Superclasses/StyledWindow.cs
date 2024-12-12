@@ -9,8 +9,9 @@ namespace MarsRover.UILayer.Superclasses
 {
     public abstract class StyledWindow : Window
     {
-        public StyledWindow(string text) : base(text)
+        public StyledWindow(string text) : base()
         {
+            Text = text; 
             X = 0;
             Y = 0;
             Width = Dim.Fill();

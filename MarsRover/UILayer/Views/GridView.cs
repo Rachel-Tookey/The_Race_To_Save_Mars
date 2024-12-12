@@ -21,11 +21,12 @@ namespace MarsRover.UILayerTG.Utils
                 for (int j = 0; j < myGrid.GetLength(1); j++)
                 {
                     
-                    var label = new Label(myGrid[i, j])
+                    var label = new Label()
                     {
                         X = startX + j,
                         Y = startY + i,
                         Height = 1,
+                        Text = myGrid[i, j],
                         ColorScheme = GetColor(myGrid[i, j])
                     };
 
@@ -47,6 +48,17 @@ namespace MarsRover.UILayerTG.Utils
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
             },
+            "▛" => new ColorScheme
+            {
+                
+                //Normal = new Terminal.Gui.Attribute(Color.FromRgb(123, 45, 200), Terminal.Gui.Color.Black)
+            },
+
+            "▞" => new ColorScheme
+            {
+                Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Magenta, Terminal.Gui.Color.Black)
+            },
+
             " " => new ColorScheme
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.Black, Terminal.Gui.Color.Black)

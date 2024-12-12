@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -8,21 +9,32 @@ using Terminal.Gui;
 
 namespace MarsRover.UILayerTG.Utils
 {
-    public class StyledLabel : Terminal.Gui.Label 
+    public class StyledLabel : Terminal.Gui.Label
     {
-        public StyledLabel(string text) : base(text)
+        public FrameView Frame {  get; private set; }
+
+        public StyledLabel(string text) : base()
         {
+
+            Text = text; 
             ColorScheme = new ColorScheme
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
             };
-            Border = new Terminal.Gui.Border()
+            Frame = new FrameView()
             {
-                BorderStyle = BorderStyle.Single,
-                Padding = new Thickness(0),
-                BorderBrush = Color.BrightMagenta,
-                Background = Color.Black,
+                ColorScheme = new ColorScheme
+                {
+                    Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.White, Terminal.Gui.Color.BrightMagenta)
+                }
+
             };
+            
         }
+
+
+
     }
+
+
 }

@@ -12,7 +12,7 @@ namespace MarsRover
 {
     public class GameApplication
     {
-        public Window CurrentWindow { get; set; }
+        public Window CurrentWindow { get; set; } 
 
         public MissionControl MissionControl { get; set; }
 
@@ -24,7 +24,7 @@ namespace MarsRover
 
             MissionControl = new MissionControl(new Plateau(60, 20));
 
-            CurrentWindow = new OpeningLevel(this);
+            CurrentWindow = new OpeningLevel(this); 
 
             SwitchToNextLevel(CurrentWindow); 
         }
@@ -32,7 +32,11 @@ namespace MarsRover
      
         public void SwitchToNextLevel(Window nextWindow)
         {
-            Terminal.Gui.Application.Top.RemoveAll();
+            if (Terminal.Gui.Application.Top != null)
+            {
+                Terminal.Gui.Application.Top.RemoveAll();
+
+            }
 
             CurrentWindow = nextWindow; 
 

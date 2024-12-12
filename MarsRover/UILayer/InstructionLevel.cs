@@ -25,14 +25,15 @@ namespace MarsRover.UILayerTG
             };
 
 
-            var nextButton = new Terminal.Gui.Button("Enter the training level")
+            var nextButton = new Button()
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(instructionText) + 4,
+                Text = "Enter the training level"
             };
 
 
-            nextButton.Clicked += () =>
+            nextButton.MouseClick += (s, e) =>
             {
                 App.SwitchToNextLevel(new TrainingLevel(App));
             };

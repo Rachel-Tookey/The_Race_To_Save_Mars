@@ -30,13 +30,14 @@ namespace MarsRover.UILayerTG
                 Y = Pos.Center() - 2,
             };
 
-            var nextButton = new Terminal.Gui.Button("Are you ready to save Mars?")
+            var nextButton = new Button()
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(introLabel) + 4,
+                Text = "Are you ready to save Mars?"
             };
 
-            nextButton.Clicked += () =>
+            nextButton.MouseClick += (s, e) =>
             {
                 App.SwitchToNextLevel(new AddRoversLevel(App));
             };        
