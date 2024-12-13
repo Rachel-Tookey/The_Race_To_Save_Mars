@@ -22,9 +22,9 @@ namespace MarsRoverTests
             Plateau testPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(testPlateau);
             Rover testRoverOne = new Rover((3, 4), Facing.NORTH);
-            testMissionControl.AddObject(testRoverOne);
+            testMissionControl.AddRover(testRoverOne);
             Rover testRoverTwo = new Rover((3,3), Facing.EAST);
-            testMissionControl.AddObject(testRoverTwo);
+            testMissionControl.AddRover(testRoverTwo);
 
 
             InstructionParser instructionsForRoverOne = new InstructionParser("LMLMLMLMM");
@@ -52,7 +52,7 @@ namespace MarsRoverTests
             Plateau testPlateau = new Plateau(5, 5);
             MissionControl testMissionControl = new MissionControl(testPlateau);
             Rover testRoverOne = new Rover((3, 3), Facing.NORTH);
-            testMissionControl.AddObject(testRoverOne);
+            testMissionControl.AddRover(testRoverOne);
 
 
             InstructionParser instructionsForRoverOne = new InstructionParser("M");

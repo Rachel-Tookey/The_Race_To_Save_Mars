@@ -32,12 +32,12 @@ namespace MarsRover.LogicLayer.Models
             Plateau = plateau;
         }
 
-        public void AddObject(Rover rover)
+        public void AddRover(Rover rover)
         {
             Rovers.Add(rover);
         }
 
-        public Boolean IsPositionUsable(List<XYPosition> list, XYPosition xypos)
+        public Boolean IsUsableObjectHere(List<XYPosition> list, XYPosition xypos)
         {
             if (list.Where(x => x == xypos).Any())
             {
@@ -68,16 +68,16 @@ namespace MarsRover.LogicLayer.Models
             else
             {
                 roverToMove.MoveRover(instruction);
-                if (!IsPositionEmptyRocks(roverToMove.Position))
+                if (!IsPositionEmptyObstacles(roverToMove.Position))
                 {
                     roverToMove.Health -= 10;
                 }
                 
-                if (IsPositionUsable(Health, roverToMove.Position)) {
+                if (IsUsableObjectHere(Health, roverToMove.Position)) {
                     roverToMove.Health += 20; 
                 }
 
-                if (IsPositionUsable(Oil, roverToMove.Position))
+                if (IsUsableObjectHere(Oil, roverToMove.Position))
                 {
                     roverToMove.Acceleration = 5; 
                 }
@@ -107,7 +107,7 @@ namespace MarsRover.LogicLayer.Models
             return !Rovers.Where(x => x.Position == xyPosition).Any();
         }
 
-        public Boolean IsPositionEmptyRocks(XYPosition xyPosition)
+        public Boolean IsPositionEmptyObstacles(XYPosition xyPosition)
         {
             return !Obstructions.Where(x => x == xyPosition).Any();
         }
@@ -145,6 +145,7 @@ namespace MarsRover.LogicLayer.Models
 
             return (xAxis, yAxis);
         }
+
 
         public List<XYPosition> GeneratePositions(int percent)
         {
@@ -225,6 +226,7 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpTrainingLevel()
         {
+            // set rover and end of level position as fixed? 
             GridSymbols = new List<string> { "⣫", "⡺" };
             EndOfLevel = PositionGenerator();
             Obstructions = GeneratePositions(20);
@@ -232,6 +234,7 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpFirstLevel()
         {
+            // set rover and end of level position as fixed? 
             GridSymbols = new List<string> { "⠿", "⣤"};
             Plateau = new Plateau(110, 20);
             EndOfLevel = PositionGenerator();
@@ -242,8 +245,10 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpSecondLevel()
         {
+            // empty the obstructions / health 
+            // add a different layer? or obstructions that switch on and off? 
+            // add lasers 
             Obstructions = GeneratePositions(30);
-
         }
 
         public void SetUpThirdLevel()

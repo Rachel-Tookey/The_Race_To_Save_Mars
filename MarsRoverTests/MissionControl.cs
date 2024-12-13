@@ -23,7 +23,7 @@ namespace MarsRoverTests
 
             List<Rover> rovers = new List<Rover>() {newRover };
 
-            testMissionControl.AddObject(newRover);
+            testMissionControl.AddRover(newRover);
 
             testMissionControl.Rovers.Should().HaveCount(1);
             testMissionControl.Rovers.Should().BeEquivalentTo(rovers);
@@ -36,7 +36,7 @@ namespace MarsRoverTests
             Rover newRover = new Rover((5, 5), Facing.NORTH);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            testMissionControl.AddObject(newRover);
+            testMissionControl.AddRover(newRover);
 
             Boolean result = testMissionControl.IsPositionEmpty((5, 6));
 
@@ -50,7 +50,7 @@ namespace MarsRoverTests
             Rover newRover = new Rover((5, 5), Facing.NORTH);
             Plateau newPlateau = new Plateau(10, 10);
             MissionControl testMissionControl = new MissionControl(newPlateau);
-            testMissionControl.AddObject(newRover);
+            testMissionControl.AddRover(newRover);
 
             Boolean result = testMissionControl.IsPositionEmpty((5, 5));
 
