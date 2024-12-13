@@ -1,5 +1,4 @@
 ﻿using MarsRover.Enums;
-using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
 using MarsRover.UILayerTG;
 using System.Text;

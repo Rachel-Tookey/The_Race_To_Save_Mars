@@ -8,8 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="InputLayer\**" />
+    <EmbeddedResource Remove="InputLayer\**" />
+    <None Remove="InputLayer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Application.cs" />
-    <Compile Remove="InputLayer\ParserModels\PlateauSizeParser.cs" />
     <Compile Remove="LogicLayer\Models\Position.cs" />
     <Compile Remove="UILayer\LevelOne.cs" />
     <Compile Remove="UILayer\Views\Labels.cs" />

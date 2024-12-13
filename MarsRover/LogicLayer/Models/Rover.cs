@@ -23,7 +23,7 @@ namespace MarsRover.LogicLayer.Models
 
         public int Acceleration { get; set; } = 1; 
 
-        public Rover(XYPosition position, Facing direction)
+        public Rover(XYPosition position, Facing direction = Facing.SOUTH)
         {
             Position = position;
             Direction = direction; 

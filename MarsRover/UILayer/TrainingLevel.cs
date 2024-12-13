@@ -1,5 +1,4 @@
-﻿using MarsRover.Input.ParserModels;
-using MarsRover.LogicLayer.Models;
+﻿using MarsRover.LogicLayer.Models;
 using MarsRover.Enums;
 using MarsRover.UILayerTG.Utils;
 using System;
@@ -11,6 +10,7 @@ using Terminal.Gui;
 using NStack;
 using System.Reflection.Emit;
 using MarsRover.UILayer.Superclasses;
+using MarsRover.UILayer.Utils;
 
 
 namespace MarsRover.UILayerTG
@@ -53,7 +53,7 @@ namespace MarsRover.UILayerTG
         public void AddUI() { 
 
 
-            var textLabel = new StyledLabel(Utils.Text.GetLevelText("Training Level"))
+            var textLabel = new StyledLabel(LabelText.trainingLevel)
             {
                 X = xAlignment,
                 Y = 3,

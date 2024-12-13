@@ -1,5 +1,4 @@
 ﻿using MarsRover.Enums;
-using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
 using MarsRover.UILayer.Superclasses;
 using MarsRover.UILayerTG.Utils;
@@ -9,17 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Terminal.Gui;
+using MarsRover.UILayer.Utils; 
 
 namespace MarsRover.UILayerTG
-{ 
+{
 
     public class AddRoversLevel : StyledWindow
     {
         public GameApplication App { get; set; }
 
         public ResponseLabel ResponseLabel { get; set; }
-
-        public TextField TextField { get; set; }
 
         public ComboBox ComboBox { get; set; }
 
@@ -32,13 +30,13 @@ namespace MarsRover.UILayerTG
 
         public void AddUI() { 
 
-            var instructionLabel = new StyledLabel(Utils.Text.GetLevelText("Add Rovers Level"))
+            var instructionLabel = new StyledLabel(LabelText.addRoverLevel)
             {
                 X = Pos.Center(),
                 Y = 2,
             };
 
-            var comboLabel = new Terminal.Gui.Label("Select a starting direction:")
+            var comboLabel = new Terminal.Gui.Label("How many rovers?")
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(instructionLabel) + 4,
@@ -52,28 +50,13 @@ namespace MarsRover.UILayerTG
                 Height = 40,
             };
 
-            ComboBox.SetSource(new List<Facing>() { Facing.NORTH, Facing.EAST, Facing.SOUTH, Facing.WEST });
+            ComboBox.SetSource(new List<int>() { 1, 2, 3 });
 
-
-            var positionLabel = new Terminal.Gui.Label("Enter a starting position:")
-            {
-                X = Pos.Center(),
-                Y = Pos.Center() + 1,
-
-            };
-
-            TextField = new TextField()
-            {
-                X = Pos.Center(),
-                Y = Pos.Bottom(positionLabel) + 1,
-                Width = 40,
-                Text = $"Max: {App.MissionControl.Plateau._x - 1}, {App.MissionControl.Plateau._y - 1}"
-            };
 
             var submitButton = new Button("Submit")
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(TextField) + 3,
+                Y = 15,
             };
 
             ResponseLabel = new ResponseLabel()
@@ -86,41 +69,24 @@ namespace MarsRover.UILayerTG
 
             submitButton.Clicked += SubmitButtonClicked; 
 
-            Add(instructionLabel, comboLabel, ComboBox, positionLabel, TextField, ResponseLabel, submitButton);
+            Add(instructionLabel, comboLabel, ComboBox, submitButton, ResponseLabel);
 
         }
 
 
         public void SubmitButtonClicked()
         {
-            Facing selectedEnum = (Facing)ComboBox.SelectedItem;
-            if ((int)selectedEnum < 0)
+            if (ComboBox.SelectedItem > -1) { 
+            
+            for (int i = 0; i <= ComboBox.SelectedItem; i++)
             {
-                ResponseLabel.Text = "Please select a direction";
-            }
-            else
+                App.MissionControl.AddRover(new Rover((0, i))); }
+
+             App.SwitchToNextLevel(new InstructionLevel(App));
+            } else
             {
-                RoverParser userInput = new RoverParser(TextField.Text.ToString(), selectedEnum, App.MissionControl);
-                if (!userInput.Success)
-                {
-                    ResponseLabel.Text = userInput.Message.ToString();
-                }
-                else
-                {
-                    App.MissionControl.AddRover(userInput.Result);
-                    if ((App.MissionControl.Rovers.Count == 3) || (MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]) == 1))
-                    {
-                        App.SwitchToNextLevel(new InstructionLevel(App));
-                    }
-                    else
-                    {
-                        TextField.Text = "x, y";
-                        ComboBox.SelectedItem = -1;
-                    }
-                }
-
+                ResponseLabel.Text = "Nothing selected"; 
             }
-
 
         }
 

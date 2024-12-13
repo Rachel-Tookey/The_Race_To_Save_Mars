@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using MarsRover.UILayerTG.Utils;
 using MarsRover.UILayer.Superclasses;
+using MarsRover.UILayer.Utils;
 
 namespace MarsRover.UILayerTG
 {
@@ -24,7 +25,7 @@ namespace MarsRover.UILayerTG
 
         public void AddUI() { 
 
-            var introLabel = new StyledLabel(Utils.Text.GetLevelText("Opening Level"))
+            var introLabel = new StyledLabel(LabelText.openingLevelText)
             {
                 X = Pos.Center(),
                 Y = Pos.Center() - 2,
