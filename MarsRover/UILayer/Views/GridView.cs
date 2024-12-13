@@ -80,9 +80,16 @@ namespace MarsRover.UILayerTG.Utils
 
         public void MoveObjectTo(ulong Key, XYPosition oldPos, XYPosition newPos, string oldObj)
         {
+            XYPosition key1 = (oldPos.xAxis + 7, oldPos.yAxis + 7);
+
+            if (gridLabels.ContainsKey(key1))
+            {
+                gridLabels[(oldPos.xAxis + 7, oldPos.yAxis + 7)].Text = oldObj;
+                gridLabels[(oldPos.xAxis + 7, oldPos.yAxis + 7)].ColorScheme = GetColor(oldObj);
+
+            }
             XYPosition key = (newPos.xAxis + 7, newPos.yAxis + 7);
-            gridLabels[(oldPos.xAxis + 7, oldPos.yAxis + 7)].Text = oldObj;
-            gridLabels[(oldPos.xAxis + 7, oldPos.yAxis + 7)].ColorScheme = GetColor(oldObj);
+
             if (gridLabels.ContainsKey(key))
             {
                 gridLabels[key].Text = $"{Key}";
