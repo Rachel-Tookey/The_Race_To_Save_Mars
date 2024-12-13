@@ -70,7 +70,7 @@ namespace MarsRover.LogicLayer.Models
                 roverToMove.MoveRover(instruction);
                 if (!IsPositionEmptyRocks(roverToMove.Position))
                 {
-                    roverToMove.Health -= 10;
+                    //roverToMove.Health -= 10;
                 }
                 
                 if (IsPositionUsable(Health, roverToMove.Position)) {
@@ -169,15 +169,15 @@ namespace MarsRover.LogicLayer.Models
 
             Plateau plateau = this.Plateau;
 
-            string[,] newGrid = new string[plateau._y + 4, plateau._x + 4];
+            string[,] newGrid = new string[plateau._y + 14, plateau._x + 14];
 
             Dictionary<ulong, XYPosition> CurrentRoverPositions = GetRoverPositions();
 
-            for (int rows = plateau._y + 3; rows >= 0; rows--)
+            for (int rows = plateau._y + 13; rows >= 0; rows--)
             {
-                for (int cols = 0; cols < plateau._x + 4; cols++)
+                for (int cols = 0; cols < plateau._x + 14; cols++)
                 {
-                    if ((cols == 1) || (cols == 0) || (rows == 0) || (rows == 1) || (rows == plateau._y + 3) || (rows == plateau._y + 2) || (cols == plateau._x + 2) || (cols == plateau._x + 3))
+                    if ((cols < 7) || (rows < 7) || (rows >= plateau._y + 7) || (cols >= plateau._x + 7) )
                     {
                         newGrid[rows, cols] = GridSymbols[0];
                     }
@@ -190,28 +190,28 @@ namespace MarsRover.LogicLayer.Models
 
             foreach (XYPosition xYPosition in Obstructions)
             {
-                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = GridSymbols[1];
+                newGrid[xYPosition.yAxis + 7, xYPosition.xAxis + 7] = GridSymbols[1];
             }
 
 
             foreach (XYPosition xYPosition in Health)
             {
-                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "⟡";
+                newGrid[xYPosition.yAxis + 7, xYPosition.xAxis + 7] = "⟡";
             }
 
 
             foreach (XYPosition xYPosition in Oil)
             {
-                newGrid[xYPosition.yAxis + 2, xYPosition.xAxis + 2] = "☢";
+                newGrid[xYPosition.yAxis + 7, xYPosition.xAxis + 7] = "🝆";
             }
 
 
             foreach (ulong key in CurrentRoverPositions.Keys)
             {
-                newGrid[CurrentRoverPositions[key].yAxis + 2, CurrentRoverPositions[key].xAxis + 2] = $"{key}";
+                newGrid[CurrentRoverPositions[key].yAxis + 7, CurrentRoverPositions[key].xAxis + 7] = $"{key}";
             }
 
-            newGrid[EndOfLevel.yAxis + 2, EndOfLevel.xAxis + 2] = "⊕";
+            newGrid[EndOfLevel.yAxis + 7, EndOfLevel.xAxis + 7] = "⊕";
 
             return newGrid;
         }
@@ -219,7 +219,7 @@ namespace MarsRover.LogicLayer.Models
         public string GetObjectByPosition(XYPosition posToSearch)
         {
             string[,] myGrid = GetGrid();
-            return myGrid[posToSearch.yAxis + 2, posToSearch.xAxis + 2];
+            return myGrid[posToSearch.yAxis + 7, posToSearch.xAxis + 7];
         }
 
 

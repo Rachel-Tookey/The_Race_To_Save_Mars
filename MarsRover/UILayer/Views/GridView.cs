@@ -11,20 +11,20 @@ namespace MarsRover.UILayerTG.Utils
         {
             X = 0;
             Y = y;
-            Width = 4 + myGrid.GetLength(1);
-            Height = 4 + myGrid.GetLength(0);
+            Width = 4 + myGrid.GetLength(1) - 5;
+            Height = 4 + myGrid.GetLength(0) - 5;
 
             int startX = 2;
             int startY = 2;
-            for (int i = myGrid.GetLength(0) - 1; i >= 0; i--)
+            for (int i = myGrid.GetLength(0) - 6; i >= 5; i--)
             {
-                for (int j = 0; j < myGrid.GetLength(1); j++)
+                for (int j = 5; j < myGrid.GetLength(1) - 5; j++)
                 {
                     
                     var label = new Label(myGrid[i, j])
                     {
-                        X = startX + j,
-                        Y = startY + i,
+                        X = startX + j - 5,
+                        Y = startY + i - 5,
                         Height = 1,
                         ColorScheme = GetColor(myGrid[i, j])
                     };
@@ -59,7 +59,7 @@ namespace MarsRover.UILayerTG.Utils
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightMagenta, Terminal.Gui.Color.Black)
             },
-            "☢" => new ColorScheme
+            "🝆" => new ColorScheme
             {
                 Normal = new Terminal.Gui.Attribute(Terminal.Gui.Color.BrightRed, Terminal.Gui.Color.Black)
             },
@@ -80,11 +80,14 @@ namespace MarsRover.UILayerTG.Utils
 
         public void MoveObjectTo(ulong Key, XYPosition oldPos, XYPosition newPos, string oldObj)
         {
-            gridLabels[(oldPos.xAxis + 2, oldPos.yAxis + 2)].Text = oldObj;
-            gridLabels[(oldPos.xAxis + 2, oldPos.yAxis + 2)].ColorScheme = GetColor(oldObj); 
-
-            gridLabels[(newPos.xAxis + 2, newPos.yAxis + 2)].Text = $"{Key}";
-            gridLabels[(newPos.xAxis + 2, newPos.yAxis + 2)].ColorScheme = GetColor("1");
+            XYPosition key = (newPos.xAxis + 7, newPos.yAxis + 7);
+            gridLabels[(oldPos.xAxis + 7, oldPos.yAxis + 7)].Text = oldObj;
+            gridLabels[(oldPos.xAxis + 7, oldPos.yAxis + 7)].ColorScheme = GetColor(oldObj);
+            if (gridLabels.ContainsKey(key))
+            {
+                gridLabels[key].Text = $"{Key}";
+                gridLabels[key].ColorScheme = GetColor("1");
+            }
         }
 
 
