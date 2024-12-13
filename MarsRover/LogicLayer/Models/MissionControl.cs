@@ -70,7 +70,7 @@ namespace MarsRover.LogicLayer.Models
                 roverToMove.MoveRover(instruction);
                 if (!IsPositionEmptyRocks(roverToMove.Position))
                 {
-                    //roverToMove.Health -= 10;
+                    roverToMove.Health -= 10;
                 }
                 
                 if (IsPositionUsable(Health, roverToMove.Position)) {
