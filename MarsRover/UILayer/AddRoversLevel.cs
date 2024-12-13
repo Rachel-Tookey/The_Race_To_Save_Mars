@@ -22,13 +22,16 @@ namespace MarsRover.UILayerTG
 
         public ComboBox ComboBox { get; set; }
 
+        public ComboBox ComboBoxHowMany { get; set; }
+
         public AddRoversLevel(GameApplication game) : base("Add your rovers", game)
         {
-            AddUI(); 
+            AddUI();
         }
 
 
-        public override void AddUI() { 
+        public override void AddUI()
+        {
 
             var instructionLabel = new StyledLabel(LabelText.addRoverLevel)
             {
@@ -36,27 +39,50 @@ namespace MarsRover.UILayerTG
                 Y = 2,
             };
 
-            var comboLabel = new Terminal.Gui.Label("Select a starting direction:")
+
+            var comboLabelBox1 = new Terminal.Gui.Label("Select number of rovers:")
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(instructionLabel) + 4,
+                Y = Pos.Bottom(instructionLabel) + 2,
             };
+
+
+            ComboBoxHowMany = new ComboBox()
+            {
+                X = Pos.Center(),
+                Y = Pos.Bottom(comboLabelBox1) + 1,
+                Width = 40,
+                Height = 40,
+            };
+
+            ComboBoxHowMany.SetSource(new List<int>() { 1, 2, 3 });
+
+
+            var comboLabelBox2 = new Terminal.Gui.Label("Select a starting direction:")
+            {
+                X = Pos.Center(),
+                Y = Pos.Center(),
+                Visible = false
+            };
+
 
             ComboBox = new ComboBox()
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(comboLabel) + 1,
+                Y = Pos.Bottom(comboLabelBox2) + 1,
                 Width = 40,
                 Height = 40,
+                Visible = false
             };
 
             ComboBox.SetSource(new List<Facing>() { Facing.NORTH, Facing.EAST, Facing.SOUTH, Facing.WEST });
 
 
-            var positionLabel = new Terminal.Gui.Label("Enter a starting position:")
+            var positionLabel = new Terminal.Gui.Label("Enter a landing position:")
             {
                 X = Pos.Center(),
-                Y = Pos.Center() + 1,
+                Y = Pos.Center() + 4,
+                Visible = false
 
             };
 
@@ -65,26 +91,42 @@ namespace MarsRover.UILayerTG
                 X = Pos.Center(),
                 Y = Pos.Bottom(positionLabel) + 1,
                 Width = 40,
-                Text = $"Max: {App.MissionControl.Plateau._x - 1}, {App.MissionControl.Plateau._y - 1}"
+                Text = $"Max: {App.MissionControl.Plateau._x - 1}, {App.MissionControl.Plateau._y - 3}",
+                Visible = false
             };
 
             var submitButton = new Button("Submit")
             {
                 X = Pos.Center(),
                 Y = Pos.Bottom(TextField) + 3,
+                Visible = false
             };
 
             ResponseLabel = new ResponseLabel()
             {
                 X = Pos.Center(),
-                Y = Pos.Bottom(submitButton) + 2,
+                Y = Pos.Bottom(TextField) + 1,
                 TextAlignment = TextAlignment.Centered,
                 Width = Dim.Fill()
             };
 
-            submitButton.Clicked += SubmitButtonClicked; 
+            ComboBoxHowMany.SelectedItemChanged += (e) =>
+            {
+                comboLabelBox2.Visible = true;
+                ComboBox.Visible = true;
+            };
 
-            Add(instructionLabel, comboLabel, ComboBox, positionLabel, TextField, ResponseLabel, submitButton);
+            ComboBox.SelectedItemChanged += (e) =>
+            {
+                positionLabel.Visible = true;
+                TextField.Visible = true;
+                submitButton.Visible = true;
+            };
+
+
+            submitButton.Clicked += SubmitButtonClicked;
+
+            Add(instructionLabel, comboLabelBox1, ComboBoxHowMany, comboLabelBox2, ComboBox, positionLabel, TextField, ResponseLabel, submitButton);
 
         }
 
@@ -92,38 +134,32 @@ namespace MarsRover.UILayerTG
         public void SubmitButtonClicked()
         {
             Facing selectedEnum = (Facing)ComboBox.SelectedItem;
-            if ((int)selectedEnum < 0)
+            RoverParser userInput = new RoverParser(ComboBoxHowMany.SelectedItem, TextField.Text.ToString(), selectedEnum, App.MissionControl);
+            if (!userInput.Success)
             {
-                ResponseLabel.Text = "Please select a direction";
+                ResponseLabel.Text = userInput.Message.ToString();
             }
             else
             {
-                RoverParser userInput = new RoverParser(TextField.Text.ToString(), selectedEnum, App.MissionControl);
-                if (!userInput.Success)
+                App.MissionControl.Rovers.AddRange(userInput.Result);
+                if ((App.MissionControl.Rovers.Count == 3) || (MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]) == 1))
                 {
-                    ResponseLabel.Text = userInput.Message.ToString();
+                    App.SwitchToNextLevel(new InstructionLevel(App));
                 }
                 else
                 {
-                    App.MissionControl.AddRover(userInput.Result);
-                    if ((App.MissionControl.Rovers.Count == 3) || (MessageBox.Query("Continue?", "Do you wish to add any more rovers?", buttons: ["Yes", "No"]) == 1))
-                    {
-                        App.SwitchToNextLevel(new InstructionLevel(App));
-                    }
-                    else
-                    {
-                        TextField.Text = "x, y";
-                        ComboBox.SelectedItem = -1;
-                    }
+                    TextField.Text = "x, y";
+                    ComboBox.SelectedItem = -1;
                 }
-
             }
-
 
         }
 
+
     }
 
-
 }
+
+
+
 

@@ -50,19 +50,20 @@ namespace MarsRover.UILayer.Superclasses
 
             Terminal.Gui.Application.MainLoop.AddTimeout(TimeSpan.FromSeconds(1), _ =>
             {
-                Seconds--;
-                if (HasTimeOut)
-                {
-                    return false;
-                }
+            Seconds--;
+            if (HasTimeOut)
+            {
+                return false;
+            }
 
-                if (Seconds > 0)
-                {
-                    TimerLabel.Text = $"Time left: {Seconds}s";
-                    return true;
-                }
-                else
-                {
+            if (Seconds > 0)
+            {
+                TimerLabel.Text = $"Time left: {Seconds}s";
+                return true;
+            }
+            else
+            {
+                    MessageBox.Query("Game over", "Game Over! You're out of time!", buttons: ["Okay"]);
                     App.SwitchToNextLevel(new EndLevel(App));
                     return false;
                 }
@@ -103,6 +104,7 @@ namespace MarsRover.UILayer.Superclasses
                 }
                 else if (!App.MissionControl.AreRoversIntact())
                 {
+                    MessageBox.Query("Game over", "Game Over! Your rovers are destroyed", buttons: ["Okay"]);
                     App.SwitchToNextLevel(new EndLevel(App));
                 }
             }
