@@ -2,6 +2,7 @@
 using MarsRover.Input.ParserModels;
 using MarsRover.LogicLayer.Models;
 using MarsRover.UILayer.Superclasses;
+using MarsRover.UILayer.Utils;
 using MarsRover.UILayerTG.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,28 +12,25 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 
 namespace MarsRover.UILayerTG
-{ 
+{
 
     public class AddRoversLevel : StyledWindow
     {
-        public GameApplication App { get; set; }
-
         public ResponseLabel ResponseLabel { get; set; }
 
         public TextField TextField { get; set; }
 
         public ComboBox ComboBox { get; set; }
 
-        public AddRoversLevel(GameApplication game) : base("Add your rovers")
+        public AddRoversLevel(GameApplication game) : base("Add your rovers", game)
         {
-            App = game;
             AddUI(); 
         }
 
 
-        public void AddUI() { 
+        public override void AddUI() { 
 
-            var instructionLabel = new StyledLabel(Utils.Text.GetLevelText("Add Rovers Level"))
+            var instructionLabel = new StyledLabel(LabelText.addRoverLevel)
             {
                 X = Pos.Center(),
                 Y = 2,

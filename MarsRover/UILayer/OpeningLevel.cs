@@ -8,23 +8,21 @@ using System.Threading.Tasks;
 using Terminal.Gui;
 using MarsRover.UILayerTG.Utils;
 using MarsRover.UILayer.Superclasses;
+using MarsRover.UILayer.Utils;
 
 namespace MarsRover.UILayerTG
 {
     public class OpeningLevel : StyledWindow  
     {
 
-        public GameApplication App { get; set; }
-
-        public OpeningLevel(GameApplication game) : base("Race to Save Mars")
+        public OpeningLevel(GameApplication game) : base("Race to Save Mars", game)
         {
-            App = game;
             AddUI(); 
         }
 
-        public void AddUI() { 
+        public override void AddUI() { 
 
-            var introLabel = new StyledLabel(Utils.Text.GetLevelText("Opening Level"))
+            var introLabel = new StyledLabel(LabelText.openingLevel)
             {
                 X = Pos.Center(),
                 Y = Pos.Center() - 2,

@@ -1,4 +1,5 @@
 ﻿using MarsRover.UILayer.Superclasses;
+using MarsRover.UILayer.Utils;
 using MarsRover.UILayerTG.Utils;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,14 @@ namespace MarsRover.UILayerTG
     public class InstructionLevel : StyledWindow  
     {
 
-        public GameApplication App { get; set; }
-
-        public InstructionLevel(GameApplication game) : base("Instructions")
+        public InstructionLevel(GameApplication game) : base("Instructions", game)
         {
-            App = game;
+            AddUI(); 
+        }
 
-            var instructionText = new StyledLabel(Utils.Text.GetLevelText("Instruction Level"))
+        public override void AddUI() { 
+
+            var instructionText = new StyledLabel(LabelText.instructionLevel)
             {
                 X = Pos.Center(),
                 Y = 2,
@@ -40,9 +42,10 @@ namespace MarsRover.UILayerTG
             Add(instructionText,nextButton);
 
         }
-
     }
+
 }
+
 
 
     

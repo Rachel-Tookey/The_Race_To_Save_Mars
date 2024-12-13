@@ -226,7 +226,6 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpTrainingLevel()
         {
-            // set rover and end of level position as fixed? 
             GridSymbols = new List<string> { "⣫", "⡺" };
             EndOfLevel = PositionGenerator();
             Obstructions = GeneratePositions(20);
@@ -234,10 +233,9 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpFirstLevel()
         {
-            // set rover and end of level position as fixed? 
             GridSymbols = new List<string> { "⠿", "⣤"};
             Plateau = new Plateau(110, 20);
-            EndOfLevel = PositionGenerator();
+            EndOfLevel = PositionGenerator(); 
             Obstructions = GeneratePositions(35);
             Health = GeneratePositions(1);
             Oil = GeneratePositions(1);
@@ -245,10 +243,14 @@ namespace MarsRover.LogicLayer.Models
 
         public void SetUpSecondLevel()
         {
-            // empty the obstructions / health 
-            // add a different layer? or obstructions that switch on and off? 
-            // add lasers 
-            Obstructions = GeneratePositions(30);
+            for (int i = 0; i <= Rovers.Count; i++)
+            {
+                Rovers[0].Position = (0, i);
+            }
+            EndOfLevel = (Plateau._x - 1, Plateau._y - 1);
+            GridSymbols = new List<string> { "⣿", "⣿" };
+            Obstructions = GeneratePositions(50);
+
         }
 
         public void SetUpThirdLevel()

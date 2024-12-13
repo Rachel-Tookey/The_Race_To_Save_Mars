@@ -4,27 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MarsRover.UILayerTG.Utils
+namespace MarsRover.UILayer.Utils
 {
-    public class Text
+    public class LabelText
     {
-        public static string GetLevelText(string LevelName)
-        {
-
-            string openingLevelText = """
+        public const string openingLevel = """
                 An alien race has landed on Mars intending to take its resources for themselves...
                 The group of cyberpunks and Martians form a rebel alliance to fight back.
                 They put a call-out for an aspiring software developer to pilot their rovers.
                 You stop your job hunting on LinkedIn and think 'Hey, I could do that!' 
                 """;
 
-            string trainingLevel = """
+        public const string trainingLevel = """
                 Your mission: 
                 Get to the entrance (⊕) of the Martian Kingdom.
                 Do not crash into the rocks (⡺).
                 """;
 
-            string instructionLevel = """
+        public const string instructionLevel = """
                 You arrive at the cyberpunk's headquarters and ask, "So, we didn't discuss rates on the phone-"
 
                 But the cyberpunks cut you off: 
@@ -40,24 +37,14 @@ namespace MarsRover.UILayerTG.Utils
                 Good luck! Oh, and breaks are not part of your billable hours"
                 """;
 
-            string addRoverLevel = """
+        public const string addRoverLevel = """
                 You can add up to 3 rovers for the duration of the game.
                 But due to a quirk in the time-space continuum:
                 The more rovers you have, the less time you get for each level 
                 Take your pick...
                 """;
 
-            Dictionary<string, string> LevelText = new Dictionary<string, string>();
-            LevelText.Add("Opening Level", openingLevelText);
-            LevelText.Add("Instruction Level", instructionLevel);
-            LevelText.Add("Training Level", trainingLevel);
-            LevelText.Add("Add Rovers Level", addRoverLevel);
-
-            return LevelText.ContainsKey(LevelName) ? LevelText[LevelName] : "";
 
 
-
-
-        }
     }
 }
